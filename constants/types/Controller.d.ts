@@ -1,0 +1,35 @@
+import { CropType } from "../constants/enums/CropType.enum";
+import { SystemStatus } from "../constants/enums/SystemStatus.enum";
+import { WaterLevel } from "../constants/enums/WaterLevel.enum";
+import { BaseEntity } from "./_BaseEntity";
+
+export interface Controller extends BaseEntity {
+  code: string;
+  waterLevel: WaterLevel;
+  systemStatus: SystemStatus;
+  cropType: CropType;
+}
+
+export class Controller implements Controller {
+  constructor() {
+    this.id = "";
+    this.code = "";
+    this.waterLevel = WaterLevel.Low;
+    this.systemStatus = SystemStatus.Offline;
+    this.cropType = CropType.None;
+  }
+
+  constructor(
+    public id: string,
+    public code: string,
+    public waterLevel: WaterLevel,
+    public systemStatus: SystemStatus,
+    public cropType: CropType
+  ) {
+    this.id = id;
+    this.code = code;
+    this.waterLevel = waterLevel;
+    this.systemStatus = systemStatus;
+    this.cropType = cropType;
+  }
+}
