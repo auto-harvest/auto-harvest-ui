@@ -1,4 +1,4 @@
-import { SensorType } from "../constants/enums/SensorType.enum";
+import { SensorType } from "../enums/SensorType.enum";
 
 export interface Sensor extends BaseEntity {
   name: string;

@@ -1,5 +1,5 @@
-import { NotificationType } from "../constants/enums/NotificationType.enum";
-import { User } from "./user";
+import { NotificationType } from "../enums/NotificationType.enum";
+import { User } from "./User";
 
 export interface UserNotification extends BaseEntity {
   type: NotificationType;

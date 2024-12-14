@@ -9,6 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "android": {
+      "permissions": ["android.permission.ACCESS_FINE_LOCATION"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/Auto-Harvest-noBG.png",
         "backgroundColor": "#d6d6c4"

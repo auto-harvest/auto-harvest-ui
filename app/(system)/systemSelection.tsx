@@ -49,7 +49,7 @@ export const systems: SystemInterface[] = [
 
 export default function SystemsScreen({}) {
   const [searchQuery, setSearchQuery] = useState("");
-  const { theme, isDark } = useThemeColor();
+  const { theme } = useThemeColor();
   const styles = StyleSheet.create({
     container: {
       flex: 1,
