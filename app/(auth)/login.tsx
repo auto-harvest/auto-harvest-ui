@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -28,7 +28,6 @@ export default function LoginScreen() {
     },
     card: {
       padding: 16,
-      backgroundColor: theme.card,
     },
     iconContainer: {
       alignItems: "center",
@@ -48,12 +47,10 @@ export default function LoginScreen() {
     },
     input: {
       marginBottom: 16,
-      backgroundColor: theme.card,
     },
     button: {
       marginTop: 8,
       marginBottom: 16,
-      backgroundColor: theme.primary,
     },
     signupText: {
       textAlign: "center",
@@ -66,7 +63,7 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Card style={styles.card}>
+      <Card style={styles.card} theme={{ colors: { background: theme.card } }}>
         <Card.Content>
           <View style={styles.iconContainer}>
             <Ionicons name="leaf" size={50} color={theme.primary} />
@@ -80,22 +77,37 @@ export default function LoginScreen() {
             value={email}
             onChangeText={setEmail}
             mode="outlined"
+            textColor={theme.text}
             keyboardType="email-address"
             style={styles.input}
-            theme={{ colors: { text: theme.text, primary: theme.primary } }}
+            theme={{
+              colors: {
+                text: theme.text,
+                primary: theme.primary,
+                background: theme.card,
+              },
+            }}
           />
           <TextInput
             label="Password"
             value={password}
             onChangeText={setPassword}
             mode="outlined"
+            textColor={theme.text}
             secureTextEntry
             style={styles.input}
-            theme={{ colors: { text: theme.text, primary: theme.primary } }}
+            theme={{
+              colors: {
+                text: theme.text,
+                primary: theme.primary,
+                background: theme.card,
+              },
+            }}
           />
           <Button
             mode="contained"
             style={styles.button}
+            theme={{ colors: { backdrop: theme.primary } }}
             onPress={() => {
               router.push("/systemSelection");
             }}

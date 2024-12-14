@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Appearance } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {
   TextInput,
   Button,
@@ -12,7 +12,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import { useRouter } from "expo-router";
-import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState("");
@@ -20,12 +19,6 @@ export default function SignUpScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const { theme } = useThemeColor();
   const router = useRouter();
-
-  console.log("SignUp-colorScheme: ", useColorScheme());
-  console.log(
-    "SignUp-Appearance.getColorScheme: ",
-    Appearance.getColorScheme()
-  );
 
   const handleSignUp = () => {
     if (!email.includes("@")) {
@@ -48,7 +41,6 @@ export default function SignUpScreen() {
     },
     card: {
       padding: 16,
-      backgroundColor: theme.card,
     },
     iconContainer: {
       alignItems: "center",
@@ -68,12 +60,10 @@ export default function SignUpScreen() {
     },
     input: {
       marginBottom: 16,
-      backgroundColor: theme.card,
     },
     button: {
       marginTop: 8,
       marginBottom: 16,
-      backgroundColor: theme.primary,
     },
     loginText: {
       textAlign: "center",
@@ -86,7 +76,7 @@ export default function SignUpScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Card style={styles.card}>
+      <Card style={styles.card} theme={{ colors: { background: theme.card } }}>
         <Card.Content>
           <View style={styles.iconContainer}>
             <Ionicons name="leaf" size={50} color={theme.primary} />
@@ -103,9 +93,9 @@ export default function SignUpScreen() {
             mode="outlined"
             keyboardType="email-address"
             style={styles.input}
+            textColor={theme.text}
             theme={{
               colors: {
-                text: theme.text,
                 background: theme.card,
                 placeholder: theme.text,
                 primary: theme.primary,
@@ -120,6 +110,7 @@ export default function SignUpScreen() {
             mode="outlined"
             secureTextEntry
             style={styles.input}
+            textColor={theme.text}
             theme={{
               colors: {
                 text: theme.text,
@@ -151,6 +142,7 @@ export default function SignUpScreen() {
           <Button
             mode="contained"
             style={styles.button}
+            theme={{ colors: { backdrop: theme.primary } }}
             onPress={() => {
               handleSignUp();
             }}
