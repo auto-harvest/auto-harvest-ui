@@ -12,7 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 export default function ProfileScreen() {
   const [name, setName] = React.useState("John Doe");
@@ -20,7 +20,7 @@ export default function ProfileScreen() {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
   const { theme, toggleTheme } = useThemeColor();
-
+  const router = useRouter();
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -79,7 +79,7 @@ export default function ProfileScreen() {
         <Header
           title="Profile"
           showBackButton
-          onBackPress={() => navigation.goBack()}
+          onBackPress={() => router.back()}
         />
       </Link>
       <ScrollView>
@@ -168,7 +168,7 @@ export default function ProfileScreen() {
               mode="contained"
               onPress={() => {
                 // Handle logout logic here
-                navigation.navigate("/login");
+                router.push("/login");
               }}
               style={[styles.button, styles.logoutButton]}
               icon={() => (

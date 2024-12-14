@@ -1,4 +1,6 @@
 import React from "react";
+import { Provider } from 'react-redux';
+
 import { View, StyleSheet } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { useThemeColor } from "../../../hooks/useThemeColor";

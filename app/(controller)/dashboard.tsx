@@ -16,10 +16,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
+import { RelativePathString, useRouter } from "expo-router";
 
 const screenWidth = Dimensions.get("window").width;
 
-export default function HydroponicsDashboard({ navigation }) {
+export default function HydroponicsDashboard() {
+  const router = useRouter();
   const [isPumpOn, setIsPumpOn] = useState(false);
   const [isSystemOn, setIsSystemOn] = useState(true);
   const [isAirPumpOn, setIsAirPumpOn] = useState(false);
@@ -269,14 +271,7 @@ export default function HydroponicsDashboard({ navigation }) {
         </View>
       </ScrollView>
 
-      <Navbar
-        activeNav="dashboard"
-        setActiveNav={(navItem) => {
-          if (navItem !== "dashboard") {
-            navigation.navigate(navItem);
-          }
-        }}
-      />
+      <Navbar activeNav="dashboard" />
     </SafeAreaView>
   );
 }

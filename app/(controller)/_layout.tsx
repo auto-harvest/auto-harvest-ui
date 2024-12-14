@@ -1,12 +1,12 @@
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 
-export default () => {
+export default function Layout() {
   return (
-    <Tabs>
-      <Tabs.Screen name="dashboard" options={{ headerShown: false }} />
-      <Tabs.Screen name="plants" options={{ headerShown: false }} />
-      <Tabs.Screen name="alerts" options={{ headerShown: false }} />
-      <Tabs.Screen name="settings" options={{ headerShown: false }} />
-    </Tabs>
+    <Stack
+      screenOptions={{
+        animation: "none", // Disables stack animations
+        headerShown: false,
+      }}
+    />
   );
-};
+}

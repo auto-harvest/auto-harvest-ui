@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
+import { useRouter } from "expo-router";
 
 const alertsData = [
   {
@@ -48,11 +49,11 @@ const alertsData = [
   },
 ];
 
-export default function AlertsScreen({ navigation }) {
+export default function AlertsScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All");
   const { theme, isDark } = useThemeColor();
-
+  const router = useRouter();
   const filteredAlerts = alertsData.filter(
     (alert) =>
       alert.message.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -122,7 +123,7 @@ export default function AlertsScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header showBackButton onBackPress={() => navigation.goBack()} />
+      <Header showBackButton onBackPress={() => router.back()} />
       <Searchbar
         placeholder="Search alerts..."
         onChangeText={setSearchQuery}
@@ -157,14 +158,7 @@ export default function AlertsScreen({ navigation }) {
         renderItem={renderAlertItem}
         keyExtractor={(item) => item.id}
       />
-      <Navbar
-        activeNav="alerts"
-        setActiveNav={(navItem) => {
-          if (navItem !== "alerts") {
-            navigation.navigate(navItem);
-          }
-        }}
-      />
+      <Navbar activeNav="alerts" />
     </SafeAreaView>
   );
 }

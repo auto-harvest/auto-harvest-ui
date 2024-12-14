@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
+import { useRouter } from "expo-router";
 
 const plantsData = [
   {
@@ -52,11 +53,11 @@ const plantsData = [
   },
 ];
 
-export default function PlantsScreen({ navigation }) {
+export default function PlantsScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All");
   const { theme, isDark } = useThemeColor();
-
+  const router = useRouter();
   const filteredPlants = plantsData.filter(
     (plant) =>
       plant.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -124,7 +125,7 @@ export default function PlantsScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header showBackButton onBackPress={() => navigation.goBack()} />
+      <Header showBackButton onBackPress={() => router.back()} />
       <Searchbar
         placeholder="Search plants..."
         onChangeText={setSearchQuery}
@@ -170,14 +171,7 @@ export default function PlantsScreen({ navigation }) {
       >
         Add Plant
       </Button>
-      <Navbar
-        activeNav="plants"
-        setActiveNav={(navItem) => {
-          if (navItem !== "plants") {
-            navigation.navigate(navItem);
-          }
-        }}
-      />
+      <Navbar activeNav="plants" />
     </SafeAreaView>
   );
 }

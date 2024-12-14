@@ -14,14 +14,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
+import { useRouter } from "expo-router";
 
-export default function SettingsScreen({ navigation }) {
+export default function SettingsScreen() {
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [wateringInterval, setWateringInterval] = useState("6");
   const [nutrientDosage, setNutrientDosage] = useState("5");
   const { theme, isDark } = useThemeColor();
-
+  const router = useRouter();
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -55,7 +56,7 @@ export default function SettingsScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header showBackButton onBackPress={() => navigation.goBack()} />
+      <Header showBackButton onBackPress={() => router.back()} />
       <ScrollView>
         <Card style={styles.card}>
           <Card.Content>
@@ -125,14 +126,7 @@ export default function SettingsScreen({ navigation }) {
           Save Settings
         </Button>
       </ScrollView>
-      <Navbar
-        activeNav="settings"
-        setActiveNav={(navItem) => {
-          if (navItem !== "settings") {
-            navigation.navigate(navItem);
-          }
-        }}
-      />
+      <Navbar activeNav="settings" />
     </SafeAreaView>
   );
 }
