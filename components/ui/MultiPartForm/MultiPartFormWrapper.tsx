@@ -11,6 +11,7 @@ import WiFiPermissionComponent from "../WifiPermissionComponent";
 import Step from "./Step";
 // import WifiPairingStep from "./ConnectToWifiStep";
 import { useThemeColor } from "../../../hooks/useThemeColor";
+import WifiPairingStep from "./ConnectToWifiStep";
 
 interface MultiPartFormWrapperProps {
   onSubmit: () => void;
@@ -52,12 +53,9 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
       <WiFiPermissionComponent></WiFiPermissionComponent>
     </Step>,
 
-    // <Step title="Step 4: Connect to WiFi">
-    //   <WifiPairingStep
-    //     handleBack={handleBack}
-    //     handleNext={handleNext}
-    //   ></WifiPairingStep>
-    // </Step>,
+    <Step title="Step 4: Connect to WiFi">
+      <WifiPairingStep handleBack={handleBack} handleNext={handleNext} />
+    </Step>,
     <Step
       title="Step 5: Pair Controller"
       description="Press the Pair button on the device."
@@ -93,7 +91,7 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
       flex: 1,
       padding: 16,
       backgroundColor: colors.background,
-      justifyContent:"space-between"
+      justifyContent: "space-between",
     },
     progressBar: {
       height: 8,
@@ -109,16 +107,16 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
 
   return (
     <View style={styles.container}>
-        <View>
-            {/* Progression Bar */}
-            <ProgressBar
-                progress={(currentStep + 1) / totalSteps}
-                color={colors.primary}
-                style={styles.progressBar}
-            />
-            {/* Render Current Step */}
-            {steps[currentStep]}
-        </View>
+      <View>
+        {/* Progression Bar */}
+        <ProgressBar
+          progress={parseInt("" + (currentStep + 1) / totalSteps)}
+          color={colors.primary}
+          style={styles.progressBar}
+        />
+        {/* Render Current Step */}
+        {steps[currentStep]}
+      </View>
       {/* Navigation Buttons */}
       <View style={styles.buttonGroup}>
         {currentStep > 0 && <Button onPress={handleBack}>Back</Button>}

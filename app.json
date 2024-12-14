@@ -9,7 +9,12 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "android": {
-      "permissions": ["android.permission.ACCESS_FINE_LOCATION"],
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_WIFI_STATE",
+        "android.permission.CHANGE_WIFI_STATE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/Auto-Harvest-noBG.png",
         "backgroundColor": "#d6d6c4"
@@ -22,6 +27,7 @@
     },
     "plugins": [
       "expo-router",
+      "react-native-wifi-reborn",
       [
         "expo-splash-screen",
         {
@@ -29,6 +35,12 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#d6d6c4"
+        }
+      ],
+      [
+        "expo-dev-launcher",
+        {
+          "launchMode": "most-recent"
         }
       ]
     ],

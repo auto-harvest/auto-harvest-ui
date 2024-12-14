@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  View,
-  Text,
   TextInput,
   Button,
   StyleSheet,
@@ -10,18 +8,18 @@ import {
   Alert,
   PermissionsAndroid,
   Platform,
-  ProgressBarAndroid,
+  View,
+  Text,
 } from "react-native";
 import WifiManager from "react-native-wifi-reborn";
- 
-const WifiPairingStep = ({
+
+const ConnectToWifiStep = ({
   handleNext,
   handleBack,
 }: {
   handleNext: () => void;
   handleBack: () => void;
 }) => {
-  const [currentStep, setCurrentStep] = useState(1);
   const [wifiList, setWifiList] = useState<any[]>([]);
   const [selectedSsid, setSelectedSsid] = useState<string | null>(null);
   const [password, setPassword] = useState<string>("");
@@ -29,134 +27,77 @@ const WifiPairingStep = ({
 
   // Request Location Permission for Android
   const requestLocationPermission = async () => {
-    if (Platform.OS === "android") {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    try {
+      if (Platform.OS === "android") {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: "Location Permission",
+            message: "We need access to your location to scan for Wi-Fi networks",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK",
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log("You can use the location");
+          loadWifiList();
+        } else {
+          console.log("Location permission denied");
+        }
+      } else {
+        loadWifiList();
+      }
+    } catch (err) {
+      console.warn(err);
     }
-    return true; // On iOS, permission is handled automatically
   };
 
-  // Scan for available Wi-Fi networks
-  const scanWifi = async () => {
+  const loadWifiList = async () => {
     try {
-      const permissionGranted = await requestLocationPermission();
-      if (!permissionGranted) {
-        Alert.alert(
-          "Permission Denied",
-          "Location permission is required to scan Wi-Fi networks."
-        );
-        return;
-      }
       setIsLoading(true);
-      const networks = await WifiManager.loadWifiList();
-      setWifiList(networks);
+      const wifiList = await WifiManager.loadWifiList();
+      setWifiList(wifiList);
+      setIsLoading(false);
     } catch (error) {
       console.error("Failed to scan Wi-Fi networks:", error);
-      Alert.alert("Error", "Failed to scan Wi-Fi networks.");
-    } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (currentStep === 2) {
-      scanWifi();
-    }
-  }, [currentStep]);
-
-  const handleNetworkSelect = (ssid: string) => {
-    setSelectedSsid(ssid);
-  };
-
-  const handleSubmit = () => {
-    if (!selectedSsid) {
-      Alert.alert("Select Wi-Fi", "Please select a Wi-Fi network.");
-      return;
-    }
-    if (!password) {
-      Alert.alert("Enter Password", "Please enter the Wi-Fi password.");
-      return;
-    }
-
-    // Here, you would pass the SSID and password to the IoT device for pairing
-    console.log("Connecting to Wi-Fi network:", selectedSsid);
-    console.log("Password:", password);
-
-    // Move to the next step
-    setCurrentStep(currentStep + 1);
-  };
-
-  const progressBarValue = currentStep / 3; // Assuming 3 steps in total
+    requestLocationPermission();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Step {currentStep} of 3</Text>
-      <ProgressBarAndroid
-        styleAttr="Horizontal"
-        indeterminate={false}
-        progress={progressBarValue}
-        color="#2196F3"
-      />
-
-      {currentStep === 1 && (
-        <View style={styles.stepContainer}>
-          <Text style={styles.stepTitle}>Step 1: Welcome</Text>
-          <Text>Start by connecting your device to Wi-Fi.</Text>
-          <Button title="Next" onPress={() => setCurrentStep(2)} />
-        </View>
-      )}
-
-      {currentStep === 2 && (
-        <View style={styles.stepContainer}>
-          <Text style={styles.stepTitle}>Step 2: Select Wi-Fi Network</Text>
-
-          {isLoading ? (
-            <Text>Loading Wi-Fi networks...</Text>
-          ) : (
-            <FlatList
-              data={wifiList}
-              keyExtractor={(item) => item.SSID}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={[
-                    styles.wifiItem,
-                    selectedSsid === item.SSID && styles.selectedWifiItem,
-                  ]}
-                  onPress={() => handleNetworkSelect(item.SSID)}
-                >
-                  <Text style={styles.wifiText}>{item.SSID}</Text>
-                  <Text style={styles.signalStrength}>
-                    Signal Strength: {item.level} dBm
-                  </Text>
-                </TouchableOpacity>
-              )}
-            />
+      <Text>Wi-Fi Pairing Step</Text>
+      {isLoading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <FlatList
+          data={wifiList}
+          keyExtractor={(item) => item.SSID}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => setSelectedSsid(item.SSID)}>
+              <Text>{item.SSID}</Text>
+            </TouchableOpacity>
           )}
-
-          {selectedSsid && (
-            <View style={styles.passwordInputContainer}>
-              <TextInput
-                style={styles.passwordInput}
-                placeholder="Enter Wi-Fi Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-              />
-            </View>
-          )}
-
-          <Button title="Next" onPress={handleSubmit} />
+        />
+      )}
+      {selectedSsid && (
+        <View>
+          <TextInput
+            placeholder="Enter Wi-Fi Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <Button title="Connect" onPress={() => console.log("Connect to Wi-Fi")} />
         </View>
       )}
-
-      {currentStep === 3 && (
-        <View style={styles.stepContainer}>
-          <Text style={styles.stepTitle}>Step 3: Done</Text>
-          <Text>Your IoT device is now connected to Wi-Fi!</Text>
-        </View>
-      )}
+      <Button title="Back" onPress={handleBack} />
+      <Button title="Next" onPress={handleNext} />
     </View>
   );
 };
@@ -166,49 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
-    backgroundColor: "#f5f5f5",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  stepContainer: {
-    alignItems: "center",
-  },
-  stepTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  wifiItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-    width: "100%",
-  },
-  selectedWifiItem: {
-    backgroundColor: "#d3f9d8",
-  },
-  wifiText: {
-    fontSize: 18,
-  },
-  signalStrength: {
-    color: "#777",
-  },
-  passwordInputContainer: {
-    marginTop: 20,
-    width: "100%",
-  },
-  passwordInput: {
-    height: 40,
-    borderColor: "#ddd",
-    borderWidth: 1,
-    paddingLeft: 10,
-    width: "100%",
-    borderRadius: 5,
   },
 });
 
-export default WifiPairingStep;
+export default ConnectToWifiStep;

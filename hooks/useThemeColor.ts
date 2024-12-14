@@ -25,9 +25,6 @@ export function useThemeColor() {
   const colorScheme = useColorScheme();
   // const theme = colorScheme === "light" ? Colors.light : Colors.dark;
 
-  console.log("colorScheme: ", colorScheme);
-  console.log("Appearance.getColorScheme: ", Appearance.getColorScheme());
-
   const theme = colorScheme === "light" ? Colors.light : Colors.dark;
   return { theme };
 }
