@@ -9,8 +9,10 @@ import { useRouter } from "expo-router";
 
 const AuthComponent = () => {
   const dispatch = useDispatch();
+
   const token = useSelector((state: RootState) => state.auth.token);
   const user = useSelector((state: any) => state.auth.user);
+
   const router = useRouter();
   const handleLogin = () => {
     // Simulate login
@@ -19,9 +21,10 @@ const AuthComponent = () => {
     dispatch(setToken(token));
     dispatch(setUser(user));
   };
+
   useEffect(() => {
     if (token) {
-      router.push("/(controller)/settings");
+      router.push("/(system)/addController");
     }
     // Fetch user data
     // fetch("https://api.example.com/user", {
