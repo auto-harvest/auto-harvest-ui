@@ -1,19 +1,14 @@
-import { persistor, store } from "@/store/store";
 import { Redirect } from "expo-router";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { useRouter } from "expo-router";
+import React from "react";
 const isLoggedIn: boolean = false;
 
 const StartPage = () => {
-  return <Redirect href="/test" />;
+  // return <Redirect href="/test" />;
+
+  if (isLoggedIn) {
+    return <Redirect href="/systemSelection" />;
+  }
+  return <Redirect href="/login" />;
 };
-{
-  /* {isLoggedIn ? (
-          <Redirect href="/systemSelection" />
-        ) : (
-          <Redirect href="/login" />
-        )} */
-}
 
 export default StartPage;

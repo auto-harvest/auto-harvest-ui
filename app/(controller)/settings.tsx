@@ -21,7 +21,7 @@ export default function SettingsScreen() {
   const [darkMode, setDarkMode] = useState(false);
   const [wateringInterval, setWateringInterval] = useState("6");
   const [nutrientDosage, setNutrientDosage] = useState("5");
-  const { theme, isDark } = useThemeColor();
+  const { theme } = useThemeColor();
   const router = useRouter();
   const styles = StyleSheet.create({
     container: {
