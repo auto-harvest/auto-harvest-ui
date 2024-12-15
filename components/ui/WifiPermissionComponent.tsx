@@ -47,7 +47,7 @@ const WiFiPermissionComponent = () => {
 
   return (
     <View style={styles.container}>
-      {(permissionStatus == "granted" && (
+      {(permissionStatus === "granted" && (
         <Text style={styles.text}>
           Location permissions already granted. You can now scan for WiFi
           networks.

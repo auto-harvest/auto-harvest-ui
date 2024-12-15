@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import {
   Card,
   Title,
   Paragraph,
   Searchbar,
-  Button,
   Text,
   Chip,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
@@ -52,7 +50,7 @@ const alertsData = [
 export default function AlertsScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All");
-  const { theme, isDark } = useThemeColor();
+  const { theme } = useThemeColor();
   const router = useRouter();
   const filteredAlerts = alertsData.filter(
     (alert) =>

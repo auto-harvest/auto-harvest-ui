@@ -5,7 +5,6 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Alert,
   PermissionsAndroid,
   Platform,
   View,
@@ -26,6 +25,7 @@ const ConnectToWifiStep = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Request Location Permission for Android
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const requestLocationPermission = async () => {
     try {
       if (Platform.OS === "android") {
@@ -33,7 +33,8 @@ const ConnectToWifiStep = ({
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
             title: "Location Permission",
-            message: "We need access to your location to scan for Wi-Fi networks",
+            message:
+              "We need access to your location to scan for Wi-Fi networks",
             buttonNeutral: "Ask Me Later",
             buttonNegative: "Cancel",
             buttonPositive: "OK",
@@ -67,7 +68,7 @@ const ConnectToWifiStep = ({
 
   useEffect(() => {
     requestLocationPermission();
-  }, []);
+  }, [requestLocationPermission]);
 
   return (
     <View style={styles.container}>
@@ -93,7 +94,10 @@ const ConnectToWifiStep = ({
             onChangeText={setPassword}
             secureTextEntry
           />
-          <Button title="Connect" onPress={() => console.log("Connect to Wi-Fi")} />
+          <Button
+            title="Connect"
+            onPress={() => console.log("Connect to Wi-Fi")}
+          />
         </View>
       )}
       <Button title="Back" onPress={handleBack} />

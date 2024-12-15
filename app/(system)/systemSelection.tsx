@@ -11,7 +11,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
-import { Link, Redirect } from "expo-router";
+import { Link, router } from "expo-router";
+import { Controller } from "@/constants/types/Controller";
+import { WaterLevel } from "@/constants/enums/WaterLevel.enum";
+import { SystemStatus } from "@/constants/enums/SystemStatus.enum";
+import { CropType } from "@/constants/enums/CropType.enum";
 
 export interface SystemInterface {
   id: number;
@@ -47,7 +51,50 @@ export const systems: SystemInterface[] = [
   },
 ];
 
-export default function SystemsScreen({}) {
+export const controllers: Controller[] = [
+  {
+    id: "1",
+    createdAt: "2021-08-01T12:00:00Z",
+    updatedAt: "2021-08-01T12:00:00Z",
+    code: "ABC123",
+    waterLevel: WaterLevel.HIGH,
+    systemStatus: SystemStatus.ON,
+    cropType: CropType.LETTUCE,
+    isDeleted: false,
+  },
+  {
+    id: "2",
+    createdAt: "2021-08-01T12:00:00Z",
+    updatedAt: "2021-08-01T12:00:00Z",
+    code: "DEF456",
+    waterLevel: WaterLevel.LOW,
+    systemStatus: SystemStatus.OFF,
+    cropType: CropType.BASIL,
+    isDeleted: false,
+  },
+  {
+    id: "3",
+    createdAt: "2021-08-01T12:00:00Z",
+    updatedAt: "2021-08-01T12:00:00Z",
+    code: "GHI789",
+    waterLevel: WaterLevel.ADEQUATE,
+    systemStatus: SystemStatus.ON,
+    cropType: CropType.CHILLY,
+    isDeleted: false,
+  },
+  {
+    id: "4",
+    createdAt: "2021-08-01T12:00:00Z",
+    updatedAt: "2021-08-01T12:00:00Z",
+    code: "JKL012",
+    waterLevel: WaterLevel.HIGH,
+    systemStatus: SystemStatus.OFF,
+    cropType: CropType.STRAWBERRY,
+    isDeleted: false,
+  },
+];
+
+export default function SystemsScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const { theme } = useThemeColor();
   const styles = StyleSheet.create({
@@ -102,7 +149,7 @@ export default function SystemsScreen({}) {
   );
 
   const handleSystemSelect = (systemId: number) => {
-    return <Redirect href="/dashboard" />;
+    return router.push(`../dashboard`);
   };
 
   const renderSystemItem = ({ item }: { item: SystemInterface }) => (
@@ -161,7 +208,6 @@ export default function SystemsScreen({}) {
           /* Handle adding new system */
         }}
         style={styles.addButton}
-        color={theme.primary}
       >
         <Link href="/addController">Add New System</Link>
       </Button>

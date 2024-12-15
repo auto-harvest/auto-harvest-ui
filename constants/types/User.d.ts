@@ -4,7 +4,7 @@ export interface User extends BaseEntity {
   username: string;
   email: string;
   password: string;
-  controllers: Array<Controller>;
+  controllers: Controller[];
 }
 
 export class User implements User {
@@ -21,7 +21,7 @@ export class User implements User {
     public username: string,
     public email: string,
     public password: string,
-    public controllers: Array<Controller>
+    public controllers: Controller[]
   ) {
     this.id = id;
     this.username = username;

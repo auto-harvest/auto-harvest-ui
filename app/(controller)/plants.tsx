@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import {
   Card,
   Title,
@@ -56,7 +56,7 @@ const plantsData = [
 export default function PlantsScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All");
-  const { theme, isDark } = useThemeColor();
+  const { theme } = useThemeColor();
   const router = useRouter();
   const filteredPlants = plantsData.filter(
     (plant) =>

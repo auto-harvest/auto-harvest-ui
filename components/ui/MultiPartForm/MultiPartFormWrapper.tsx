@@ -1,12 +1,6 @@
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
-import {
-  ProgressBar,
-  Button,
-  Text,
-  useTheme,
-  TextInput,
-} from "react-native-paper";
+import { ProgressBar, Button, TextInput } from "react-native-paper";
 import WiFiPermissionComponent from "../WifiPermissionComponent";
 import Step from "./Step";
 // import WifiPairingStep from "./ConnectToWifiStep";
@@ -39,28 +33,32 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
   };
   const steps = [
     <Step
+      key={1}
       title="Step 1: Prepare Controller"
       description="Ensure the controller is blinking green."
     />,
     <Step
+      key={2}
       title="Step 2: Disable Mobile Data"
       description="Go to your settings and turn off mobile data."
     />,
     <Step
+      key={3}
       title="Step 3: Grant Location Permission"
       description="Location access is needed to scan the network."
     >
       <WiFiPermissionComponent></WiFiPermissionComponent>
     </Step>,
 
-    <Step title="Step 4: Connect to WiFi">
+    <Step title="Step 4: Connect to WiFi" key={}>
       <WifiPairingStep handleBack={handleBack} handleNext={handleNext} />
     </Step>,
     <Step
+      key={4}
       title="Step 5: Pair Controller"
       description="Press the Pair button on the device."
     />,
-    <Step title="Step 6: System Details">
+    <Step title="Step 6: System Details" key={5}>
       <TextInput
         label="System Name"
         value={systemName}

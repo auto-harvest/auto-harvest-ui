@@ -1,8 +1,6 @@
 import React from "react";
-import { Provider } from 'react-redux';
-
 import { View, StyleSheet } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { useThemeColor } from "../../../hooks/useThemeColor";
 
 interface StepProps {
@@ -13,12 +11,11 @@ interface StepProps {
 
 const Step: React.FC<StepProps> = ({ title, description, children }) => {
   const { theme } = useThemeColor();
-  const colors= theme;
+  const colors = theme;
 
   const styles = StyleSheet.create({
     container: {
       marginBottom: 16,
-      minHeight: "50%",
     },
     title: {
       fontSize: 20,

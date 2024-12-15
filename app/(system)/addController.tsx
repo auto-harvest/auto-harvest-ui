@@ -1,11 +1,6 @@
 import React from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import MultiPartFormWrapper from "../../components/ui/MultiPartForm/MultiPartFormWrapper";
-import Step from "../../components/ui/MultiPartForm/Step";
-import { TextInput } from "react-native-paper";
-import { PermissionsAndroid } from "react-native";
-import WiFiPermissionComponent from "@/components/ui/WifiPermissionComponent";
-import WifiPairingStep from "@/components/ui/MultiPartForm/ConnectToWifiStep";
 
 const IoTDevicePairingScreen: React.FC = () => {
   const handleSubmit = () => {

@@ -1,31 +1,27 @@
 import React, { useState } from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Card,
   Title,
   Paragraph,
-  Button,
   DataTable,
   Switch,
   Text,
 } from "react-native-paper";
 import { LineChart, BarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
-import { RelativePathString, useRouter } from "expo-router";
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function HydroponicsDashboard() {
-  const router = useRouter();
   const [isPumpOn, setIsPumpOn] = useState(false);
   const [isSystemOn, setIsSystemOn] = useState(true);
   const [isAirPumpOn, setIsAirPumpOn] = useState(false);
-  const { theme, isDark } = useThemeColor();
+  const { theme } = useThemeColor();
 
   const temperatureHumidityData = {
     labels: ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00"],

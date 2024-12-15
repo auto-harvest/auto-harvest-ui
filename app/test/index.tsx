@@ -30,7 +30,7 @@ const AuthComponent = () => {
     // fetch("https://api.example.com/user", {
     //   headers: {
     //
-  }, [token]);
+  }, [router, token]);
   const handleLogout = () => {
     dispatch(clearAuth());
   };
