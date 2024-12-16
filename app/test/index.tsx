@@ -38,7 +38,7 @@ const LoginScreen: React.FC = () => {
 export default LoginScreen;
 
 // Mock API function
-const fakeLoginApi = async (
+export const fakeLoginApi = async (
   email: string,
   password: string
 ): Promise<{

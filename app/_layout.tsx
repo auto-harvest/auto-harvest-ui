@@ -27,8 +27,13 @@ const JwtGuard = () => {
   const currentRoute = useNavigationState((state) => state.routes[state.index]);
 
   useEffect(() => {
-    console.log(currentRoute)
-    if (currentRoute && !token && currentRoute.name !== "/login" && currentRoute.name !== "(login)") {
+    console.log(currentRoute);
+    if (
+      currentRoute &&
+      !token &&
+      currentRoute.name !== "/login" &&
+      currentRoute.name !== "(login)"
+    ) {
       console.log("No token found, redirecting to login...");
       router.push("/login");
     }

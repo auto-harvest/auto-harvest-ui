@@ -13,15 +13,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
-import { router } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 export default function ProfileScreen() {
-  const navigation = useNavigation();
-  const { theme } = useThemeColor();
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [darkModeEnabled, setDarkModeEnabled] = useState(false);
+  const [name, setName] = React.useState("John Doe");
+  const [email, setEmail] = React.useState("john.doe@example.com");
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
+  const { theme, toggleTheme } = useThemeColor();
+  const router = useRouter();
 
   const styles = StyleSheet.create({
     container: {
@@ -185,6 +185,7 @@ export default function ProfileScreen() {
             <Button
               mode="contained"
               onPress={() => {
+                // Handle logout logic here
                 router.push("/login");
               }}
               style={[styles.button, styles.logoutButton]}

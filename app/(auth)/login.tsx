@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {
   TextInput,
@@ -12,12 +12,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import { useRouter } from "expo-router";
+import { Link, Redirect, useNavigation, useRouter } from "expo-router";
+import { fakeLoginApi } from "../test";
+import { useDispatch, useSelector } from "react-redux";
+import { setToken, setUser } from "@/store/slices/persist/authSlice";
+import { RootState } from "@/store/store";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { theme } = useThemeColor();
   const router = useRouter();
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const token = useSelector((state: RootState) => state.auth.token);
 
   const styles = StyleSheet.create({
     container: {
@@ -64,72 +72,64 @@ export default function LoginScreen() {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Card style={styles.card}>
-        <Card.Content>
-          <View style={styles.iconContainer}>
-            <Ionicons name="leaf" size={50} color={theme.primary} />
-          </View>
-          <Title style={styles.title}>Login to Auto-Harvest</Title>
-          <Paragraph style={styles.description}>
-            Enter your email and password to access your systems
-          </Paragraph>
+    (token && <Redirect href={"/(system)/systemSelection"} />) || (
+      <SafeAreaView style={styles.container}>
+        <Card style={styles.card}>
+          <Card.Content>
+            <View style={styles.iconContainer}>
+              <Ionicons name="leaf" size={50} color={theme.primary} />
+            </View>
+            <Title style={styles.title}>Login to Auto-Harvest</Title>
+            <Paragraph style={styles.description}>
+              Enter your email and password to access your systems
+            </Paragraph>
+            <TextInput
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+              mode="outlined"
+              keyboardType="email-address"
+              style={styles.input}
+              theme={{ colors: { text: theme.text, primary: theme.primary } }}
+            />
+            <TextInput
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              mode="outlined"
+              secureTextEntry
+              style={styles.input}
+              theme={{ colors: { text: theme.text, primary: theme.primary } }}
+            />
+            <Button
+              mode="contained"
+              style={styles.button}
+              onPress={async () => {
+                const response = await fakeLoginApi(email, password);
+                const { token, user } = response;
+                console.log(": LoginScreen -> user", user);
+                // Dispatch token and user information
+                dispatch(setToken(token));
+                dispatch(setUser(user as any));
+                router.push("/systemSelection");
+              }}
+            >
+              Sign In
+            </Button>
 
-          <TextInput
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            mode="outlined"
-            textColor={theme.text}
-            keyboardType="email-address"
-            style={styles.input}
-            theme={{
-              colors: {
-                text: theme.text,
-                primary: theme.primary,
-                background: theme.card,
-              },
-            }}
-          />
-          <TextInput
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            mode="outlined"
-            textColor={theme.text}
-            secureTextEntry
-            style={styles.input}
-            theme={{
-              colors: {
-                text: theme.text,
-                primary: theme.primary,
-                background: theme.card,
-              },
-            }}
-          />
-          <Button
-            mode="contained"
-            style={styles.button}
-            theme={{ colors: { backdrop: theme.primary } }}
-            onPress={() => {
-              router.push("/systemSelection");
-            }}
-          >
-            Sign In
-          </Button>
-
-          <TouchableOpacity
-            onPress={() => {
-              router.push("/signup");
-            }}
-          >
-            <Text style={styles.signupText}>
-              Don't have an account?{" "}
-              <Text style={styles.signupLink}>Sign up</Text>
-            </Text>
-          </TouchableOpacity>
-        </Card.Content>
-      </Card>
-    </SafeAreaView>
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/signup");
+              }}
+            >
+              <Text style={styles.signupText}>
+                Don't have an account?{" "}
+                <Text style={styles.signupLink}>Sign up</Text>
+              </Text>
+            </TouchableOpacity>
+          </Card.Content>
+        </Card>
+      </SafeAreaView>
+    )
   );
 }

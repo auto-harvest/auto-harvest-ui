@@ -15,7 +15,6 @@ import { apiSlice } from "./slices/api/apiSlice";
 import authSlice from "./slices/persist/authSlice";
 import socketMiddleware from "./middleware/socketMiddleware"; // Import the socketMiddleware
 import socketSlice from "./slices/socketSlice";
-import { thunk } from "redux-thunk";
 import sensorInfoSlice from "./slices/api/sensorInfoSlice";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import { Platform } from "react-native";
@@ -47,7 +46,6 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     })
-      .concat(thunk)
       .concat(apiSlice.middleware) // Add API middleware
       .concat(socketMiddleware),
 });
