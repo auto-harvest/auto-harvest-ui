@@ -1,53 +1,57 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setToken, setUser, clearAuth } from "@/store/slices/persist/authSlice";
-import { RootState } from "@/store/store";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, Paragraph, Title } from "react-native-paper";
-import { View } from "react-native";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setToken, setUser } from "../../store/slices/persist/authSlice";
+import { TextInput } from "react-native-paper";
+import { Button, View } from "react-native";
 import { useRouter } from "expo-router";
 
-const AuthComponent = () => {
+const LoginScreen: React.FC = () => {
   const dispatch = useDispatch();
-
-  const token = useSelector((state: RootState) => state.auth.token);
-  const user = useSelector((state: any) => state.auth.user);
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
-  const handleLogin = () => {
-    // Simulate login
-    const token = "your-token-here";
-    const user = { id: "1", name: "John Doe", email: "john.doe@example.com" };
+  const handleLogin = async () => {
+    // Simulate API call
+    const response = await fakeLoginApi(email, password);
+    const { token, user } = response;
+    console.log(": LoginScreen -> user", user);
+    // Dispatch token and user information
     dispatch(setToken(token));
-    dispatch(setUser(user));
-  };
-
-  useEffect(() => {
-    if (token) {
-      router.push("/(system)/addController");
-    }
-    // Fetch user data
-    // fetch("https://api.example.com/user", {
-    //   headers: {
-    //
-  }, [router, token]);
-  const handleLogout = () => {
-    dispatch(clearAuth());
+    dispatch(setUser(user as any));
+    router.push("/dashboard");
   };
 
   return (
-    <SafeAreaView>
-      <Title>Auth Component</Title>
-      {token ? (
-        <View>
-          <Paragraph>Logged in as {user?.name}</Paragraph>
-          <Button onPress={handleLogout}>Logout</Button>
-        </View>
-      ) : (
-        <Button onPress={handleLogin}>Login</Button>
-      )}
-    </SafeAreaView>
+    <View>
+      <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
+      <TextInput
+        placeholder="Password"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+      <Button title="Login" onPress={handleLogin} />
+    </View>
   );
 };
 
-export default AuthComponent;
+export default LoginScreen;
+
+// Mock API function
+const fakeLoginApi = async (
+  email: string,
+  password: string
+): Promise<{
+  token: string;
+  user: { id: string; name: string; email: string };
+}> => {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      resolve({
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxODE2MjM5MDIyfQ.8FDcphMEeZ5j0U-g865C2Bw1e6Z04eksyRg9YVRuKP4",
+        user: { id: "1", name: "John Doe", email },
+      });
+    }, 1000)
+  );
+};

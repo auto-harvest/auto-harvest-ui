@@ -6,6 +6,7 @@ import Step from "./Step";
 // import WifiPairingStep from "./ConnectToWifiStep";
 import { useThemeColor } from "../../../hooks/useThemeColor";
 import WifiPairingStep from "./ConnectToWifiStep";
+import CheckMobileData from "./CheckMobileDataStep";
 
 interface MultiPartFormWrapperProps {
   onSubmit: () => void;
@@ -41,7 +42,9 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
       key={2}
       title="Step 2: Disable Mobile Data"
       description="Go to your settings and turn off mobile data."
-    />,
+    >
+      <CheckMobileData></CheckMobileData>
+    </Step>,
     <Step
       key={3}
       title="Step 3: Grant Location Permission"
