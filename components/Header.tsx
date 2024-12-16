@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "../hooks/useThemeColor";
+import { useThemeColor } from "../hooks/useThemeColor";
 
 interface HeaderProps {
   title?: string;
@@ -19,7 +19,7 @@ export default function Header({
   showUserIcon = false,
   onUserIconPress,
 }: HeaderProps) {
-  const { theme } = useTheme();
+  const { theme } = useThemeColor();
 
   const styles = StyleSheet.create({
     header: {

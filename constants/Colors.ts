@@ -6,12 +6,14 @@
 const background = "#F5F5F5";
 const text = "#000000";
 const primaryGreen = "#4CAF50";
+const secondary = "#FFA726";
 const card = "#FFFFFF";
-const border = "#E0E0E0";
+const border = "#32f1";
 
 const darkBackground = "#121212";
 const darkText = "#FFFFFF";
 const darkPrimary = "#81C784";
+const darkSecondary = "#FFB74D";
 const darkCard = "#1E1E1E";
 const darkBorder = "#333333";
 
@@ -22,6 +24,7 @@ export const Colors = {
     primary: primaryGreen,
     card: card,
     border: border,
+    secondary: secondary,
   },
   dark: {
     text: darkText,
@@ -29,5 +32,6 @@ export const Colors = {
     primary: darkPrimary,
     card: darkCard,
     border: darkBorder,
+    secondary: darkSecondary,
   },
 };

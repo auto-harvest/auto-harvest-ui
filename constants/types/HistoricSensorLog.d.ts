@@ -1,4 +1,4 @@
-import { ValueType } from "../constants/enums/ValueType.enum";
+import { ValueType } from "../enums/ValueType.enum";
 import { AggregateSensorMetadata } from "./AggregateSensorMetadata";
 
 export interface HistoricSensorLog extends BaseEntity {

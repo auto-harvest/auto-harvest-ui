@@ -1,5 +1,5 @@
-import { Granularity } from "../constants/enums/Granularity.enum";
-import { Statistics } from "./interfaces/Statistics";
+import { Granularity } from "../enums/Granularity.enum";
+import { Statistics } from "./Statistics";
 
 export interface AggregateSensorMetadata {
   granularity: Granularity;

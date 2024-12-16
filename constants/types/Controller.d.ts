@@ -1,6 +1,6 @@
-import { CropType } from "../constants/enums/CropType.enum";
-import { SystemStatus } from "../constants/enums/SystemStatus.enum";
-import { WaterLevel } from "../constants/enums/WaterLevel.enum";
+import { CropType } from "../enums/CropType.enum";
+import { SystemStatus } from "../enums/SystemStatus.enum";
+import { WaterLevel } from "../enums/WaterLevel.enum";
 import { BaseEntity } from "./_BaseEntity";
 
 export interface Controller extends BaseEntity {

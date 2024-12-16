@@ -2,15 +2,16 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "../hooks/useThemeColor";
+import { useThemeColor } from "../hooks/useThemeColor";
+import { RelativePathString, useRouter } from "expo-router";
 
 interface NavbarProps {
   activeNav: string;
-  setActiveNav: (navItem: string) => void;
 }
 
-export default function Navbar({ activeNav, setActiveNav }: NavbarProps) {
-  const { theme } = useTheme();
+export default function Navbar({ activeNav }: NavbarProps) {
+  const { theme } = useThemeColor();
+  const router = useRouter();
 
   const styles = StyleSheet.create({
     navbar: {
@@ -55,7 +56,10 @@ export default function Navbar({ activeNav, setActiveNav }: NavbarProps) {
             styles.navItem,
             activeNav === item.name && styles.activeNavItem,
           ]}
-          onPress={() => setActiveNav(item.name)}
+          onPress={() => {
+            if (activeNav !== item.name)
+              router.push(`/${item.name}` as RelativePathString);
+          }}
         >
           <Ionicons
             name={item.icon}
