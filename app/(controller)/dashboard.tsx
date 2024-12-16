@@ -14,6 +14,7 @@ import { Dimensions } from "react-native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
+import { router } from "expo-router";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -128,9 +129,13 @@ export default function HydroponicsDashboard() {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <Header
+          showBackButton
+          onBackPress={() => {
+            router.back();
+          }}
           showUserIcon
           onUserIconPress={() => {
-            /* Handle user menu */
+            router.push("/profile");
           }}
         />
 

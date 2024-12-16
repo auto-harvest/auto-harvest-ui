@@ -125,7 +125,12 @@ export default function PlantsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header showBackButton onBackPress={() => router.back()} />
+      <Header
+        showBackButton
+        onBackPress={() => router.back()}
+        showUserIcon
+        onUserIconPress={() => router.push("/profile")}
+      />
       <Searchbar
         placeholder="Search plants..."
         onChangeText={setSearchQuery}

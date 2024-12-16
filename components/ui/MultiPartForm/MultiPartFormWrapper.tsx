@@ -50,15 +50,15 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
       <WiFiPermissionComponent></WiFiPermissionComponent>
     </Step>,
 
-    <Step title="Step 4: Connect to WiFi" key={}>
+    <Step title="Step 4: Connect to WiFi" key={4}>
       <WifiPairingStep handleBack={handleBack} handleNext={handleNext} />
     </Step>,
     <Step
-      key={4}
+      key={5}
       title="Step 5: Pair Controller"
       description="Press the Pair button on the device."
     />,
-    <Step title="Step 6: System Details" key={5}>
+    <Step title="Step 6: System Details" key={6}>
       <TextInput
         label="System Name"
         value={systemName}
@@ -96,6 +96,10 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
       borderRadius: 4,
       marginBottom: 16,
     },
+    button: {
+      margin: 16,
+      backgroundColor: theme.primary,
+    },
     buttonGroup: {
       flexDirection: "row",
       justifyContent: "space-between",
@@ -117,13 +121,31 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
       </View>
       {/* Navigation Buttons */}
       <View style={styles.buttonGroup}>
-        {currentStep > 0 && <Button onPress={handleBack}>Back</Button>}
+        {currentStep > 0 && (
+          <Button
+            style={styles.button}
+            onPress={handleBack}
+            textColor={colors.text}
+          >
+            Back
+          </Button>
+        )}
         {currentStep < totalSteps - 1 ? (
-          <Button mode="contained" onPress={handleNext}>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={handleNext}
+            textColor={colors.text}
+          >
             Next
           </Button>
         ) : (
-          <Button mode="contained" onPress={onSubmit}>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={onSubmit}
+            textColor={colors.text}
+          >
             Submit
           </Button>
         )}

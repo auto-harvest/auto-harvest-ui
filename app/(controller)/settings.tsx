@@ -54,7 +54,12 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header showBackButton onBackPress={() => router.back()} />
+      <Header
+        showBackButton
+        onBackPress={() => router.back()}
+        showUserIcon
+        onUserIconPress={() => router.push("/profile")}
+      />
       <ScrollView>
         <Card style={styles.card}>
           <Card.Content>
@@ -119,7 +124,6 @@ export default function SettingsScreen() {
             /* Handle saving settings */
           }}
           style={styles.saveButton}
-          color={theme.primary}
         >
           Save Settings
         </Button>

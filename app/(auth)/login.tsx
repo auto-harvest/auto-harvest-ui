@@ -28,6 +28,7 @@ export default function LoginScreen() {
     },
     card: {
       padding: 16,
+      backgroundColor: theme.card,
     },
     iconContainer: {
       alignItems: "center",
@@ -51,6 +52,7 @@ export default function LoginScreen() {
     button: {
       marginTop: 8,
       marginBottom: 16,
+      backgroundColor: theme.primary,
     },
     signupText: {
       textAlign: "center",
@@ -63,7 +65,7 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Card style={styles.card} theme={{ colors: { background: theme.card } }}>
+      <Card style={styles.card}>
         <Card.Content>
           <View style={styles.iconContainer}>
             <Ionicons name="leaf" size={50} color={theme.primary} />
@@ -72,6 +74,7 @@ export default function LoginScreen() {
           <Paragraph style={styles.description}>
             Enter your email and password to access your systems
           </Paragraph>
+
           <TextInput
             label="Email"
             value={email}

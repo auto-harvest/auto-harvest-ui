@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -10,17 +10,18 @@ import {
   TextInput,
 } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
-import { Link, useRouter } from "expo-router";
+import { router } from "expo-router";
 
 export default function ProfileScreen() {
-  const [name, setName] = React.useState("John Doe");
-  const [email, setEmail] = React.useState("john.doe@example.com");
-  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
-  const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
-  const { theme, toggleTheme } = useThemeColor();
-  const router = useRouter();
+  const navigation = useNavigation();
+  const { theme } = useThemeColor();
+  const [name, setName] = useState("John Doe");
+  const [email, setEmail] = useState("john.doe@example.com");
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [darkModeEnabled, setDarkModeEnabled] = useState(false);
 
   const styles = StyleSheet.create({
     container: {
@@ -70,19 +71,17 @@ export default function ProfileScreen() {
     },
     logoutButton: {
       marginTop: 20,
-      backgroundColor: "#ff3b30",
+      backgroundColor: "#D32F2F",
     },
   });
 
   return (
     <SafeAreaView style={styles.container}>
-      <Link href="/SystemScreen">
-        <Header
-          title="Profile"
-          showBackButton
-          onBackPress={() => router.back()}
-        />
-      </Link>
+      <Header
+        title="Profile"
+        showBackButton
+        onBackPress={() => navigation.goBack()}
+      />
       <ScrollView>
         <View style={styles.header}>
           <Avatar.Image
@@ -102,17 +101,31 @@ export default function ProfileScreen() {
               value={name}
               onChangeText={setName}
               mode="outlined"
+              textColor={theme.text}
               style={styles.input}
-              theme={{ colors: { text: theme.text, primary: theme.primary } }}
+              theme={{
+                colors: {
+                  text: theme.text,
+                  primary: theme.primary,
+                  background: theme.card,
+                },
+              }}
             />
             <TextInput
               label="Email"
               value={email}
               onChangeText={setEmail}
               mode="outlined"
-              style={styles.input}
               keyboardType="email-address"
-              theme={{ colors: { text: theme.text, primary: theme.primary } }}
+              textColor={theme.text}
+              style={styles.input}
+              theme={{
+                colors: {
+                  text: theme.text,
+                  primary: theme.primary,
+                  background: theme.card,
+                },
+              }}
             />
           </Card.Content>
         </Card>
@@ -147,6 +160,7 @@ export default function ProfileScreen() {
               mode="outlined"
               onPress={() => {}}
               style={styles.button}
+              textColor={theme.text}
               icon={() => (
                 <Ionicons name="key-outline" size={20} color={theme.primary} />
               )}
@@ -157,6 +171,7 @@ export default function ProfileScreen() {
               mode="outlined"
               onPress={() => {}}
               style={styles.button}
+              textColor={theme.text}
               icon={() => (
                 <Ionicons
                   name="cloud-download-outline"
@@ -170,7 +185,6 @@ export default function ProfileScreen() {
             <Button
               mode="contained"
               onPress={() => {
-                // Handle logout logic here
                 router.push("/login");
               }}
               style={[styles.button, styles.logoutButton]}

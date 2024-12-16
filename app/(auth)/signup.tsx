@@ -41,6 +41,7 @@ export default function SignUpScreen() {
     },
     card: {
       padding: 16,
+      backgroundColor: theme.card,
     },
     iconContainer: {
       alignItems: "center",
@@ -64,6 +65,7 @@ export default function SignUpScreen() {
     button: {
       marginTop: 8,
       marginBottom: 16,
+      backgroundColor: theme.primary,
     },
     loginText: {
       textAlign: "center",
@@ -76,7 +78,7 @@ export default function SignUpScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Card style={styles.card} theme={{ colors: { background: theme.card } }}>
+      <Card style={styles.card}>
         <Card.Content>
           <View style={styles.iconContainer}>
             <Ionicons name="leaf" size={50} color={theme.primary} />
@@ -99,7 +101,6 @@ export default function SignUpScreen() {
                 background: theme.card,
                 placeholder: theme.text,
                 primary: theme.primary,
-                outline: theme.primary,
               },
             }}
           />
@@ -117,7 +118,6 @@ export default function SignUpScreen() {
                 background: theme.card,
                 placeholder: theme.text,
                 primary: theme.primary,
-                outline: theme.primary,
               },
             }}
           />
@@ -134,7 +134,6 @@ export default function SignUpScreen() {
                 background: theme.card,
                 placeholder: theme.text,
                 primary: theme.primary,
-                outline: theme.primary,
               },
             }}
           />

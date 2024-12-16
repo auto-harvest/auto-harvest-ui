@@ -16,6 +16,7 @@ import { Controller } from "@/constants/types/Controller";
 import { WaterLevel } from "@/constants/enums/WaterLevel.enum";
 import { SystemStatus } from "@/constants/enums/SystemStatus.enum";
 import { CropType } from "@/constants/enums/CropType.enum";
+import Header from "@/components/Header";
 
 export interface SystemInterface {
   id: number;
@@ -170,22 +171,13 @@ export default function SystemsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.titleContainer}>
-          <Ionicons
-            name="leaf"
-            size={24}
-            color={theme.primary}
-            style={styles.icon}
-          />
-          <Text style={styles.title}>Auto-Harvest Systems</Text>
-        </View>
-        <TouchableOpacity>
-          <Link href={"/profile"}>
-            <Ionicons name="log-out-outline" size={24} color={theme.text} />
-          </Link>
-        </TouchableOpacity>
-      </View>
+      <Header
+        title="Auto-Harvest Systems"
+        showUserIcon
+        onUserIconPress={() => {
+          router.push("/profile");
+        }}
+      />
       <Searchbar
         placeholder="Search systems..."
         onChangeText={setSearchQuery}
