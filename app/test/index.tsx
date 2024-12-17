@@ -52,6 +52,6 @@ export const fakeLoginApi = async (
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxODE2MjM5MDIyfQ.8FDcphMEeZ5j0U-g865C2Bw1e6Z04eksyRg9YVRuKP4",
         user: { id: "1", name: "John Doe", email },
       });
-    }, 1000)
+    }, 100)
   );
 };

@@ -72,64 +72,62 @@ export default function LoginScreen() {
   });
 
   return (
-    (token && <Redirect href={"/(system)/systemSelection"} />) || (
-      <SafeAreaView style={styles.container}>
-        <Card style={styles.card}>
-          <Card.Content>
-            <View style={styles.iconContainer}>
-              <Ionicons name="leaf" size={50} color={theme.primary} />
-            </View>
-            <Title style={styles.title}>Login to Auto-Harvest</Title>
-            <Paragraph style={styles.description}>
-              Enter your email and password to access your systems
-            </Paragraph>
-            <TextInput
-              label="Email"
-              value={email}
-              onChangeText={setEmail}
-              mode="outlined"
-              keyboardType="email-address"
-              style={styles.input}
-              theme={{ colors: { text: theme.text, primary: theme.primary } }}
-            />
-            <TextInput
-              label="Password"
-              value={password}
-              onChangeText={setPassword}
-              mode="outlined"
-              secureTextEntry
-              style={styles.input}
-              theme={{ colors: { text: theme.text, primary: theme.primary } }}
-            />
-            <Button
-              mode="contained"
-              style={styles.button}
-              onPress={async () => {
-                const response = await fakeLoginApi(email, password);
-                const { token, user } = response;
-                console.log(": LoginScreen -> user", user);
-                // Dispatch token and user information
-                dispatch(setToken(token));
-                dispatch(setUser(user as any));
-                router.push("/systemSelection");
-              }}
-            >
-              Sign In
-            </Button>
+    <SafeAreaView style={styles.container}>
+      <Card style={styles.card}>
+        <Card.Content>
+          <View style={styles.iconContainer}>
+            <Ionicons name="leaf" size={50} color={theme.primary} />
+          </View>
+          <Title style={styles.title}>Login to Auto-Harvest</Title>
+          <Paragraph style={styles.description}>
+            Enter your email and password to access your systems
+          </Paragraph>
+          <TextInput
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            mode="outlined"
+            keyboardType="email-address"
+            style={styles.input}
+            theme={{ colors: { text: theme.text, primary: theme.primary } }}
+          />
+          <TextInput
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            mode="outlined"
+            secureTextEntry
+            style={styles.input}
+            theme={{ colors: { text: theme.text, primary: theme.primary } }}
+          />
+          <Button
+            mode="contained"
+            style={styles.button}
+            onPress={async () => {
+              const response = await fakeLoginApi(email, password);
+              const { token, user } = response;
+              console.log(": LoginScreen -> user", user);
+              // Dispatch token and user information
+              dispatch(setToken(token));
+              dispatch(setUser(user as any));
+              router.push("/dashboard");
+            }}
+          >
+            Sign In
+          </Button>
 
-            <TouchableOpacity
-              onPress={() => {
-                router.push("/signup");
-              }}
-            >
-              <Text style={styles.signupText}>
-                Don't have an account?{" "}
-                <Text style={styles.signupLink}>Sign up</Text>
-              </Text>
-            </TouchableOpacity>
-          </Card.Content>
-        </Card>
-      </SafeAreaView>
-    )
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/signup");
+            }}
+          >
+            <Text style={styles.signupText}>
+              Don't have an account?{" "}
+              <Text style={styles.signupLink}>Sign up</Text>
+            </Text>
+          </TouchableOpacity>
+        </Card.Content>
+      </Card>
+    </SafeAreaView>
   );
 }

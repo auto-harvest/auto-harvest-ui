@@ -18,12 +18,14 @@ import socketSlice from "./slices/socketSlice";
 import sensorInfoSlice from "./slices/api/sensorInfoSlice";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import { Platform } from "react-native";
+import jwtMiddleware from "./middleware/jwtMiddleware";
+import { thunk } from "redux-thunk";
 
 // Persist configuration
 const persistConfig = {
   key: "root",
-  storage: Platform.OS === "web" ? storage : AsyncStorage,
-  whitelist: ["auth", "user"], // Persisted slices
+  storage: AsyncStorage,
+  whitelist: ["auth", "user", "sensorInfo"], // Persisted slices
 };
 
 // Combine reducers
@@ -46,8 +48,9 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     })
+      .concat(socketMiddleware)
       .concat(apiSlice.middleware) // Add API middleware
-      .concat(socketMiddleware),
+      .concat(jwtMiddleware),
 });
 
 // Persistor

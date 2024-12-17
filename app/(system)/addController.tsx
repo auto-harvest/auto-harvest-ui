@@ -3,6 +3,7 @@ import { SafeAreaView, StyleSheet } from "react-native";
 import MultiPartFormWrapper from "../../components/ui/MultiPartForm/MultiPartFormWrapper";
 
 const IoTDevicePairingScreen: React.FC = () => {
+  
   const handleSubmit = () => {
     console.log("Form submitted:", { location });
   };

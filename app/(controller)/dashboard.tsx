@@ -20,6 +20,8 @@ import { RootState } from "@/store/store";
 const screenWidth = Dimensions.get("window").width;
 
 export default function HydroponicsDashboard() {
+  
+  const router = useRouter();
   const [isPumpOn, setIsPumpOn] = useState(false);
   const [isSystemOn, setIsSystemOn] = useState(true);
   const [isAirPumpOn, setIsAirPumpOn] = useState(false);
