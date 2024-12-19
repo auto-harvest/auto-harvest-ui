@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { setToken, setUser } from "../../store/slices/persist/authSlice";
 import { TextInput } from "react-native-paper";
 import { Button, View } from "react-native";
 import { useRouter } from "expo-router";
+import { useAppDispatch } from "@/store/overrides";
 
 const LoginScreen: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();

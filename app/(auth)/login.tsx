@@ -14,18 +14,17 @@ import { useThemeColor } from "../../hooks/useThemeColor";
 import { useRouter } from "expo-router";
 import { Link, Redirect, useNavigation, useRouter } from "expo-router";
 import { fakeLoginApi } from "../test";
-import { useDispatch, useSelector } from "react-redux";
 import { setToken, setUser } from "@/store/slices/persist/authSlice";
-import { RootState } from "@/store/store";
+import { useAppDispatch, useAppSelector } from "@/store/overrides";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { theme } = useThemeColor();
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token = useAppSelector((state) => state.auth.token);
 
   const styles = StyleSheet.create({
     container: {

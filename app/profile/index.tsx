@@ -14,13 +14,16 @@ import { useNavigation } from "@react-navigation/native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import { Link, useRouter } from "expo-router";
+import { logout } from "@/store/slices/persist/authSlice";
+import { useAppDispatch } from "@/store/overrides";
 
 export default function ProfileScreen() {
   const [name, setName] = React.useState("John Doe");
   const [email, setEmail] = React.useState("john.doe@example.com");
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
-  const { theme, toggleTheme } = useThemeColor();
+  const { theme } = useThemeColor();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const styles = StyleSheet.create({
@@ -146,7 +149,6 @@ export default function ProfileScreen() {
                 value={darkModeEnabled}
                 onValueChange={(value) => {
                   setDarkModeEnabled(value);
-                  toggleTheme();
                 }}
                 color={theme.primary}
               />

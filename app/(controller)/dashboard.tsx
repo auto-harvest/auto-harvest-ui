@@ -14,18 +14,16 @@ import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
 import { RelativePathString, useRouter } from "expo-router";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useAppSelector } from "@/store/overrides";
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function HydroponicsDashboard() {
-  
   const router = useRouter();
   const [isPumpOn, setIsPumpOn] = useState(false);
   const [isSystemOn, setIsSystemOn] = useState(true);
   const [isAirPumpOn, setIsAirPumpOn] = useState(false);
-  const sensorData = useSelector((state: RootState) => state.sensorInfo.data);
+  const sensorData = useAppSelector((state) => state.sensorInfo.data);
   console.log(sensorData);
   const { theme, isDark } = useThemeColor();
 
@@ -154,6 +152,11 @@ export default function HydroponicsDashboard() {
             "Humidity",
             `${sensorData["humidity"].value}%`,
             "Optimal range: 50-70%"
+          )}
+          {renderMetricCard(
+            "Water Temperature",
+            `${sensorData["water-temperature"].value}%`,
+            "Optimal range: 18-22°C"
           )}
           {renderMetricCard(
             "pH Level",

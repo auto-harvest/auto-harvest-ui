@@ -16,10 +16,7 @@ import authSlice from "./slices/persist/authSlice";
 import socketMiddleware from "./middleware/socketMiddleware"; // Import the socketMiddleware
 import socketSlice from "./slices/socketSlice";
 import sensorInfoSlice from "./slices/api/sensorInfoSlice";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
-import { Platform } from "react-native";
 import jwtMiddleware from "./middleware/jwtMiddleware";
-import { thunk } from "redux-thunk";
 
 // Persist configuration
 const persistConfig = {
@@ -57,6 +54,5 @@ const store = configureStore({
 const persistor = persistStore(store);
 
 // Export store types
-export type RootState = ReturnType<typeof rootReducer>;
-export type AppDispatch = typeof store.dispatch;
-export { store, persistor };
+
+export { store, persistor, rootReducer };
