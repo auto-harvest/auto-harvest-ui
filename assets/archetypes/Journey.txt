@@ -1,0 +1,62 @@
+()JOURNEY()
+
+-User starts app
+	If login {
+		has access to profile button and settings button
+		go to ControllerSelection
+	}else{
+		go to login page
+			Option to go to register
+					from register have the option to go back to login
+	}
+
+-In controller selection page
+	-User can search for a controller
+	-User can add a controller
+	-User can select a controller
+		-Go to controller page
+
+>Header-
+	- Has Logo and name in far Left
+	- in the middle is the name of the current screen 
+	- in the far right is a button that dropdowns "Profile" and "Settings"
+		
+>Profile
+	- Has profile pic and selection for another profile pic
+	- Has change email
+	- Has change password
+	- Has change username
+	- Has delete account
+
+>Settings
+	- has theme selection
+	- has General notification settings
+		- Enable Push Notifications?
+		- Watering Notification
+		- Data change notification
+		- Notification every X minutes/hours
+	- Has Help Section
+		- Contact us
+		- Knowledge base / FAQ (Some hydroponics page/forum)	
+		- Terms and conditions
+		- About page
+
+>ControllerSelection
+	- Has all the Controllers as cards with name and some details
+	- A searchBar on the top
+	- An addController button on the bottom
+
+>AddController
+	- Has a form to add a controller
+		- Name
+		- Location
+		- IP Address
+		- Port
+		- Username
+		- Password
+	- A button to add the controller
+
+>Controller
+	- Has Dashboard
+	- Has Settings
+	
