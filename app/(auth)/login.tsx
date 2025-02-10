@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { TextInput, Button, Text, Card, Title, Paragraph } from "react-native-paper";
+import {
+  TextInput,
+  Button,
+  Text,
+  Card,
+  Title,
+  Paragraph,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
-import { Link, useNavigation, useRouter } from "expo-router";
+import { Link, Redirect, useNavigation, useRouter } from "expo-router";
+import { fakeLoginApi } from "../test";
 import { setToken, setUser } from "@/store/slices/persist/authSlice";
 import { useAppDispatch } from "@/store/overrides";
 import { useLoginMutation } from "@/store/slices/api/authSlice";
@@ -68,7 +76,7 @@ export default function LoginScreen() {
       const { token, user } = response;
       dispatch(setToken(token));
       dispatch(setUser(user));
-      router.push("/dashboard");
+      router.push("/systemSelection");
     } catch (error) {
       console.error("Failed to login:", error);
     }
@@ -92,6 +100,7 @@ export default function LoginScreen() {
             mode="outlined"
             keyboardType="email-address"
             style={styles.input}
+            textColor={theme.text}
             theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
           <TextInput
@@ -101,6 +110,7 @@ export default function LoginScreen() {
             mode="outlined"
             secureTextEntry
             style={styles.input}
+            textColor={theme.text}
             theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
           <Button

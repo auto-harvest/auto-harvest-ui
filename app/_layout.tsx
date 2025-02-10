@@ -1,8 +1,7 @@
+import Notification from "@/components/Notification";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { persistor, store } from "@/store/store";
-import { useNavigationState } from "@react-navigation/native";
-import { Stack, useNavigation, useRouter } from "expo-router";
-import { useEffect } from "react";
+import { Stack } from "expo-router";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
@@ -17,6 +16,7 @@ export default function RootLayout() {
           }}
         />
         <JwtGuard />
+        <Notification />
       </PersistGate>
     </Provider>
   );
