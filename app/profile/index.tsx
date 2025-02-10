@@ -80,7 +80,7 @@ export default function ProfileScreen() {
       <Header
         title="Profile"
         showBackButton
-        onBackPress={() => navigation.goBack()}
+        onBackPress={() => router.back()}
       />
       <ScrollView>
         <View style={styles.header}>

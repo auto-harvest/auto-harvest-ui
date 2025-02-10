@@ -56,7 +56,7 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.container}>
       <Header
         showBackButton
-        onBackPress={() => router.back()}
+        onBackPress={() => router.push("/systemSelection")}
         showUserIcon
         onUserIconPress={() => router.push("/profile")}
       />

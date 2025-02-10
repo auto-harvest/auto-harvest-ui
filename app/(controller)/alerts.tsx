@@ -121,7 +121,14 @@ export default function AlertsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header showBackButton onBackPress={() => router.back()} />
+      <Header
+        showBackButton
+        onBackPress={() => router.push("/systemSelection")}
+        showUserIcon
+        onUserIconPress={() => {
+          router.push("/profile");
+        }}
+      />
       <Searchbar
         placeholder="Search alerts..."
         onChangeText={setSearchQuery}
