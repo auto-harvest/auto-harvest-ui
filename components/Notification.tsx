@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Text, View, Button, Platform } from "react-native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -40,8 +41,9 @@ async function registerForPushNotificationsAsync() {
       );
       return;
     }
-    const projectId = "9ef25314-f6d4-4458-a5fa-684c091085a2";
-
+    const projectId =
+      Constants?.expoConfig?.extra?.eas?.projectId ??
+      Constants?.easConfig?.projectId;
     if (!projectId) {
       handleRegistrationError("Project ID not found");
     }
