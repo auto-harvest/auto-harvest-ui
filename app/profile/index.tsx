@@ -11,22 +11,27 @@ import {
 } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useThemeColor } from "../../hooks/useThemeColor";
+import { useThemeColor, useDarkTheme } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import { Link, useRouter } from "expo-router";
-import { logout, setAllowPush } from "@/store/slices/persist/authSlice";
+import { logout, setAllowPush, setTheme } from "@/store/slices/persist/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/overrides";
-import Notification from "@/components/Notification";
 
 export default function ProfileScreen() {
   const allowPush = useAppSelector((state) => state.auth.allowPush);
   const [name, setName] = React.useState("John Doe");
   const [email, setEmail] = React.useState("john.doe@example.com");
-  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
-  const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
   const { theme } = useThemeColor();
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const handleThemeChange = (value: boolean) => {
+    if (value === true) {
+      dispatch(setTheme("dark"));
+    } else {
+      dispatch(setTheme("light"));
+    }
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -156,9 +161,9 @@ export default function ProfileScreen() {
             <View style={styles.settingItem}>
               <Text style={styles.settingText}>Dark Mode</Text>
               <Switch
-                value={darkModeEnabled}
+                value={useDarkTheme()}
                 onValueChange={(value) => {
-                  setDarkModeEnabled(value);
+                  handleThemeChange(!!value);
                 }}
                 color={theme.primary}
               />

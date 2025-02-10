@@ -56,7 +56,6 @@ async function registerForPushNotificationsAsync() {
           projectId,
         })
       ).data;
-      console.log(pushTokenString);
       return pushTokenString;
     } catch (e: unknown) {
       handleRegistrationError(`${e}`);
@@ -78,7 +77,6 @@ export default function useNotifications(onNotification: (notification: any) => 
     registerForPushNotificationsAsync()
       .then((token) =>{ 
         dispatch(setPushToken(token ?? ""))
-        alert(token);
       })
       .catch((error: any) => console.error(error));
     notificationListener.current =
@@ -90,7 +88,7 @@ export default function useNotifications(onNotification: (notification: any) => 
         );
     
     };
-  }, [allowPush, dispatch]);
+  }, [allowPush, dispatch, onNotification]);
 
   return notificationListener.current;
 }
