@@ -145,27 +145,27 @@ export default function HydroponicsDashboard() {
         <View style={styles.metricsContainer}>
           {renderMetricCard(
             "Temperature",
-            `${sensorData["temperature"].value}°C`,
+            `${sensorData["temperature"]?.value}°C`,
             "Optimal range: 20-26°C"
           )}
           {renderMetricCard(
             "Humidity",
-            `${sensorData["humidity"].value}%`,
+            `${sensorData["humidity"]?.value}%`,
             "Optimal range: 50-70%"
           )}
           {renderMetricCard(
             "Water Temperature",
-            `${sensorData["water-temperature"].value}%`,
-            "Optimal range: 18-22°C"
+            `${sensorData["water-temperature"]?.value}%`,
+            "Optimal range: 18-22°C" 
           )}
           {renderMetricCard(
             "pH Level",
-            `${sensorData["ph"].value}`,
+            `${sensorData["ph"]?.value}`,
             "Optimal range: 5.5-6.5"
           )}
           {renderMetricCard(
             "TDS",
-            `${sensorData["tds"].value} ppm`,
+            `${sensorData["tds"]?.value} ppm`,
             "Optimal range: 150-250 ppm"
           )}
         </View>

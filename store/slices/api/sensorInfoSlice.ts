@@ -32,6 +32,11 @@ const initialState: SensorInfoState = {
       value: 0,
       timestamp: Date.now().toString(),
     },
+    'water-temperature': {
+      id: "water-temperature",
+      value: 0,
+      timestamp: Date.now().toString(),
+    }
   }, // Initial state as an empty object
 };
 

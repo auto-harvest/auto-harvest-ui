@@ -197,11 +197,11 @@ export default function SystemsScreen() {
         mode="contained"
         icon="plus"
         onPress={() => {
-          /* Handle adding new system */
+          router.push("/addController");
         }}
         style={styles.addButton}
       >
-        <Link href="/addController">Add New System</Link>
+        Add New System
       </Button>
     </SafeAreaView>
   );
