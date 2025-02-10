@@ -1,8 +1,11 @@
+import { useState, useEffect, useRef } from "react";
+import { Platform } from "react-native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
-import { Platform } from "react-native";
-import { useEffect, useRef, useState } from "react";
+import { useAppSelector } from "@/store/overrides";
+import { useAppDispatch } from "@/store/overrides";
+import { setPushToken } from "@/store/slices/persist/authSlice";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -11,26 +14,6 @@ Notifications.setNotificationHandler({
     shouldSetBadge: true,
   }),
 });
-
-async function sendPushNotification(expoPushToken: string, message: any) {
-  const message = {
-    to: expoPushToken,
-    sound: "default",
-    title: "Original Title",
-    body: "And here is the body!",
-    data: { someData: "goes here" },
-  };
-
-  await fetch("https://exp.host/--/api/v2/push/send", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Accept-encoding": "gzip, deflate",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(message),
-  });
-}
 
 function handleRegistrationError(errorMessage: string) {
   alert(errorMessage);
@@ -83,35 +66,31 @@ async function registerForPushNotificationsAsync() {
   }
 }
 
-export const useNotifications = () => {
-  const [expoPushToken, setExpoPushToken] = useState("");
-  const [notification, setNotification] = useState<
-    Notifications.Notification | undefined
-  >(undefined);
+export default function useNotifications(onNotification: (notification: any) => void) {
+  const dispatch = useAppDispatch();
+  const allowPush = useAppSelector((state) => state.auth.allowPush);
+ 
   const notificationListener = useRef<Notifications.EventSubscription>();
-  const responseListener = useRef<Notifications.EventSubscription>();
   useEffect(() => {
+    if (!allowPush) return;
+    if (Platform.OS !== "android") return;
+
     registerForPushNotificationsAsync()
-      .then((token) => setExpoPushToken(token ?? ""))
-      .catch((error: any) => setExpoPushToken(`${error}`));
-
+      .then((token) =>{ 
+        dispatch(setPushToken(token ?? ""))
+        alert(token);
+      })
+      .catch((error: any) => console.error(error));
     notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
-
+      Notifications.addNotificationReceivedListener(onNotification);
     return () => {
       notificationListener.current &&
         Notifications.removeNotificationSubscription(
           notificationListener.current
         );
-      responseListener.current &&
-        Notifications.removeNotificationSubscription(responseListener.current);
+    
     };
-  }, []);
-};
+  }, [allowPush, dispatch]);
+
+  return notificationListener.current;
+}

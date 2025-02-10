@@ -14,10 +14,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import { Link, useRouter } from "expo-router";
-import { logout } from "@/store/slices/persist/authSlice";
-import { useAppDispatch } from "@/store/overrides";
+import { logout, setAllowPush } from "@/store/slices/persist/authSlice";
+import { useAppDispatch, useAppSelector } from "@/store/overrides";
+import Notification from "@/components/Notification";
 
 export default function ProfileScreen() {
+  const allowPush = useAppSelector((state) => state.auth.allowPush);
   const [name, setName] = React.useState("John Doe");
   const [email, setEmail] = React.useState("john.doe@example.com");
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
@@ -144,8 +146,10 @@ export default function ProfileScreen() {
             <View style={styles.settingItem}>
               <Text style={styles.settingText}>Enable Notifications</Text>
               <Switch
-                value={notificationsEnabled}
-                onValueChange={setNotificationsEnabled}
+                value={allowPush}
+                onValueChange={(value)=> {
+                  dispatch(setAllowPush(!!value));
+                }}
                 color={theme.primary}
               />
             </View>

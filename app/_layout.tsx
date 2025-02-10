@@ -1,3 +1,4 @@
+import Notification from "@/components/Notification";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { persistor, store } from "@/store/store";
 import { Stack } from "expo-router";
@@ -15,6 +16,7 @@ export default function RootLayout() {
           }}
         />
         <JwtGuard />
+        <Notification />
       </PersistGate>
     </Provider>
   );
