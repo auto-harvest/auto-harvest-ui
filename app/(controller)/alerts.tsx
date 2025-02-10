@@ -48,6 +48,7 @@ const alertsData = [
 ];
 
 export default function AlertsScreen() {
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All");
   const { theme } = useThemeColor();

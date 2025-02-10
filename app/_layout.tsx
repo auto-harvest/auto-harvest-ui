@@ -1,6 +1,8 @@
-import React from "react";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { persistor, store } from "@/store/store";
-import { Stack } from "expo-router";
+import { useNavigationState } from "@react-navigation/native";
+import { Stack, useNavigation, useRouter } from "expo-router";
+import { useEffect } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
@@ -14,7 +16,13 @@ export default function RootLayout() {
             headerShown: false, // Hides the header for all screens in this layout
           }}
         />
+        <JwtGuard />
       </PersistGate>
     </Provider>
   );
 }
+
+const JwtGuard = () => {
+  useAuthGuard();
+  return null;
+};

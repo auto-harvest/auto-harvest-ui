@@ -1,14 +1,16 @@
 import { Redirect } from "expo-router";
-import React from "react";
+
+import { useAppSelector } from "@/store/overrides";
 const isLoggedIn: boolean = false;
 
 const StartPage = () => {
-  // return <Redirect href="/test" />;
-
-  if (isLoggedIn) {
-    return <Redirect href="/systemSelection" />;
-  }
-  return <Redirect href="/login" />;
+  const token = useAppSelector((state) => state.auth.token);
+  // return null;
+  return token ? (
+    <Redirect href="/systemSelection" />
+  ) : (
+    <Redirect href="/login" />
+  );
 };
 
 export default StartPage;

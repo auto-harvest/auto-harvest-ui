@@ -18,11 +18,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/Auto-Harvest-noBG.png",
         "backgroundColor": "#d6d6c4"
-      }
+      },
+      "package": "com.anonymous.autoharvestui"
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/Auto-Harvest-noBG.png"
     },
     "plugins": [
@@ -46,6 +47,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "9ef25314-f6d4-4458-a5fa-684c091085a2"
+      }
     }
   }
 }
