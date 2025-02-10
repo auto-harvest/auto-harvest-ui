@@ -9,20 +9,23 @@ import {
   Switch,
   Text,
 } from "react-native-paper";
-import { LineChart, BarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
-import { router } from "expo-router";
+import { RelativePathString, useRouter } from "expo-router";
+import { useAppSelector } from "@/store/overrides";
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function HydroponicsDashboard() {
+  const router = useRouter();
   const [isPumpOn, setIsPumpOn] = useState(false);
   const [isSystemOn, setIsSystemOn] = useState(true);
   const [isAirPumpOn, setIsAirPumpOn] = useState(false);
-  const { theme } = useThemeColor();
+  const sensorData = useAppSelector((state) => state.sensorInfo.data);
+  console.log(sensorData);
+  const { theme, isDark } = useThemeColor();
 
   const temperatureHumidityData = {
     labels: ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00"],
@@ -78,6 +81,8 @@ export default function HydroponicsDashboard() {
     },
     cardValue: {
       fontSize: 24,
+      height: 32,
+      verticalAlign: "middle",
       fontWeight: "bold",
       color: theme.text,
     },
@@ -130,9 +135,7 @@ export default function HydroponicsDashboard() {
       <ScrollView>
         <Header
           showBackButton
-          onBackPress={() => {
-            router.back();
-          }}
+          onBackPress={() => router.push("/systemSelection")}
           showUserIcon
           onUserIconPress={() => {
             router.push("/profile");
@@ -140,16 +143,37 @@ export default function HydroponicsDashboard() {
         />
 
         <View style={styles.metricsContainer}>
-          {renderMetricCard("Temperature", "24°C", "Optimal range: 20-26°C")}
-          {renderMetricCard("Humidity", "60%", "Optimal range: 50-70%")}
-          {renderMetricCard("pH Level", "6.2", "Optimal range: 5.5-6.5")}
-          {renderMetricCard("EC", "1.8 mS/cm", "Optimal range: 1.5-2.5 mS/cm")}
+          {renderMetricCard(
+            "Temperature",
+            `${sensorData["temperature"].value}°C`,
+            "Optimal range: 20-26°C"
+          )}
+          {renderMetricCard(
+            "Humidity",
+            `${sensorData["humidity"].value}%`,
+            "Optimal range: 50-70%"
+          )}
+          {renderMetricCard(
+            "Water Temperature",
+            `${sensorData["water-temperature"].value}%`,
+            "Optimal range: 18-22°C"
+          )}
+          {renderMetricCard(
+            "pH Level",
+            `${sensorData["ph"].value}`,
+            "Optimal range: 5.5-6.5"
+          )}
+          {renderMetricCard(
+            "TDS",
+            `${sensorData["tds"].value} ppm`,
+            "Optimal range: 150-250 ppm"
+          )}
         </View>
 
         <Card style={styles.chartCard}>
           <Card.Content>
             <Title style={{ color: theme.text }}>Temperature & Humidity</Title>
-            <LineChart
+            {/* <LineChart
               data={temperatureHumidityData}
               width={screenWidth - 40}
               height={220}
@@ -169,14 +193,14 @@ export default function HydroponicsDashboard() {
                 marginVertical: 8,
                 borderRadius: 16,
               }}
-            />
+            /> */}
           </Card.Content>
         </Card>
 
         <Card style={styles.chartCard}>
           <Card.Content>
             <Title style={{ color: theme.text }}>Nutrient Levels</Title>
-            <BarChart
+            {/* <BarChart
               data={nutrientLevelsData}
               width={screenWidth - 40}
               height={220}
@@ -196,7 +220,7 @@ export default function HydroponicsDashboard() {
                 marginVertical: 8,
                 borderRadius: 16,
               }}
-            />
+            /> */}
           </Card.Content>
         </Card>
 

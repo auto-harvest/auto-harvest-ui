@@ -4,6 +4,7 @@ import MultiPartFormWrapper from "../../components/ui/MultiPartForm/MultiPartFor
 import { router } from "expo-router";
 
 const IoTDevicePairingScreen: React.FC = () => {
+  
   const handleSubmit = () => {
     console.log("Form submitted:", { location });
   };

@@ -13,15 +13,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
-import { router } from "expo-router";
+import { Link, useRouter } from "expo-router";
+import { logout } from "@/store/slices/persist/authSlice";
+import { useAppDispatch } from "@/store/overrides";
 
 export default function ProfileScreen() {
-  const navigation = useNavigation();
+  const [name, setName] = React.useState("John Doe");
+  const [email, setEmail] = React.useState("john.doe@example.com");
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
   const { theme } = useThemeColor();
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [darkModeEnabled, setDarkModeEnabled] = useState(false);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const styles = StyleSheet.create({
     container: {
@@ -83,7 +86,7 @@ export default function ProfileScreen() {
       <Header
         title="Profile"
         showBackButton
-        onBackPress={() => navigation.goBack()}
+        onBackPress={() => router.back()}
       />
       <ScrollView>
         <View style={styles.header}>
@@ -152,7 +155,6 @@ export default function ProfileScreen() {
                 value={darkModeEnabled}
                 onValueChange={(value) => {
                   setDarkModeEnabled(value);
-                  toggleTheme();
                 }}
                 color={theme.primary}
               />
@@ -191,6 +193,7 @@ export default function ProfileScreen() {
             <Button
               mode="contained"
               onPress={() => {
+                // Handle logout logic here
                 router.push("/login");
               }}
               style={[styles.button, styles.logoutButton]}

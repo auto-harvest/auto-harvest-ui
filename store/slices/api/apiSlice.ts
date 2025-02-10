@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseAuthQuery } from "./baseQuery";
 
 // Define the API slice
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3333" }),
+  baseQuery: baseAuthQuery("api"),
   endpoints: (builder) => ({
     getTest: builder.query({
       query: (token) => ({
