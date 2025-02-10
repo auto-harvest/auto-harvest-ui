@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "154580888046",
+    "project_id": "auto-harvest-9e6e1",
+    "storage_bucket": "auto-harvest-9e6e1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154580888046:android:15b507e2c51cc610f906ff",
+        "android_client_info": {
+          "package_name": "com.anonymous.autoharvestui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzXZpxa32gz0GBpe4Hf9cIEULO-fJrn9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
