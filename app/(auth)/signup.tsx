@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { TextInput, Button, Text, Card, Title, Paragraph } from "react-native-paper";
+import {
+  TextInput,
+  Button,
+  Text,
+  Card,
+  Title,
+  Paragraph,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
@@ -91,6 +98,7 @@ export default function SignupScreen() {
             value={username}
             onChangeText={setUsername}
             mode="outlined"
+            textColor={theme.text}
             style={styles.input}
             theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
@@ -100,6 +108,7 @@ export default function SignupScreen() {
             onChangeText={setEmail}
             mode="outlined"
             keyboardType="email-address"
+            textColor={theme.text}
             style={styles.input}
             theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
@@ -109,6 +118,7 @@ export default function SignupScreen() {
             onChangeText={setPassword}
             mode="outlined"
             secureTextEntry
+            textColor={theme.text}
             style={styles.input}
             theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />

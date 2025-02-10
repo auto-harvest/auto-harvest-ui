@@ -25,7 +25,7 @@ export default function HydroponicsDashboard() {
   const [isAirPumpOn, setIsAirPumpOn] = useState(false);
   const sensorData = useAppSelector((state) => state.sensorInfo.data);
   console.log(sensorData);
-  const { theme, isDark } = useThemeColor();
+  const { theme } = useThemeColor();
 
   const temperatureHumidityData = {
     labels: ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00"],
@@ -156,7 +156,7 @@ export default function HydroponicsDashboard() {
           {renderMetricCard(
             "Water Temperature",
             `${sensorData["water-temperature"]?.value}%`,
-            "Optimal range: 18-22°C" 
+            "Optimal range: 18-22°C"
           )}
           {renderMetricCard(
             "pH Level",

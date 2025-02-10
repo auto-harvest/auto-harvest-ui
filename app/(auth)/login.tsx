@@ -76,7 +76,7 @@ export default function LoginScreen() {
       const { token, user } = response;
       dispatch(setToken(token));
       dispatch(setUser(user));
-      router.push("/dashboard");
+      router.push("/systemSelection");
     } catch (error) {
       console.error("Failed to login:", error);
     }
@@ -100,6 +100,7 @@ export default function LoginScreen() {
             mode="outlined"
             keyboardType="email-address"
             style={styles.input}
+            textColor={theme.text}
             theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
           <TextInput
@@ -109,6 +110,7 @@ export default function LoginScreen() {
             mode="outlined"
             secureTextEntry
             style={styles.input}
+            textColor={theme.text}
             theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
           <Button
