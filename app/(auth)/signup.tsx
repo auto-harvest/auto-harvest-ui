@@ -1,18 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Appearance } from "react-native";
-import {
-  TextInput,
-  Button,
-  Text,
-  Card,
-  Title,
-  Paragraph,
-} from "react-native-paper";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { TextInput, Button, Text, Card, Title, Paragraph } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
-import { useRouter } from "expo-router";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { Link, useNavigation, useRouter } from "expo-router";
+import { setToken, setUser } from "@/store/slices/persist/authSlice";
+import { useAppDispatch } from "@/store/overrides";
+import { useSignupMutation } from "@/store/slices/api/authSlice";
 
 export default function SignupScreen() {
   const [username, setUsername] = useState("");
@@ -20,24 +15,8 @@ export default function SignupScreen() {
   const [password, setPassword] = useState("");
   const { theme } = useThemeColor();
   const router = useRouter();
-
-  console.log("SignUp-colorScheme: ", useColorScheme());
-  console.log(
-    "SignUp-Appearance.getColorScheme: ",
-    Appearance.getColorScheme()
-  );
-
-  const handleSignUp = () => {
-    if (!email.includes("@")) {
-      alert("Please enter a valid email.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-    router.push("/systemSelection");
-  };
+  const dispatch = useAppDispatch();
+  const [signup, { isLoading }] = useSignupMutation();
 
   const styles = StyleSheet.create({
     container: {
@@ -68,6 +47,7 @@ export default function SignupScreen() {
     },
     input: {
       marginBottom: 16,
+      backgroundColor: theme.card,
     },
     button: {
       marginTop: 8,
@@ -121,15 +101,7 @@ export default function SignupScreen() {
             mode="outlined"
             keyboardType="email-address"
             style={styles.input}
-            theme={{
-              colors: {
-                text: theme.text,
-                background: theme.card,
-                placeholder: theme.text,
-                primary: theme.primary,
-                outline: theme.primary,
-              },
-            }}
+            theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
           <TextInput
             label="Password"
@@ -138,40 +110,13 @@ export default function SignupScreen() {
             mode="outlined"
             secureTextEntry
             style={styles.input}
-            theme={{
-              colors: {
-                text: theme.text,
-                background: theme.card,
-                placeholder: theme.text,
-                primary: theme.primary,
-                outline: theme.primary,
-              },
-            }}
+            theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
-          <TextInput
-            label="Confirm Password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            mode="outlined"
-            secureTextEntry
-            style={styles.input}
-            theme={{
-              colors: {
-                text: theme.text,
-                background: theme.card,
-                placeholder: theme.text,
-                primary: theme.primary,
-                outline: theme.primary,
-              },
-            }}
-          />
-
           <Button
             mode="contained"
             style={styles.button}
-            onPress={() => {
-              handleSignUp();
-            }}
+            onPress={handleSignup}
+            loading={isLoading}
           >
             Sign Up
           </Button>
