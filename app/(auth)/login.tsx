@@ -15,6 +15,7 @@ import { Link, Redirect, useNavigation, useRouter } from "expo-router";
 import { fakeLoginApi } from "../test";
 import { setToken, setUser } from "@/store/slices/persist/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/overrides";
+import { useLoginMutation } from "@/store/slices/api/authSlice";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -24,7 +25,19 @@ export default function LoginScreen() {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
   const token = useAppSelector((state) => state.auth.token);
+  const [login, { isLoading }] = useLoginMutation();
 
+  const handleLogin = async () => {
+    try {
+      const response = await login({ email, password }).unwrap();
+      const { token, user } = response;
+      dispatch(setToken(token));
+      dispatch(setUser(user));
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Failed to login:", error);
+    }
+  };
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -98,19 +111,7 @@ export default function LoginScreen() {
             style={styles.input}
             theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
-          <Button
-            mode="contained"
-            style={styles.button}
-            onPress={async () => {
-              const response = await fakeLoginApi(email, password);
-              const { token, user } = response;
-              console.log(": LoginScreen -> user", user);
-              // Dispatch token and user information
-              dispatch(setToken(token));
-              dispatch(setUser(user as any));
-              router.push("/dashboard");
-            }}
-          >
+          <Button mode="contained" style={styles.button} onPress={handleLogin}>
             Sign In
           </Button>
 
