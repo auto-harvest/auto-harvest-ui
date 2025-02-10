@@ -53,6 +53,9 @@ export default function ProfileScreen() {
       marginBottom: 10,
       color: theme.text,
     },
+    attention: {
+      color: theme.secondary,
+    },
     input: {
       marginBottom: 10,
       backgroundColor: theme.card,
@@ -132,6 +135,9 @@ export default function ProfileScreen() {
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.sectionTitle}>App Settings</Text>
+            <Text style={styles.attention}>
+              Attention! Some notifications may not be visible in web app.
+            </Text>
             <View style={styles.settingItem}>
               <Text style={styles.settingText}>Enable Notifications</Text>
               <Switch

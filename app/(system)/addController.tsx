@@ -1,11 +1,16 @@
 import React from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet, Platform } from "react-native";
 import MultiPartFormWrapper from "../../components/ui/MultiPartForm/MultiPartFormWrapper";
+import { router } from "expo-router";
 
 const IoTDevicePairingScreen: React.FC = () => {
   const handleSubmit = () => {
     console.log("Form submitted:", { location });
   };
+
+  if (Platform.OS === "web") {
+    router.push("/availabilityError");
+  }
 
   return (
     <SafeAreaView style={styles.container}>
