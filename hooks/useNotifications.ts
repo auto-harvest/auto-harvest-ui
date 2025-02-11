@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Platform } from "react-native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
@@ -82,10 +82,9 @@ export default function useNotifications(onNotification: (notification: any) => 
     notificationListener.current =
       Notifications.addNotificationReceivedListener(onNotification);
     return () => {
-      notificationListener.current &&
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
-        );
+      if (notificationListener.current) {
+        Notifications.removeNotificationSubscription(notificationListener.current);
+      }
     
     };
   }, [allowPush, dispatch, onNotification]);

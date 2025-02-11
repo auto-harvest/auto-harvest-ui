@@ -172,7 +172,6 @@ export default function PlantsScreen() {
           /* Handle adding new plant */
         }}
         style={styles.addButton}
-        color={theme.primary}
       >
         Add Plant
       </Button>

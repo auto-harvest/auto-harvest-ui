@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import {
-  Card,
-  Title,
-  Paragraph,
-  Switch,
-  Button,
-  TextInput,
-} from "react-native-paper";
+import { Card, Title, Paragraph, Switch, Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";

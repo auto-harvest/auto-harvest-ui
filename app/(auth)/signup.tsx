@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
-import { Link, useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { setToken, setUser } from "@/store/slices/persist/authSlice";
 import { useAppDispatch } from "@/store/overrides";
 import { useSignupMutation } from "@/store/slices/api/authSlice";

@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import { useRouter } from "expo-router";
 import { useThemeColor } from "../hooks/useThemeColor";
+import witheredPlant from "../assets/images/404-withered-plant.png";
 
 export default function NotFoundScreen() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function NotFoundScreen() {
       <Header title="Functionality Unavailable" />
       <View style={styles.content}>
         <Image
-          source={require("../assets/images/404-withered-plant.png")}
+          source={witheredPlant}
           style={styles.image}
           accessibilityLabel="A wilted plant illustration"
         />

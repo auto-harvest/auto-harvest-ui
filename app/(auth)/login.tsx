@@ -1,18 +1,10 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import {
-  TextInput,
-  Button,
-  Text,
-  Card,
-  Title,
-  Paragraph,
-} from "react-native-paper";
+import { TextInput, Button, Text, Card, Title, Paragraph,} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
-import { Link, Redirect, useNavigation, useRouter } from "expo-router";
-import { fakeLoginApi } from "../test";
+import { useRouter } from "expo-router";
 import { setToken, setUser } from "@/store/slices/persist/authSlice";
 import { useAppDispatch } from "@/store/overrides";
 import { useLoginMutation } from "@/store/slices/api/authSlice";
