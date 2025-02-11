@@ -27,15 +27,7 @@ export default function HydroponicsDashboard() {
 
   console.log(sensorData);
   const { theme } = useThemeColor();
-
-  const colors = {
-    temperature: theme.secondary,
-    humidity: theme.tertiary,
-    "water-temperature": theme.quinary,
-    ph: theme.quaternary,
-    tds: theme.primary,
-  };
-
+  
   const alertsData = [
     { id: 1, type: "Low Water Level", timestamp: "2023-04-15 09:23" },
     { id: 2, type: "High EC", timestamp: "2023-04-14 14:56" },

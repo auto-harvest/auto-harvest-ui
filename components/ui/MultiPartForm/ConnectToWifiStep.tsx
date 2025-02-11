@@ -9,14 +9,16 @@ import {
   View,
   Text,
   Modal,
-  Button,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import Toast from "react-native-toast-message";
 
 import WifiManager from "react-native-wifi-reborn";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import SpinnerModal from "../SpinnerModal";
+import { Button, Title } from "react-native-paper";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 const _Alert = (title: string, message: string) =>
   Alert.alert(title, message, undefined, {
     userInterfaceStyle: "dark",
@@ -35,6 +37,7 @@ const ConnectToWifiStep = ({
 
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  console.log(isLoading);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [connectedToIotWifi, setConnectedToIotWifi] = useState<boolean>(false);
   const { theme } = useThemeColor();
@@ -59,6 +62,8 @@ const ConnectToWifiStep = ({
         return;
       }
     }
+    console.log(64);
+
     setIsLoading(true);
     await loadWifiList();
     setIsLoading(false);
@@ -92,7 +97,7 @@ const ConnectToWifiStep = ({
 
   useEffect(() => {
     requestLocationPermission();
-  }, [requestLocationPermission]);
+  }, []);
 
   // Connect to Wi-Fi with or without a password
   const connectToWifi = async (selectedWifi: WifiManager.WifiEntry) => {
@@ -122,12 +127,6 @@ const ConnectToWifiStep = ({
       try {
         const result = await fetch("http://5.5.5.5/");
         resultStatus = result.status === 200;
-
-        console.log("Connected to Wi-Fi:");
-        _Alert(
-          "Success",
-          `Connected to ${selectedWifi.SSID}! ${await result.text()}`
-        );
       } catch (e) {
         _Alert(
           "Error",
@@ -142,6 +141,8 @@ const ConnectToWifiStep = ({
       _Alert("Error", "Failed to connect to the Wi-Fi network.");
     } finally {
       setConnectedToIotWifi(resultStatus);
+      console.log(147);
+
       setIsLoading(false);
       setIsModalVisible(false);
       setPassword("");
@@ -156,6 +157,7 @@ const ConnectToWifiStep = ({
     },
     listContainer: {
       flex: 1,
+      height: 500,
       marginTop: 10,
     },
     listItem: {
@@ -178,24 +180,31 @@ const ConnectToWifiStep = ({
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
+
       backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
     modalContent: {
-      width: "80%",
-
+      elevation: 5,
+      margin: 20,
       backgroundColor: theme.card,
-      borderRadius: 10,
-      padding: 20,
+      borderRadius: 20,
+      padding: 35,
       alignItems: "center",
-      height: 200,
-      flex: 1,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
     },
     input: {
-      width: "100%",
       borderWidth: 1,
       borderColor: theme.border,
       borderRadius: 8,
+      width: 300,
       padding: 10,
+      marginBottom:20,
       marginVertical: 10,
       color: theme.text,
       backgroundColor: theme.inputBackground,
@@ -215,15 +224,21 @@ const ConnectToWifiStep = ({
       setIsModalVisible(true);
     } else {
       // Directly connect to open networks
+      console.log(220);
+
       setIsLoading(true);
       setSpinnerMessage("Connecting to controller...");
-
+      setTimeout(() => {
+        connectToWifi(item);
+      }, 1000);
       connectToWifi(item);
     }
   };
   const passWifi = async () => {
     //construct a post query
     try {
+      console.log(229);
+
       setIsLoading(true);
       setSpinnerMessage("Controller is trying to connect...");
       const formData = new URLSearchParams();
@@ -259,6 +274,7 @@ const ConnectToWifiStep = ({
         "Failed to connect IoT device to Wi-Fi" + (e as any).message
       );
     } finally {
+      console.log(264);
       setIsLoading(false);
     }
   };
@@ -278,8 +294,8 @@ const ConnectToWifiStep = ({
       <SpinnerModal visible={isLoading} text={spinnerMessage} />
       <Text style={styles.listText}>
         {!connectedToIotWifi
-          ? "Choose the Controllers Access Point"
-          : "Select your local Wi-Fi network"}
+          ? "2.1: Choose the Controllers Access Point"
+          : "2.2: Select your local Wi-Fi network"}
       </Text>
       {isLoading || (
         <FlatList
@@ -317,49 +333,67 @@ const ConnectToWifiStep = ({
       )}
 
       {/* Modal for Wi-Fi Password */}
-      <Modal visible={isModalVisible} transparent animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.listText}>
-              Connect to {selectedWifi?.SSID || "Unknown Network"}
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Wi-Fi Password"
-              placeholderTextColor={theme.text}
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
+      <SafeAreaProvider
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          elevation: 5,
+          display: isModalVisible ? "flex" : "none",
+        }}
+      >
+        <SafeAreaView>
+          <Modal visible={isModalVisible} transparent animationType="slide">
             <View
               style={{
-                marginTop: 10,
                 flex: 1,
-                alignContent: "space-between",
-
-                marginBottom: 10,
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <Button
-                title="Connect"
-                color={theme.primary}
-                onPress={() =>
-                  connectedToIotWifi ? passWifi() : connectToWifi(selectedWifi!)
-                }
-              />
-
-              <Button
-                title="Cancel"
-                color={theme.secondary}
-                onPress={() => {
-                  setIsModalVisible(false);
-                  setPassword("");
-                }}
-              />
+              <View style={styles.modalContent}>
+                <Title style={{ color: "white", fontSize: 14 }}>
+                  Connect to {selectedWifi?.SSID || "Unknown Network"}
+                </Title>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter Wi-Fi Password"
+                  placeholderTextColor={theme.text}
+                  value={password}
+                  onChangeText={setPassword}
+                />
+                <View
+                  style={{
+                    width: "100%",
+                    alignContent: "space-evenly",
+                    justifyContent: "space-between",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Button
+                    onPress={() => {
+                      setIsModalVisible(false);
+                      setPassword("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    style={{ backgroundColor: theme.primary }}
+                    onPress={() =>
+                      connectedToIotWifi
+                        ? passWifi()
+                        : connectToWifi(selectedWifi!)
+                    }
+                  >
+                    Connect
+                  </Button>
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-      </Modal>
+          </Modal>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </View>
   );
 };

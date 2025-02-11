@@ -5,7 +5,8 @@ import { router } from "expo-router";
 
 const IoTDevicePairingScreen: React.FC = () => {
   const handleSubmit = () => {
-    console.log("Form submitted:", { location });
+    
+    
   };
 
   if (Platform.OS === "web") {
