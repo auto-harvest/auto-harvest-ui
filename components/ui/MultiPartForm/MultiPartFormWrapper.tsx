@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Alert } from "react-native";
 import { ProgressBar, Button, TextInput } from "react-native-paper";
 import WiFiPermissionComponent from "../WifiPermissionComponent";
 import Step from "./Step";
@@ -7,27 +7,60 @@ import Step from "./Step";
 import { useThemeColor } from "../../../hooks/useThemeColor";
 import WifiPairingStep from "./ConnectToWifiStep";
 import CheckMobileData from "./CheckMobileDataStep";
+import { useSetControllerMutation } from "@/store/slices/api/apiSlice";
+import { router } from "expo-router";
 
 interface MultiPartFormWrapperProps {
   onSubmit: () => void;
 }
 
-const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
-  onSubmit,
-}) => {
+const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = () => {
   const [systemName, setSystemName] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [capacity, setCapacity] = React.useState("");
   const [currentStep, setCurrentStep] = useState(0);
   const [clientId, setClientId] = useState("");
+  const [canContinue, setCanContinue] = useState(true);
+  const [canGoBack, setCanGoBack] = useState(false);
   const { theme } = useThemeColor();
   const colors = theme;
+  const [setController, { data }] = useSetControllerMutation();
+  const onSubmit = async () => {
+    console.log("Submitting...");
+    const response = await setController({
+      code: clientId,
+      name: systemName,
+      location,
+      capacity: +capacity,
+    });
+    if (response.error) {
+      Alert.alert("Error", "An error occurred while setting the controller.");
+      return router.push("/systemSelection");
+    }
+    if (response.data.error === 1) {
+      Alert.alert("Error", response.data.message);
+    } else {
+      Alert.alert("Success", response.data.message);
+    }
+    return router.push("/systemSelection");
+  };
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
       setCurrentStep((prev) => prev + 1);
     }
   };
-
+  // useEffect(() => {
+  //   if (currentStep === 1) {
+  //     setCanContinue(false);
+  //   }
+  //   if (currentStep === 0) {
+  //     setCanContinue(true);
+  //     setCanGoBack(false);
+  //   }
+  //   if (currentStep === 1) {
+  //     setCanGoBack(false);
+  //   }
+  // }, [currentStep, canGoBack]);
   const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep((prev) => prev - 1);
@@ -40,23 +73,18 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
       description="Ensure the controller is blinking green."
     />,
 
-    <Step title="Step 2: Connect to WiFi">
+    <Step title="Step 2: Provide credentials to controller">
       <WifiPairingStep
         handleBack={handleBack}
         handleNext={handleNext}
-        setClientId={(c: string) => setClientId(c)}
+        setClientId={(c: string) => {
+          setClientId(c);
+          setCanContinue(true);
+        }}
       />
     </Step>,
 
     <Step title="Step 3: System Details">
-      <TextInput
-        label="System Name"
-        value={systemName}
-        onChangeText={setSystemName}
-        mode="outlined"
-        disabled
-        style={{ marginBottom: 16 }}
-      />
       <TextInput
         label="System Name"
         value={systemName}
@@ -98,11 +126,14 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
       margin: 16,
       backgroundColor: theme.primary,
     },
+    backButton: {
+      margin: 16,
+    },
     buttonGroup: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "flex-end",
-      marginTop: 16,
+      marginTop: 0,
     },
     hiddenButton: {
       visibility: "none",
@@ -123,7 +154,11 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
       </View>
       {/* Navigation Buttons */}
       <View style={styles.buttonGroup}>
-        <Button onPress={handleBack} disabled={currentStep === 0}>
+        <Button
+          onPress={handleBack}
+          style={styles.backButton}
+          disabled={canGoBack === false}
+        >
           Back
         </Button>
 
@@ -133,6 +168,7 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = ({
             mode="contained"
             onPress={handleNext}
             textColor={colors.text}
+            disabled={canContinue === false}
           >
             Next
           </Button>

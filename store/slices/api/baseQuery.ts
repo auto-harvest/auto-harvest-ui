@@ -1,7 +1,7 @@
 import { environment } from "@/environment/environment";
-import { RootState } from "@/store/store";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { logout } from "../persist/authSlice";
+import { RootState } from "@/store/overrides";
 
 export const baseAuthQuery = (prefix: string) =>
   fetchBaseQuery({
