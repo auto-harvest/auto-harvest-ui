@@ -8,35 +8,17 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { ValueType } from "@/constants/enums/ValueType.enum";
+import { DateRange } from "@/constants/enums/DateRange.enum";
 
 const screenWidth = Dimensions.get("window").width;
 
-// 1) Define the types for clarity
-export type MeasurementType = "ph" | "temp" | "water-temp" | "tds" | "hum";
-export type DateRangeType = "day" | "week" | "month" | "year";
-
-/**
- * Props:
- * - measurementType: which measurement to plot (ph, temp, etc.)
- * - rangeType: time range for the X axis (day, week, month, year)
- * - date: a Date object representing a specific day or the start date
- * - dataPoints?: optional array of data values to plot. If not provided, random data is generated.
- */
 interface MeasurementLineChartProps {
-  measurementType: MeasurementType;
-  rangeType: DateRangeType;
+  measurementType: ValueType;
+  rangeType: DateRange;
   date: Date;
   dataPoints?: number[];
 }
-
-// Your color map
-const colors = {
-  temp: "",
-  hum: "",
-  "water-temp": "",
-  ph: "",
-  tds: "",
-};
 
 // Helper: convert a hex color to RGBA string
 const hexToRGBA = (hex: string, alpha: number = 1): string => {
@@ -71,7 +53,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
   };
 
   // Decide how many data points we expect based on rangeType
-  const getExpectedPointsCount = (range: DateRangeType): number => {
+  const getExpectedPointsCount = (range: DateRange): number => {
     switch (range) {
       case "day":
         return 24; // 24 hourly points
@@ -87,7 +69,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
   };
 
   // Generate the corresponding labels
-  const generateLabels = (range: DateRangeType): string[] => {
+  const generateLabels = (range: DateRange): string[] => {
     switch (range) {
       case "day":
         return Array.from({ length: 24 }, (_, i) => `${i}:00`);
@@ -119,7 +101,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
 
   // Generate random data if user doesn't provide dataPoints
   const generateRandomData = (
-    measurement: MeasurementType,
+    measurement: ValueType,
     count: number
   ): number[] => {
     let minVal = 0;
@@ -203,8 +185,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
   return (
     <View style={styles.container}>
       <Text style={[styles.title, { color: lineHexColor }]}>
-        {measurementType.toUpperCase()} ({rangeType.toUpperCase()}) -{" "}
-        {date.toDateString()}
+        ({rangeType.toUpperCase()}) - {date.toDateString()}
       </Text>
 
       <LineChart
@@ -224,7 +205,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
           backgroundColor: theme.card,
           backgroundGradientFrom: theme.card,
           backgroundGradientTo: theme.card,
-          decimalPlaces: 2,
+          decimalPlaces: 1,
           style: {
             borderRadius: 16,
           },

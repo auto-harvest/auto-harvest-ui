@@ -1,8 +1,7 @@
 export enum ValueType {
   PH = "ph",
-  EC = "ec",
+  TDS = "tds",
   TEMPERATURE = "temp",
   HUMIDITY = "hum",
-  LIGHT = "light",
-  FLOW = "flow",
+  WATER_TEMPERATURE = "water-temp",
 }

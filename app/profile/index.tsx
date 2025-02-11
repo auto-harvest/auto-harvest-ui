@@ -82,6 +82,10 @@ export default function ProfileScreen() {
       marginTop: 20,
       backgroundColor: "#D32F2F",
     },
+    redirectButton: {
+      backgroundColor: theme.primary,
+      marginTop: 20,
+    }
   });
 
   return (
@@ -134,6 +138,18 @@ export default function ProfileScreen() {
           <Card style={styles.card}>
             <Card.Content>
               <Text style={styles.sectionTitle}>Account</Text>
+              <Button
+                mode="contained"
+                onPress={() => {
+                  router.push("/systemSelection");
+                }}
+                style={[styles.button, styles.redirectButton]}
+                icon={() => (
+                  <Ionicons name="home-outline" size={20} color="white" />
+                )}
+              >
+                Back to Controller Selection
+              </Button>
               <Button
                 mode="contained"
                 onPress={() => {
