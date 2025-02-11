@@ -13,7 +13,7 @@ import { Dimensions } from "react-native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
-import { RelativePathString, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useAppSelector } from "@/store/overrides";
 
 const screenWidth = Dimensions.get("window").width;
@@ -21,10 +21,12 @@ const screenWidth = Dimensions.get("window").width;
 export default function HydroponicsDashboard() {
   const router = useRouter();
   const [isPumpOn, setIsPumpOn] = useState(false);
-  const [isSystemOn, setIsSystemOn] = useState(true);
   const [isAirPumpOn, setIsAirPumpOn] = useState(false);
   const sensorData = useAppSelector((state) => state.sensorInfo.data);
-  const { theme, isDark } = useThemeColor();
+
+  console.log(sensorData);
+  const { theme } = useThemeColor();
+
 
   const alertsData = [
     { id: 1, type: "Low Water Level", timestamp: "2023-04-15 09:23" },
@@ -232,20 +234,6 @@ export default function HydroponicsDashboard() {
                 <Switch
                   value={isPumpOn}
                   onValueChange={() => setIsPumpOn(!isPumpOn)}
-                  color={theme.primary}
-                />
-                <Text style={styles.switchText}>On</Text>
-              </View>
-            </Card.Content>
-          </Card>
-          <Card style={styles.controlCard}>
-            <Card.Content>
-              <Title style={{ color: theme.text }}>System Control</Title>
-              <View style={styles.switchContainer}>
-                <Text style={styles.switchText}>Off</Text>
-                <Switch
-                  value={isSystemOn}
-                  onValueChange={() => setIsSystemOn(!isSystemOn)}
                   color={theme.primary}
                 />
                 <Text style={styles.switchText}>On</Text>

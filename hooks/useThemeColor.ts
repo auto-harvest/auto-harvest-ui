@@ -4,14 +4,18 @@
  */
 
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
-
+import { useAppSelector } from "@/store/overrides";
 
 export function useThemeColor() {
-  const colorScheme = useColorScheme();
-  
-  // const theme = colorScheme === "light" ? Colors.light : Colors.dark;
+  const theme = useAppSelector((state) => state.auth.theme);
+
+  if (theme === "light") {
+    return { theme: Colors.light };
+  }
   return { theme: Colors.dark };
-  const theme = colorScheme === "light" ? Colors.light : Colors.dark;
-  return { theme };
+}
+
+export function useDarkTheme(): boolean {
+  const theme = useAppSelector((state) => state.auth.theme);
+  return theme === "dark";
 }

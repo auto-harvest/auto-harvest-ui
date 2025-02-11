@@ -48,21 +48,17 @@ export default function NotFoundScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        title="Page Not Found"
-        showBackButton
-        onBackPress={() => router.back()}
-      />
+      <Header title="Functionality Unavailable" />
       <View style={styles.content}>
         <Image
           source={witheredPlant}
           style={styles.image}
           accessibilityLabel="A wilted plant illustration"
         />
-        <Text style={styles.title}>Oops! Page Not Found</Text>
+        <Text style={styles.title}>Oops! Functionality Unavailable</Text>
         <Text style={styles.message}>
-          It seems like this page has withered away. Let&apos;s get you back to
-          greener pastures!
+          The requested functionality is not available in Web Preview. Please
+          use the app on your mobile device to access this feature.
         </Text>
         <Button
           mode="contained"

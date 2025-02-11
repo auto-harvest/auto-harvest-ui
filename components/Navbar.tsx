@@ -42,7 +42,7 @@ export default function Navbar({ activeNav }: NavbarProps) {
 
   const navItems = [
     { name: "dashboard", icon: "home-outline" },
-    { name: "plants", icon: "leaf-outline" },
+    // { name: "plants", icon: "leaf-outline" },
     { name: "alerts", icon: "notifications-outline" },
     { name: "settings", icon: "settings-outline" },
   ];

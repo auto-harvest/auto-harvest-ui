@@ -1,15 +1,7 @@
 import React, { useState } from "react";
-import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import {
-  Card,
-  Title,
-  Paragraph,
-  Searchbar,
-  Button,
-  Text,
-} from "react-native-paper";
+import { StyleSheet, FlatList } from "react-native";
+import {Card, Title, Paragraph, Searchbar, Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import { Link, router } from "expo-router";
 import { Controller } from "@/constants/types/Controller";

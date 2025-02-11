@@ -9,6 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "android": {
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",
@@ -34,8 +35,7 @@
         {
           "image": "./assets/images/Auto-Harvest-noBG.png",
           "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#d6d6c4"
+          "resizeMode": "contain"
         }
       ],
       [

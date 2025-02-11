@@ -1,6 +1,5 @@
 import React from "react";
-import { useAuthGuard } from "@/hooks/useAuthGuard";
-import { Stack, Tabs } from "expo-router";
+import { Stack } from "expo-router";
 
 export default function Layout() {
 
