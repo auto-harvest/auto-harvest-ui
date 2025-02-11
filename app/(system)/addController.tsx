@@ -5,7 +5,8 @@ import MultiPartFormWrapper from "../../components/ui/MultiPartForm/MultiPartFor
 const IoTDevicePairingScreen: React.FC = () => {
   
   const handleSubmit = () => {
-    console.log("Form submitted:", { location });
+    
+    
   };
 
   return (

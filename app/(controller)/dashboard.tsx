@@ -24,34 +24,7 @@ export default function HydroponicsDashboard() {
   const [isSystemOn, setIsSystemOn] = useState(true);
   const [isAirPumpOn, setIsAirPumpOn] = useState(false);
   const sensorData = useAppSelector((state) => state.sensorInfo.data);
-  console.log(sensorData);
   const { theme, isDark } = useThemeColor();
-
-  const temperatureHumidityData = {
-    labels: ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00"],
-    datasets: [
-      {
-        data: [22, 21, 23, 26, 25, 24],
-        color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,
-        strokeWidth: 2,
-      },
-      {
-        data: [60, 62, 58, 55, 57, 59],
-        color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
-        strokeWidth: 2,
-      },
-    ],
-    legend: ["Temperature", "Humidity"],
-  };
-
-  const nutrientLevelsData = {
-    labels: ["Nitrogen", "Phosphorus", "Potassium", "Calcium", "Magnesium"],
-    datasets: [
-      {
-        data: [200, 50, 150, 100, 40],
-      },
-    ],
-  };
 
   const alertsData = [
     { id: 1, type: "Low Water Level", timestamp: "2023-04-15 09:23" },
@@ -156,7 +129,7 @@ export default function HydroponicsDashboard() {
           {renderMetricCard(
             "Water Temperature",
             `${sensorData["water-temperature"]?.value}%`,
-            "Optimal range: 18-22°C" 
+            "Optimal range: 18-22°C"
           )}
           {renderMetricCard(
             "pH Level",
