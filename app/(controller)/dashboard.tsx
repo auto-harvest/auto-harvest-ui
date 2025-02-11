@@ -15,7 +15,8 @@ import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
 import { useRouter } from "expo-router";
 import { useAppSelector } from "@/store/overrides";
-
+import MeasurementLineChart from "@/components/LineGraph";
+import sampleData from "../../sampleData";
 const screenWidth = Dimensions.get("window").width;
 
 export default function HydroponicsDashboard() {
@@ -26,8 +27,7 @@ export default function HydroponicsDashboard() {
 
   console.log(sensorData);
   const { theme } = useThemeColor();
-
-
+  
   const alertsData = [
     { id: 1, type: "Low Water Level", timestamp: "2023-04-15 09:23" },
     { id: 2, type: "High EC", timestamp: "2023-04-14 14:56" },
@@ -95,11 +95,18 @@ export default function HydroponicsDashboard() {
     },
   });
 
-  const renderMetricCard = (title, value, desc) => (
+  interface MetricCardProps {
+    title: string;
+    value: string;
+    desc: string;
+  }
+
+  const renderMetricCard = ({ title, value, desc }: MetricCardProps) => (
     <Card style={styles.card}>
       <Card.Content>
         <Title style={styles.cardTitle}>{title}</Title>
         <Paragraph style={styles.cardValue}>{value}</Paragraph>
+        {/* <Paragraph style={[styles.cardValue, {color=calculateColor(title, value)}]}>{value}</Paragraph> */}
         <Paragraph style={styles.cardDesc}>{desc}</Paragraph>
       </Card.Content>
     </Card>
@@ -117,114 +124,41 @@ export default function HydroponicsDashboard() {
           }}
         />
 
-        <View style={styles.metricsContainer}>
-          {renderMetricCard(
-            "Temperature",
-            `${sensorData["temperature"]?.value}°C`,
-            "Optimal range: 20-26°C"
-          )}
-          {renderMetricCard(
-            "Humidity",
-            `${sensorData["humidity"]?.value}%`,
-            "Optimal range: 50-70%"
-          )}
-          {renderMetricCard(
-            "Water Temperature",
-            `${sensorData["water-temperature"]?.value}%`,
-            "Optimal range: 18-22°C"
-          )}
-          {renderMetricCard(
-            "pH Level",
-            `${sensorData["ph"]?.value}`,
-            "Optimal range: 5.5-6.5"
-          )}
-          {renderMetricCard(
-            "TDS",
-            `${sensorData["tds"]?.value} ppm`,
-            "Optimal range: 150-250 ppm"
-          )}
+        {/* //? Metrics */}
+        <View style={styles.controlsContainer}>
+          {renderMetricCard({
+            title: "Temperature",
+            value: `${sensorData["temperature"]?.value}°C`,
+            desc: "Optimal range: 20-26°C",
+          })}
+          {renderMetricCard({
+            title: "Humidity",
+            value: `${sensorData["humidity"]?.value}%`,
+            desc: "Optimal range: 50-70%",
+          })}
+          {renderMetricCard({
+            title: "Water Temperature",
+            value: `${sensorData["water-temperature"]?.value}%`,
+            desc: "Optimal range: 18-22°C",
+          })}
+          {renderMetricCard({
+            title: "pH Level",
+            value: `${sensorData["ph"]?.value}`,
+            desc: "Optimal range: 5.5-6.5",
+          })}
+          {renderMetricCard({
+            title: "TDS",
+            value: `${sensorData["tds"]?.value} ppm`,
+            desc: "Optimal range: 150-250 ppm",
+          })},
+          {renderMetricCard({
+            title: "Water Level",
+            value: `Full`,
+            desc: "Water Level could be Attention Needed, Low, Full"
+          })}
         </View>
 
-        <Card style={styles.chartCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Temperature & Humidity</Title>
-            {/* <LineChart
-              data={temperatureHumidityData}
-              width={screenWidth - 40}
-              height={220}
-              chartConfig={{
-                backgroundColor: theme.card,
-                backgroundGradientFrom: theme.card,
-                backgroundGradientTo: theme.card,
-                decimalPlaces: 1,
-                color: (opacity = 1) => theme.text,
-                labelColor: (opacity = 1) => theme.text,
-                style: {
-                  borderRadius: 16,
-                },
-              }}
-              bezier
-              style={{
-                marginVertical: 8,
-                borderRadius: 16,
-              }}
-            /> */}
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.chartCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Nutrient Levels</Title>
-            {/* <BarChart
-              data={nutrientLevelsData}
-              width={screenWidth - 40}
-              height={220}
-              yAxisLabel=""
-              chartConfig={{
-                backgroundColor: theme.card,
-                backgroundGradientFrom: theme.card,
-                backgroundGradientTo: theme.card,
-                decimalPlaces: 0,
-                color: (opacity = 1) => theme.primary,
-                labelColor: (opacity = 1) => theme.text,
-                style: {
-                  borderRadius: 16,
-                },
-              }}
-              style={{
-                marginVertical: 8,
-                borderRadius: 16,
-              }}
-            /> */}
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.alertsCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Recent Alerts</Title>
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title textStyle={{ color: theme.text }}>
-                  Alert Type
-                </DataTable.Title>
-                <DataTable.Title textStyle={{ color: theme.text }}>
-                  Timestamp
-                </DataTable.Title>
-              </DataTable.Header>
-              {alertsData.map((alert) => (
-                <DataTable.Row key={alert.id}>
-                  <DataTable.Cell textStyle={{ color: theme.text }}>
-                    {alert.type}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ color: theme.text }}>
-                    {alert.timestamp}
-                  </DataTable.Cell>
-                </DataTable.Row>
-              ))}
-            </DataTable>
-          </Card.Content>
-        </Card>
-
+        {/* //? Controls */}
         <View style={styles.controlsContainer}>
           <Card style={styles.controlCard}>
             <Card.Content>
@@ -255,6 +189,93 @@ export default function HydroponicsDashboard() {
             </Card.Content>
           </Card>
         </View>
+
+        {/* //? Charts */}
+        <Card style={styles.chartCard}>
+          <Card.Content>
+            <Title style={{ color: theme.text }}>PH</Title>
+            <MeasurementLineChart
+              measurementType="ph"
+              rangeType="day"
+              date={new Date(2025, 1, 15)}
+              dataPoints={sampleData.ph.day} // matches the rangeType "week" → 7 points
+            />
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.chartCard}>
+          <Card.Content>
+            <Title style={{ color: theme.text }}>Temperature</Title>
+            <MeasurementLineChart
+              measurementType="temp"
+              rangeType="week"
+              date={new Date(2025, 1, 15)}
+              dataPoints={sampleData.temp.week} // matches the rangeType "week" → 7 points
+            />
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.chartCard}>
+          <Card.Content>
+            <Title style={{ color: theme.text }}>Humidity</Title>
+            <MeasurementLineChart
+              measurementType="hum" // matches the "humidity" key in your color map
+              rangeType="month" // "month" expects 12 data points
+              date={new Date(2025, 4, 10)} // May 10, 2025 (example)
+              dataPoints={sampleData.hum["month-daily"]} // Provide the 12 humidity values
+            />
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.chartCard}>
+          <Card.Content>
+            <Title style={{ color: theme.text }}>TDS</Title>
+            <MeasurementLineChart
+              measurementType="tds" // matches the "humidity" key in your color map
+              rangeType="month" // "month" expects 12 data points
+              date={new Date(2025, 4, 10)} // May 10, 2025 (example)
+              dataPoints={sampleData.tds["month-daily"]} // Provide the 12 humidity values
+            />
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.chartCard}>
+          <Card.Content>
+            <Title style={{ color: theme.text }}>water-temp</Title>
+            <MeasurementLineChart
+              measurementType="water-temp" // matches the "humidity" key in your color map
+              rangeType="week" // "month" expects 12 data points
+              date={new Date(2025, 4, 10)} // May 10, 2025 (example)
+              dataPoints={sampleData["water-temp"].week} // Provide the 12 humidity values
+            />
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.alertsCard}>
+          <Card.Content>
+            <Title style={{ color: theme.text }}>Recent Alerts</Title>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title textStyle={{ color: theme.text }}>
+                  Alert Type
+                </DataTable.Title>
+                <DataTable.Title textStyle={{ color: theme.text }}>
+                  Timestamp
+                </DataTable.Title>
+              </DataTable.Header>
+              {alertsData.map((alert) => (
+                <DataTable.Row key={alert.id}>
+                  <DataTable.Cell textStyle={{ color: theme.text }}>
+                    {alert.type}
+                  </DataTable.Cell>
+                  <DataTable.Cell textStyle={{ color: theme.text }}>
+                    {alert.timestamp}
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </Card.Content>
+        </Card>
       </ScrollView>
 
       <Navbar activeNav="dashboard" />

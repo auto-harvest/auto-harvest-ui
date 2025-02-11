@@ -85,7 +85,7 @@ export default function ProfileScreen() {
   });
 
   return (
-    (!User && <Redirect href="/availabilityError" />) || (
+    // (!User && <Redirect href="/errorPage" />) || (
       <SafeAreaView style={styles.container}>
         <Header
           title="Profile"
@@ -152,6 +152,6 @@ export default function ProfileScreen() {
           </Card>
         </ScrollView>
       </SafeAreaView>
-    )
+    // )
   );
 }
