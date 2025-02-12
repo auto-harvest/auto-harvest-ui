@@ -10,7 +10,7 @@ export const useAuthGuard = () => {
   useEffect(() => {
     if (!token) {
       dispatch(logout());
-      router.push("/login");
+      router.navigate("/login");
     }
   }, [token, router, dispatch]);
 
