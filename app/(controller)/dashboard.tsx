@@ -5,36 +5,23 @@ import {
   Card,
   Title,
   Paragraph,
-  DataTable,
   Switch,
   Text,
   Button,
 } from "react-native-paper";
-import { Dimensions } from "react-native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
 import { useRouter } from "expo-router";
 import { useAppSelector } from "@/store/overrides";
-import MeasurementLineChart from "@/components/LineGraph";
-import sampleData from "../../sampleData";
-import { ValueType } from "@/constants/enums/ValueType.enum";
-import { DateRange } from "@/constants/enums/DateRange.enum";
 
 export default function HydroponicsDashboard() {
   const router = useRouter();
   const [isPumpOn, setIsPumpOn] = useState(false);
   const [isAirPumpOn, setIsAirPumpOn] = useState(false);
   const sensorData = useAppSelector((state) => state.sensorInfo.data);
-
-  console.log(sensorData);
   const { theme } = useThemeColor();
-
-  const alertsData = [
-    { id: 1, type: "Low Water Level", timestamp: "2023-04-15 09:23" },
-    { id: 2, type: "High EC", timestamp: "2023-04-14 14:56" },
-    { id: 3, type: "Pump Malfunction", timestamp: "2023-04-13 22:10" },
-  ];
+  console.log(sensorData);
 
   const styles = StyleSheet.create({
     container: {
@@ -199,95 +186,7 @@ export default function HydroponicsDashboard() {
             </Card.Content>
           </Card>
         </View>
-
-        {/* //? Charts
-        <Card style={styles.chartCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>PH</Title>
-            <MeasurementLineChart
-              measurementType={ValueType.PH}
-              rangeType={DateRange.DAY}
-              date={new Date(2025, 1, 15)}
-              dataPoints={sampleData.ph.day} // matches the rangeType "week" → 7 points
-            />
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.chartCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Temperature</Title>
-            <MeasurementLineChart
-              measurementType={ValueType.TEMPERATURE}
-              rangeType={DateRange.WEEK}
-              date={new Date(2025, 1, 15)}
-              dataPoints={sampleData.temp.week} // matches the rangeType "week" → 7 points
-            />
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.chartCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Humidity</Title>
-            <MeasurementLineChart
-              measurementType={ValueType.HUMIDITY} // matches the "humidity" key in your color map
-              rangeType={DateRange.MONTH} // "month" expects 12 data points
-              date={new Date(2025, 4, 10)} // May 10, 2025 (example)
-              dataPoints={sampleData.hum["month-daily"]} // Provide the 12 humidity values
-            />
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.chartCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>TDS</Title>
-            <MeasurementLineChart
-              measurementType={ValueType.TDS}
-              rangeType={DateRange.MONTH}
-              date={new Date(2025, 4, 10)}
-              dataPoints={sampleData.tds["month-daily"]}
-            />
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.chartCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Water Temperature</Title>
-            <MeasurementLineChart
-              measurementType={ValueType.WATER_TEMPERATURE}
-              rangeType={DateRange.WEEK}
-              date={new Date(2025, 4, 10)}
-              dataPoints={sampleData["water-temp"].week}
-            />
-          </Card.Content>
-        </Card> */}
-
-        <Card style={styles.alertsCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Recent Alerts</Title>
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title textStyle={{ color: theme.text }}>
-                  Alert Type
-                </DataTable.Title>
-                <DataTable.Title textStyle={{ color: theme.text }}>
-                  Timestamp
-                </DataTable.Title>
-              </DataTable.Header>
-              {alertsData.map((alert) => (
-                <DataTable.Row key={alert.id}>
-                  <DataTable.Cell textStyle={{ color: theme.text }}>
-                    {alert.type}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ color: theme.text }}>
-                    {alert.timestamp}
-                  </DataTable.Cell>
-                </DataTable.Row>
-              ))}
-            </DataTable>
-          </Card.Content>
-        </Card>
       </ScrollView>
-
       <Navbar activeNav="dashboard" />
     </SafeAreaView>
   );

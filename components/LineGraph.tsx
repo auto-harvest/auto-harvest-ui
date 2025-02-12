@@ -72,17 +72,26 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
   const generateLabels = (range: DateRange): string[] => {
     switch (range) {
       case "day":
-        return Array.from({ length: 24 }, (_, i) => `${i}:00`);
+        return Array.from({ length: 12 }, (_, i) => `${i * 2}:00`);
       case "week":
-        return Array.from({ length: 7 }, (_, i) => `Day ${i + 1}`);
+        return [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
       case "month":
         // 30 daily labels
-        return Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`);
+        return Array.from({ length: 15 }, (_, i) => `${i * 2 + 1}`);
       case "year":
         // 12 monthly labels
         return [
           "Jan",
           "Feb",
+          "Mar",
           "Mar",
           "Apr",
           "May",
@@ -198,8 +207,8 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
             },
           ],
         }}
-        width={screenWidth - 100}
-        height={220}
+        width={screenWidth - 60}
+        height={440}
         fromZero
         chartConfig={{
           backgroundColor: theme.card,

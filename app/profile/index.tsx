@@ -5,8 +5,8 @@ import { Avatar, Button, Card, Switch, Text } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor, useDarkTheme } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
-import { Redirect, useRouter } from "expo-router";
-import { logout, setAllowPush,setTheme } from "@/store/slices/persist/authSlice";
+import { useRouter } from "expo-router";
+import { logout, setAllowPush, setTheme } from "@/store/slices/persist/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/overrides";
 
 export default function ProfileScreen() {
@@ -80,94 +80,94 @@ export default function ProfileScreen() {
     },
     logoutButton: {
       marginTop: 20,
-      backgroundColor: "#D32F2F",
+      backgroundColor: theme.red,
     },
     redirectButton: {
       backgroundColor: theme.primary,
       marginTop: 20,
-    }
+    },
   });
 
   return (
-    // (!User && <Redirect href="/errorPage" />) || (
-      <SafeAreaView style={styles.container}>
-        <Header
-          title="Profile"
-          showBackButton
-          onBackPress={() => router.back()}
-        />
-        <ScrollView>
-          <View style={styles.header}>
-            <Avatar.Image
-              size={80}
-              source={{
-                uri: "https://avatar.iran.liara.run/public",
+    // (!User && router.push("/errorPage")) || (
+    <SafeAreaView style={styles.container}>
+      <Header
+        title="Profile"
+        showBackButton
+        onBackPress={() => router.back()}
+      />
+      <ScrollView>
+        <View style={styles.header}>
+          <Avatar.Image
+            size={80}
+            source={{
+              uri: "https://avatar.iran.liara.run/public",
+            }}
+          />
+          <Text style={styles.name}>{username}</Text>
+          <Text style={styles.email}>{email}</Text>
+        </View>
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.sectionTitle}>App Settings</Text>
+            <Text style={styles.attention}>
+              Attention! Some notifications may not be visible in web app.
+            </Text>
+            <View style={styles.settingItem}>
+              <Text style={styles.settingText}>Enable Notifications</Text>
+              <Switch
+                value={allowPush}
+                onValueChange={(value) => {
+                  dispatch(setAllowPush(!!value));
+                }}
+                color={theme.primary}
+              />
+            </View>
+            <View style={styles.settingItem}>
+              <Text style={styles.settingText}>Dark Mode</Text>
+              <Switch
+                value={isDarkTheme}
+                onValueChange={(value) => {
+                  handleThemeChange(!!value);
+                }}
+                color={theme.primary}
+              />
+            </View>
+          </Card.Content>
+        </Card>
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.sectionTitle}>Account</Text>
+            <Button
+              mode="contained"
+              onPress={() => {
+                router.push("/systemSelection");
               }}
-            />
-            <Text style={styles.name}>{username}</Text>
-            <Text style={styles.email}>{email}</Text>
-          </View>
-          <Card style={styles.card}>
-            <Card.Content>
-              <Text style={styles.sectionTitle}>App Settings</Text>
-              <Text style={styles.attention}>
-                Attention! Some notifications may not be visible in web app.
-              </Text>
-              <View style={styles.settingItem}>
-                <Text style={styles.settingText}>Enable Notifications</Text>
-                <Switch
-                  value={allowPush}
-                  onValueChange={(value) => {
-                    dispatch(setAllowPush(!!value));
-                  }}
-                  color={theme.primary}
-                />
-              </View>
-              <View style={styles.settingItem}>
-                <Text style={styles.settingText}>Dark Mode</Text>
-                <Switch
-                  value={isDarkTheme}
-                  onValueChange={(value) => {
-                    handleThemeChange(!!value);
-                  }}
-                  color={theme.primary}
-                />
-              </View>
-            </Card.Content>
-          </Card>
-          <Card style={styles.card}>
-            <Card.Content>
-              <Text style={styles.sectionTitle}>Account</Text>
-              <Button
-                mode="contained"
-                onPress={() => {
-                  router.push("/systemSelection");
-                }}
-                style={[styles.button, styles.redirectButton]}
-                icon={() => (
-                  <Ionicons name="home-outline" size={20} color="white" />
-                )}
-              >
-                Back to Controller Selection
-              </Button>
-              <Button
-                mode="contained"
-                onPress={() => {
-                  // Handle logout logic here
-                  dispatch(logout());
-                  router.push("/login");
-                }}
-                style={[styles.button, styles.logoutButton]}
-                icon={() => (
-                  <Ionicons name="log-out-outline" size={20} color="white" />
-                )}
-              >
-                Logout
-              </Button>
-            </Card.Content>
-          </Card>
-        </ScrollView>
-      </SafeAreaView>
+              style={[styles.button, styles.redirectButton]}
+              icon={() => (
+                <Ionicons name="home-outline" size={20} color="white" />
+              )}
+            >
+              Back to Controller Selection
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => {
+                // Handle logout logic here
+                dispatch(logout());
+                router.push("/login");
+              }}
+              style={[styles.button, styles.logoutButton]}
+              icon={() => (
+                <Ionicons name="log-out-outline" size={20} color="white" />
+              )}
+            >
+              Logout
+            </Button>
+          </Card.Content>
+        </Card>
+      </ScrollView>
+    </SafeAreaView>
     // )
   );
 }

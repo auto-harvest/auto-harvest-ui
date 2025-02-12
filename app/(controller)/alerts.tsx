@@ -96,13 +96,13 @@ export default function AlertsScreen() {
       color: theme.text,
     },
     criticalAlert: {
-      color: "#FF0000",
+      color: theme.red,
     },
     warningAlert: {
-      color: "#FFA500",
+      color: theme.secondary,
     },
     infoAlert: {
-      color: "#0000FF",
+      color: theme.tertiary,
     },
   });
 

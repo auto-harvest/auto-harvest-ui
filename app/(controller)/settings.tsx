@@ -9,7 +9,6 @@ import { useRouter } from "expo-router";
 
 export default function SettingsScreen() {
   const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
   const [wateringInterval, setWateringInterval] = useState("6");
   const [nutrientDosage, setNutrientDosage] = useState("5");
   const { theme } = useThemeColor();
@@ -64,19 +63,6 @@ export default function SettingsScreen() {
               <Switch
                 value={notifications}
                 onValueChange={setNotifications}
-                color={theme.primary}
-              />
-            </View>
-          </Card.Content>
-        </Card>
-        <Card style={styles.card}>
-          <Card.Content>
-            <Title style={styles.cardTitle}>Appearance</Title>
-            <View style={styles.settingItem}>
-              <Paragraph style={styles.cardParagraph}>Dark Mode</Paragraph>
-              <Switch
-                value={darkMode}
-                onValueChange={setDarkMode}
                 color={theme.primary}
               />
             </View>
