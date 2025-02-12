@@ -14,6 +14,7 @@ const border = "#32f1";
 const tertiary = "#2196F3";   // A strong blue
 const quaternary = "#9C27B0"; // A deep purple
 const quinary = "#009688";    // A bright yellow
+const red="#D32F2F";
 
 const darkBackground = "#121212";
 const darkText = "#FFFFFF";
@@ -38,6 +39,7 @@ export const Colors = {
     tertiary: tertiary,
     quaternary: quaternary,
     quinary: quinary,
+    red:red
   },
   dark: {
     text: darkText,
@@ -49,5 +51,6 @@ export const Colors = {
     tertiary: darkTertiary,
     quaternary: darkQuaternary,
     quinary: darkQuinary,
+    red:red
   },
 };

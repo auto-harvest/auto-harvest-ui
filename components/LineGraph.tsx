@@ -8,35 +8,17 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { ValueType } from "@/constants/enums/ValueType.enum";
+import { DateRange } from "@/constants/enums/DateRange.enum";
 
 const screenWidth = Dimensions.get("window").width;
 
-// 1) Define the types for clarity
-export type MeasurementType = "ph" | "temp" | "water-temp" | "tds" | "hum";
-export type DateRangeType = "day" | "week" | "month" | "year";
-
-/**
- * Props:
- * - measurementType: which measurement to plot (ph, temp, etc.)
- * - rangeType: time range for the X axis (day, week, month, year)
- * - date: a Date object representing a specific day or the start date
- * - dataPoints?: optional array of data values to plot. If not provided, random data is generated.
- */
 interface MeasurementLineChartProps {
-  measurementType: MeasurementType;
-  rangeType: DateRangeType;
+  measurementType: ValueType;
+  rangeType: DateRange;
   date: Date;
   dataPoints?: number[];
 }
-
-// Your color map
-const colors = {
-  temp: "",
-  hum: "",
-  "water-temp": "",
-  ph: "",
-  tds: "",
-};
 
 // Helper: convert a hex color to RGBA string
 const hexToRGBA = (hex: string, alpha: number = 1): string => {
@@ -71,7 +53,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
   };
 
   // Decide how many data points we expect based on rangeType
-  const getExpectedPointsCount = (range: DateRangeType): number => {
+  const getExpectedPointsCount = (range: DateRange): number => {
     switch (range) {
       case "day":
         return 24; // 24 hourly points
@@ -87,20 +69,29 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
   };
 
   // Generate the corresponding labels
-  const generateLabels = (range: DateRangeType): string[] => {
+  const generateLabels = (range: DateRange): string[] => {
     switch (range) {
       case "day":
-        return Array.from({ length: 24 }, (_, i) => `${i}:00`);
+        return Array.from({ length: 12 }, (_, i) => `${i * 2}:00`);
       case "week":
-        return Array.from({ length: 7 }, (_, i) => `Day ${i + 1}`);
+        return [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
       case "month":
         // 30 daily labels
-        return Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`);
+        return Array.from({ length: 15 }, (_, i) => `${i * 2 + 1}`);
       case "year":
         // 12 monthly labels
         return [
           "Jan",
           "Feb",
+          "Mar",
           "Mar",
           "Apr",
           "May",
@@ -119,7 +110,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
 
   // Generate random data if user doesn't provide dataPoints
   const generateRandomData = (
-    measurement: MeasurementType,
+    measurement: ValueType,
     count: number
   ): number[] => {
     let minVal = 0;
@@ -203,8 +194,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
   return (
     <View style={styles.container}>
       <Text style={[styles.title, { color: lineHexColor }]}>
-        {measurementType.toUpperCase()} ({rangeType.toUpperCase()}) -{" "}
-        {date.toDateString()}
+        ({rangeType.toUpperCase()}) - {date.toDateString()}
       </Text>
 
       <LineChart
@@ -217,14 +207,14 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
             },
           ],
         }}
-        width={screenWidth - 100}
-        height={220}
+        width={screenWidth - 60}
+        height={440}
         fromZero
         chartConfig={{
           backgroundColor: theme.card,
           backgroundGradientFrom: theme.card,
           backgroundGradientTo: theme.card,
-          decimalPlaces: 2,
+          decimalPlaces: 1,
           style: {
             borderRadius: 16,
           },
