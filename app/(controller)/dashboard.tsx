@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Card,
@@ -90,6 +90,14 @@ export default function HydroponicsDashboard() {
     desc: string;
   }
 
+  const handleMetricPress = (title: string): void => {
+    if (Platform.OS === "web") {
+      router.push(`/metric/${title.toLowerCase()}`);
+    } else {
+      router.push("/availabilityErrorAndroid");
+    }
+  };
+
   const renderMetricCard = ({ title, value, desc }: MetricCardProps) => (
     <Card style={styles.card}>
       <Card.Content>
@@ -98,12 +106,13 @@ export default function HydroponicsDashboard() {
         <Paragraph style={styles.cardDesc}>{desc}</Paragraph>
 
         {title !== "Water Level" && (
-        <Button onPress={() => router.push(`/metric/${title.toLowerCase()}`)}
-        textColor={theme.secondary}>
-          Show Detailed View
-        </Button>
-      )}
-      
+          <Button
+            onPress={() => handleMetricPress(title)}
+            textColor={theme.secondary}
+          >
+            Show Detailed View
+          </Button>
+        )}
       </Card.Content>
     </Card>
   );
@@ -147,7 +156,6 @@ export default function HydroponicsDashboard() {
             value: `${sensorData["tds"]?.value} ppm`,
             desc: "Optimal range: 150-250 ppm",
           })}
-          ,
           {renderMetricCard({
             title: "Water Level",
             value: `Full`,

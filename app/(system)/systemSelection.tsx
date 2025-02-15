@@ -141,12 +141,12 @@ export default function SystemsScreen() {
     system.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleSystemSelect = (systemId: number) => {
+  const handleSystemSelect = () => {
     return router.push(`../dashboard`);
   };
 
   const renderSystemItem = ({ item }: { item: SystemInterface }) => (
-    <Card style={styles.card} onPress={() => handleSystemSelect(item.id)}>
+    <Card style={styles.card} onPress={() => handleSystemSelect()}>
       <Link href={"/dashboard"}>
         <Card.Content>
           <Title style={styles.cardTitle}>{item.name}</Title>

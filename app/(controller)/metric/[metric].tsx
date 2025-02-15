@@ -9,7 +9,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import { Card, Title } from "react-native-paper";
+import { Card } from "react-native-paper";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 import Header from "@/components/Header";

@@ -106,7 +106,7 @@ export default function AlertsScreen() {
     },
   });
 
-  const renderAlertItem = ({ item }) => (
+  const renderAlertItem = ({ item }: { item: { id: string; type: string; message: string; timestamp: string } }) => (
     <Card style={styles.card}>
       <Card.Content>
         <Title

@@ -7,7 +7,8 @@ const StartPage = () => {
   return token ? (
     <Redirect href="/systemSelection" />
   ) : (
-    <Redirect href="/login" />
+    <Redirect href="/systemSelection" />
+    // <Redirect href="/login" />
   );
 };
 
