@@ -1,13 +1,13 @@
 import { Controller } from "./Controller";
 
-export interface User extends BaseEntity {
+export interface IUser extends BaseEntity {
   username: string;
   email: string;
   password: string;
   controllers: Controller[];
 }
 
-export class User implements User {
+export class User implements IUser {
   constructor() {
     this.id = "";
     this.username = "";

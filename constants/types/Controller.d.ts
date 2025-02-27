@@ -3,14 +3,14 @@ import { SystemStatus } from "../enums/SystemStatus.enum";
 import { WaterLevel } from "../enums/WaterLevel.enum";
 import { BaseEntity } from "./_BaseEntity";
 
-export interface Controller extends BaseEntity {
+export interface IController extends BaseEntity {
   code: string;
   waterLevel: WaterLevel;
   systemStatus: SystemStatus;
   cropType: CropType;
 }
 
-export class Controller implements Controller {
+export class Controller implements IController {
   constructor() {
     this.id = "";
     this.code = "";

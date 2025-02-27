@@ -1,7 +1,7 @@
 import { ValueType } from "../enums/ValueType.enum";
 import { ControllerSensor } from "./ControllerSensor";
 
-export interface AlertConfiguration extends BaseEntity {
+export interface IAlertConfiguration extends BaseEntity {
   name: string;
   controllerSensor: ControllerSensor;
   accessorKey: ValueType;
@@ -9,7 +9,7 @@ export interface AlertConfiguration extends BaseEntity {
   max: number;
 }
 
-export class AlertConfiguration implements AlertConfiguration {
+export class AlertConfiguration implements IAlertConfiguration {
   constructor() {
     this.id = "";
     this.name = "";

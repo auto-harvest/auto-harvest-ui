@@ -1,6 +1,6 @@
 import { DateValue } from "./DateValue";
 
-export interface Statistics {
+export interface IStatistics {
   variance: number;
   median: number;
   datapoint: number;
@@ -8,7 +8,7 @@ export interface Statistics {
   max: DateValue;
 }
 
-export class Statistics implements Statistics {
+export class Statistics implements IStatistics {
   constructor() {
     this.variance = 0;
     this.median = 0;

@@ -1,7 +1,7 @@
 import { NotificationType } from "../enums/NotificationType.enum";
 import { User } from "./User";
 
-export interface UserNotification extends BaseEntity {
+export interface IUserNotification extends BaseEntity {
   type: NotificationType;
   message: string;
   seen: boolean;
@@ -9,7 +9,7 @@ export interface UserNotification extends BaseEntity {
   controller?: Controller | null | undefined;
 }
 
-export class UserNotification implements UserNotification {
+export class UserNotification implements IUserNotification {
   constructor() {
     this.id = "";
     this.type = NotificationType.Info;
