@@ -1,12 +1,12 @@
 import { ValueType } from "../enums/ValueType.enum";
 import { SensorMetadata } from "./SensorMetadata";
 
-export interface SensorLog extends BaseEntity {
+export interface ISensorLog extends BaseEntity {
   metadata: SensorMetadata;
   data: Record<ValueType, number>;
 }
 
-export class SensorLog implements SensorLog {
+export class SensorLog implements ISensorLog {
   constructor() {
     this.id = "";
     this.metadata = new SensorMetadata();

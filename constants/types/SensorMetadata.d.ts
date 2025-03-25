@@ -1,14 +1,14 @@
 import { SensorType } from "react-native-reanimated";
 import { ControllerSensor } from "./ControllerSensor";
 
-export interface SensorMetadata {
+export interface ISensorMetadata {
   type: SensorType;
   timestamp: Date;
   name: string;
   controllerSensor: ControllerSensor;
 }
 
-export class SensorMetadata implements SensorMetadata {
+export class SensorMetadata implements ISensorMetadata {
   constructor() {
     this.type = SensorType.Temperature;
     this.timestamp = new Date();
