@@ -43,7 +43,6 @@ const ConnectToWifiStep = ({
   const { theme } = useThemeColor();
   const [spinnerMessage, setSpinnerMessage] = useState<string>("Loading...");
   // Request Location Permission for Android
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const requestLocationPermission = async () => {
     if (Platform.OS === "android") {
       const granted = await PermissionsAndroid.request(
