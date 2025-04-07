@@ -11,10 +11,24 @@
             "id": "fe1f85ef09b87a15",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.3 Artifact Registry.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "5.1.3 Artifact Registry"
             }
           }
         ]
@@ -74,7 +88,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 206.5
+    "width": 672.5
   },
   "right": {
     "id": "ac867f85e4b5f905",
@@ -138,13 +152,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Thesis/Intro/Introduction.md",
+                "file": "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.3 Artifact Registry.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Introduction"
+              "title": "Outline of 5.1.3 Artifact Registry"
             }
           },
           {
@@ -166,8 +180,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 291.5,
-    "collapsed": true
+    "width": 291.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -183,28 +196,43 @@
   },
   "active": "fe1f85ef09b87a15",
   "lastOpenFiles": [
-    "Thesis/1. Introduction/1.5 Existing Solutions.md",
-    "Thesis/1. Introduction/1.3 Goal.md",
-    "Thesis/1. Introduction/1.7 Our Recommendation.md",
-    "Thesis/1. Introduction/1.6 Difference.md",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.1 Google Cloud Provider and Services.md",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.3 Artifact Registry.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.1 Cloudflare Services.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.2 DNS Record Management.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.3 WAF Rules.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.6 Attack Mitigation and Security.md",
+    "Thesis/6. DevEx/6.2 Repository Organization.md",
+    "Thesis/6. DevEx/6.3 Local Development.md",
+    "Thesis/6. DevEx/Collaboration and Development Tools.md",
+    "Thesis/6. DevEx/6.1 VCS.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.7 SEO and Performance Optimization.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.5 Request Flow.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.4 Reverse Proxy Provider.md",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.6 Traffic Engineering.md",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.5 Static Files and Google Buckets.md",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.7 Load Balancer and Google CDN.md",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.4 Google Kubernetes Engine.md",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.2 Identity and Access Management.md",
     "Thesis/1. Introduction/1.4 Coverage.md",
-    "Thesis/1. Introduction/1.2 Implemented Solution.md",
-    "Thesis/1. Introduction/1.1 Problem.md",
-    "Thesis/2. Software/UI/2.2 Technological Foundations.md",
-    "Thesis/2. Software/UI/2.1 UI's repo overview.md",
+    "Thesis/1. Introduction/1.6 Difference.md",
+    "Thesis/2. Software/2.1 Backend/2.1.2 ExpressJS Server.md",
+    "Thesis/2. Software/2.3 Services/2.3.2 ActiveMQ Service.md",
+    "Thesis/4. Material/4.3 Maintainance.md",
+    "Thesis/7. CICD/7.3 Helper Scripts.md",
+    "Thesis/7. CICD/7.1 GitHub Actions.md",
+    "Thesis/7. CICD/7.2 Deployment Pipeline Flow.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider",
+    "Thesis/4. Material",
+    "Thesis/2. Software/2.3 Services",
+    "Thesis/2. Software/2.2 Firmware",
+    "Thesis/7. CICD",
+    "Untitled",
+    "Thesis/6. DevEx",
+    "Thesis/5. Infrastracture/5.3 Cloud and Production/Untitled",
+    "Thesis/5. Infrastracture/5.3 Cloud and Production/5.3.2 Google Artifact Repository",
     "Untitled.canvas",
-    "Thesis/3. Hardware/3.1 Material Part.md",
-    "Thesis/2. Software/Collaboration and Development Tools.md",
-    "Structure.md",
-    "Thesis/3. Hardware",
-    "Thesis/2. Software/UI",
-    "2025-03-24.md",
-    "Thesis/1. Introduction",
-    "Welcome.md",
-    "Thesis/2. Software",
-    "Thesis",
-    "2025-03-19.md",
-    "Untitled 1.canvas",
-    "create a link.md"
+    "Untitled 1.canvas"
   ]
 }

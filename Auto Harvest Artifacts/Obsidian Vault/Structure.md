@@ -22,7 +22,7 @@
 - **Sensor Data Readings & Calibration (Mandatory):**
     
     - Sensor readings for EC (Electrical Conductivity), pH, humidity, temperature, and nutrient levels are performed continuously and sent via WebSocket integration (`socket.io-client`) from Arduino to backend and then to the mobile application.
-    - **Calibration:** Sensors calibrated regularly with standard calibration solutions—pH buffer solutions (pH 4.0, 7.0, 10.0) and EC calibration fluid (typically 1413 µS/cm)—to maintain accuracy.
+    - **Calibration:** Sensors calibrated regularly with standard calibration solutions—pH buffer solutions (pH 4.03, 7.0, 10.0) and EC calibration fluid (typically 1413 µS/cm)—to maintain accuracy.
     - **Validity:** The application verifies sensor readings by comparing real-time readings to known calibration points. Alerts trigger if readings deviate beyond accepted tolerances.
 - **Certification of Readings (Mandatory):**
     - Certified accuracy via repeated cross-validation: sensor outputs compared against laboratory-grade digital meters at scheduled intervals to ensure continuous accuracy and reliability. This rigorous verification process confirms system reliability and accuracy.
@@ -35,15 +35,16 @@
     - **Sensors Implemented:**
         - **pH Sensor:** Provides precise acidity/alkalinity measurements.
         - **EC Sensor:** Monitors nutrient concentrations.
-        - **Temperature/Humidity Sensor (DHT22):** Measures air conditions within the hydroponic environment.
-        - **Water Level Sensor:** Ensures consistent nutrient supply.
+        - **Air Temperature/Humidity Sensor (DHT22):** Measures air conditions within the hydroponic environment.
+        - **Water Temperature Sensor** (DS18B20): Measures water temperatures via probe, in order to monitor the medium
+        - **Water Level Sensor:** A pair of water level floating sensors ensures the water is never too high and never too low, staying always in adequate levels.
+
 - **Connectivity & Communication:**
-    
-    - Arduino sends sensor data to the backend through Wi-Fi (ESP8266 Wi-Fi module).
+    - Arduino sends sensor data to the backend through Wi-Fi (ESP-01 attached to a ESP-01 adapter as a daughter board Wi-Fi module).
     - Reliable data transmission and reduced latency achieved through WebSockets.
-- **Material Mention (Minimal):**
-    
-    - Basic mention: pipes, hoses, nutrient reservoirs, and sensor casings used to house electronics and sensors. Detailed physical setup excluded due to project scope focusing on informatics.
+
+- **Material Mention (Minimal):**    
+    - Basic mention: pipes, hoses, connections (ταχησυνδεσμοι), nutrient reservoirs, and sensor casings used to house electronics and sensors, net pots. Detailed physical setup excluded due to project scope focusing on informatics.
 
 ## 4. Results
 
