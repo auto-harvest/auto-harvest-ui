@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.3 Artifact Registry.md",
+                "file": "Thesis/8. Challenges/8.2 Dead Ends.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "5.1.3 Artifact Registry"
+              "title": "8.2 Dead Ends"
             }
           }
         ]
@@ -88,7 +88,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 672.5
+    "width": 562.5
   },
   "right": {
     "id": "ac867f85e4b5f905",
@@ -152,13 +152,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.3 Artifact Registry.md",
+                "file": "Thesis/8. Challenges/8.2 Dead Ends.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 5.1.3 Artifact Registry"
+              "title": "Outline of 8.2 Dead Ends"
             }
           },
           {
@@ -196,32 +196,37 @@
   },
   "active": "fe1f85ef09b87a15",
   "lastOpenFiles": [
-    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.1 Google Cloud Provider and Services.md",
-    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.3 Artifact Registry.md",
-    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.1 Cloudflare Services.md",
-    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.2 DNS Record Management.md",
+    "Thesis/8. Challenges/8.1 Shortcomings.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.4 Control Logic and Custom Behaviors.md",
     "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.3 WAF Rules.md",
-    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.6 Attack Mitigation and Security.md",
-    "Thesis/6. DevEx/6.2 Repository Organization.md",
+    "Thesis/2. Software/2.1 Backend/2.1.1 Backend Specifications.md",
+    "Thesis/6. DevEx/6.4 Collaboration and Development Tools.md",
     "Thesis/6. DevEx/6.3 Local Development.md",
-    "Thesis/6. DevEx/Collaboration and Development Tools.md",
-    "Thesis/6. DevEx/6.1 VCS.md",
-    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.7 SEO and Performance Optimization.md",
-    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.5 Request Flow.md",
-    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.4 Reverse Proxy Provider.md",
-    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.6 Traffic Engineering.md",
-    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.5 Static Files and Google Buckets.md",
-    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.7 Load Balancer and Google CDN.md",
-    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.4 Google Kubernetes Engine.md",
-    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.2 Identity and Access Management.md",
-    "Thesis/1. Introduction/1.4 Coverage.md",
-    "Thesis/1. Introduction/1.6 Difference.md",
-    "Thesis/2. Software/2.1 Backend/2.1.2 ExpressJS Server.md",
-    "Thesis/2. Software/2.3 Services/2.3.2 ActiveMQ Service.md",
-    "Thesis/4. Material/4.3 Maintainance.md",
-    "Thesis/7. CICD/7.3 Helper Scripts.md",
     "Thesis/7. CICD/7.1 GitHub Actions.md",
-    "Thesis/7. CICD/7.2 Deployment Pipeline Flow.md",
+    "Thesis/9. Roadmap/9.3 Our Goal.md",
+    "Thesis/10. Conclusion/10.4 The Future of Hydroponics.md",
+    "Thesis/10. Conclusion/10.3 Alternative Applications.md",
+    "Thesis/1. Introduction/1.6 Difference.md",
+    "Thesis/1. Introduction/1.7 Our Recommendation.md",
+    "Thesis/10. Conclusion/10.5 Final Thoughts.md",
+    "Thesis/10. Conclusion/10.2 Delivered Product.md",
+    "Thesis/10. Conclusion/10.1 Test Run.md",
+    "Thesis/9. Roadmap/9.2 Production Preparation.md",
+    "Thesis/9. Roadmap/9.1 Planned Features.md",
+    "Thesis/8. Challenges/8.2 Dead Ends.md",
+    "Pasted image 20250410032707.png",
+    "Thesis/2. Software/2.3 Services/2.3.4 Service Orchestration.md",
+    "Thesis/2. Software/2.3 Services/2.3.2 MongoDB Service.md",
+    "Thesis/2. Software/2.3 Services/2.3.3 ActiveMQ Service.md",
+    "Thesis/2. Software/2.3 Services/2.3.1 3rd Part Dependencies.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.6 Testing and Debugging.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.5 Utilized Libraries.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.3 Code Structure and Patterns.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.2 PlatformIO for Arduino.md",
+    "Pasted image 20250410032816.png",
+    "Thesis/10. Conclusion",
+    "Thesis/9. Roadmap",
+    "Thesis/8. Challenges",
     "Thesis/5. Infrastracture/5.2 Cloudflare",
     "Thesis/5. Infrastracture/5.1 Cloud Provider",
     "Thesis/4. Material",
@@ -229,9 +234,6 @@
     "Thesis/2. Software/2.2 Firmware",
     "Thesis/7. CICD",
     "Untitled",
-    "Thesis/6. DevEx",
-    "Thesis/5. Infrastracture/5.3 Cloud and Production/Untitled",
-    "Thesis/5. Infrastracture/5.3 Cloud and Production/5.3.2 Google Artifact Repository",
     "Untitled.canvas",
     "Untitled 1.canvas"
   ]
