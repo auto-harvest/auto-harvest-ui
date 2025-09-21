@@ -8,7 +8,9 @@ export const socket = io(environment.wsBaseUrl, {
   autoConnect: false,
   transports: ["websocket"],
   reconnection: true,
+  path:'/socket.io'
 });
+
 const handle = setInterval(() => {
   const token = store.getState().auth.token;
   if (token && !socket.connected) {
@@ -21,7 +23,7 @@ export const initializeSocket = (store: any, token: any) => {
   console.log("Initializing socket connection");
   if (socket.connected) return;
   if (token) {
-    socket.io.uri += "?token=" + token; // Pass token in the WebSocket auth payload
+  socket.io.uri += "?token=" + token; // Pass token in the WebSocket auth payload
     console.log("Initializing socket connection");
     console.log("socketMiddleware -> token", token);
 

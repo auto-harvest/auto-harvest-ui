@@ -8,7 +8,7 @@ const socketMiddleware: Middleware<{}, RootState> = (store) => {
   const token = state.auth.token;
   if (token) {
     initializeSocket(store, token); 
-  }
+  } 
   return (next) => (action: any) => {
     const state = store.getState();
     const token = state.auth.token; // Access the JWT token from authSlice
