@@ -143,7 +143,7 @@ export default function HydroponicsDashboard() {
           })}
           {renderMetricCard({
             title: "Water Temperature",
-            value: `${sensorData["water-temperature"]?.value}%`,
+            value: `${sensorData["water-temperature"]?.value}°C`,
             desc: "Optimal range: 18-22°C",
           })}
           {renderMetricCard({

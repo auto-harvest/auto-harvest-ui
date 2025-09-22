@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Obsidian Vault/Thesis/3. Hardware/3.5 Internet Connectivity.md",
+                "file": "Obsidian Vault/Thesis/3. Hardware/3.7 Maintenance and Replacements.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "3.5 Internet Connectivity"
+              "title": "3.7 Maintenance and Replacements"
             }
           }
         ]
@@ -171,14 +171,15 @@
   },
   "active": "39b79b52b168a528",
   "lastOpenFiles": [
-    "Obsidian Vault/Thesis/3. Hardware/3.4 Modules.md",
+    "image.png",
+    "Obsidian Vault/Thesis/3. Hardware/3.6 Calibration.md",
     "Obsidian Vault/Thesis/3. Hardware/3.5 Internet Connectivity.md",
+    "Obsidian Vault/Thesis/3. Hardware/3.4 Modules.md",
     "Obsidian Vault/Thesis/3. Hardware/3.3 Sensors.md",
     "Obsidian Vault/Thesis/3. Hardware/3.7 Maintenance and Replacements.md",
     "Obsidian Vault/Thesis/4. Material/4.1 Components and Tools.md",
     "Obsidian Vault/Thesis/4. Material/4.2 Build Process.md",
     "Obsidian Vault/Thesis/4. Material/4.3 Maintainance.md",
-    "Obsidian Vault/Thesis/3. Hardware/3.6 Calibration.md",
     "Obsidian Vault/Thesis/2. Software/2.2 Firmware/2.2.3 Code Structure and Patterns.md",
     "Obsidian Vault/Thesis/3. Hardware/3.2 Connections and Wiring.md",
     "Obsidian Vault/Thesis/3. Hardware/3.1 Components.md",
@@ -205,7 +206,6 @@
     "LineChart React-Native-Chart-Kit.png",
     "Controller Selector.png",
     "Obsidian Vault/Thesis/6. DevEx/6.4 Collaboration and Development Tools.md",
-    "Obsidian Vault/Thesis/6. DevEx/6.3 Local Development.md",
-    "Obsidian Vault/Thesis/6. DevEx/6.2 Repository Organization.md"
+    "Obsidian Vault/Thesis/6. DevEx/6.3 Local Development.md"
   ]
 }
