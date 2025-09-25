@@ -83,7 +83,7 @@ export default function LoginScreen() {
           </View>
           <Title style={styles.title}>Login to Auto-Harvest</Title>
           <Paragraph style={styles.description}>
-            Enter your email and password to access your systems
+            EEnter your email and password to access your systems
           </Paragraph>
           <TextInput
             label="Email"
