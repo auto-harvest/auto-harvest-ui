@@ -11,9 +11,21 @@
             "id": "fe1f85ef09b87a15",
             "type": "leaf",
             "state": {
+              "type": "image",
+              "state": {
+                "file": "Pasted image 20250410032816.png"
+              },
+              "icon": "lucide-image",
+              "title": "Pasted image 20250410032816"
+            }
+          },
+          {
+            "id": "f09d7d4cd2eb62d3",
+            "type": "leaf",
+            "state": {
               "type": "markdown",
               "state": {
-                "file": "Thesis/8. Challenges/8.2 Dead Ends.md",
+                "file": "Thesis/2. Software/2.1 Backend/2.1.4 Utilized Libraries.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,10 +40,35 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "8.2 Dead Ends"
+              "title": "2.1.4 Utilized Libraries"
+            }
+          },
+          {
+            "id": "d6ce6d016bcbf895",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Thesis/2. Software/2.2 Firmware/2.2.5 Utilized Libraries.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "2.2.5 Utilized Libraries"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -88,7 +125,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 562.5
+    "width": 200
   },
   "right": {
     "id": "ac867f85e4b5f905",
@@ -152,13 +189,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Thesis/8. Challenges/8.2 Dead Ends.md",
+                "file": "Thesis/2. Software/2.1 Backend/2.1.4 Utilized Libraries.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 8.2 Dead Ends"
+              "title": "Outline of 2.1.4 Utilized Libraries"
             }
           },
           {
@@ -180,10 +217,12 @@
       }
     ],
     "direction": "horizontal",
-    "width": 291.5
+    "width": 200,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
       "markdown-importer:Open format converter": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
@@ -194,47 +233,54 @@
       "workspaces:Manage workspace layouts": false
     }
   },
-  "active": "fe1f85ef09b87a15",
+  "active": "d6ce6d016bcbf895",
   "lastOpenFiles": [
-    "Thesis/8. Challenges/8.1 Shortcomings.md",
-    "Thesis/2. Software/2.2 Firmware/2.2.4 Control Logic and Custom Behaviors.md",
-    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.3 WAF Rules.md",
-    "Thesis/2. Software/2.1 Backend/2.1.1 Backend Specifications.md",
-    "Thesis/6. DevEx/6.4 Collaboration and Development Tools.md",
-    "Thesis/6. DevEx/6.3 Local Development.md",
-    "Thesis/7. CICD/7.1 GitHub Actions.md",
-    "Thesis/9. Roadmap/9.3 Our Goal.md",
-    "Thesis/10. Conclusion/10.4 The Future of Hydroponics.md",
-    "Thesis/10. Conclusion/10.3 Alternative Applications.md",
-    "Thesis/1. Introduction/1.6 Difference.md",
-    "Thesis/1. Introduction/1.7 Our Recommendation.md",
-    "Thesis/10. Conclusion/10.5 Final Thoughts.md",
-    "Thesis/10. Conclusion/10.2 Delivered Product.md",
-    "Thesis/10. Conclusion/10.1 Test Run.md",
-    "Thesis/9. Roadmap/9.2 Production Preparation.md",
-    "Thesis/9. Roadmap/9.1 Planned Features.md",
-    "Thesis/8. Challenges/8.2 Dead Ends.md",
-    "Pasted image 20250410032707.png",
-    "Thesis/2. Software/2.3 Services/2.3.4 Service Orchestration.md",
-    "Thesis/2. Software/2.3 Services/2.3.2 MongoDB Service.md",
-    "Thesis/2. Software/2.3 Services/2.3.3 ActiveMQ Service.md",
-    "Thesis/2. Software/2.3 Services/2.3.1 3rd Part Dependencies.md",
     "Thesis/2. Software/2.2 Firmware/2.2.6 Testing and Debugging.md",
     "Thesis/2. Software/2.2 Firmware/2.2.5 Utilized Libraries.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.4 Control Logic and Custom Behaviors.md",
+    "Data Mining/data mining/Pasted image 20250626195352.png",
+    "Thesis/1. Introduction/1.1 Problem.md",
     "Thesis/2. Software/2.2 Firmware/2.2.3 Code Structure and Patterns.md",
     "Thesis/2. Software/2.2 Firmware/2.2.2 PlatformIO for Arduino.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.1 Firmware Specifications.md",
+    "Pasted image 20250410032707.png",
     "Pasted image 20250410032816.png",
-    "Thesis/10. Conclusion",
-    "Thesis/9. Roadmap",
-    "Thesis/8. Challenges",
-    "Thesis/5. Infrastracture/5.2 Cloudflare",
-    "Thesis/5. Infrastracture/5.1 Cloud Provider",
-    "Thesis/4. Material",
-    "Thesis/2. Software/2.3 Services",
-    "Thesis/2. Software/2.2 Firmware",
-    "Thesis/7. CICD",
-    "Untitled",
+    "Thesis/2. Software/2.1 Backend/2.1.5 Debugging and Profiling.md",
+    "Thesis/2. Software/2.3 Services/2.3.4 Service Orchestration.md",
+    "Thesis/2. Software/2.3 Services/2.3.1 3rd Part Dependencies.md",
+    "Thesis/2. Software/2.3 Services/2.3.2 MongoDB Service.md",
+    "Thesis/2. Software/2.1 Backend/2.1.4 Utilized Libraries.md",
+    "Thesis/2. Software/2.1 Backend/2.1.3 Code Structure and Patterns.md",
+    "Thesis/2. Software/2.1 Backend/2.1.2 Express Server.md",
+    "Thesis/2. Software/2.1 Backend/2.1.1 Backend Specifications.md",
+    "Data Mining/data mining/Section A/1. Preprocessing/Attribute Selection.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.1 Cloudflare Services.md",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.5 Static Files and Google Buckets.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.3 WAF Rules.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.4 Reverse Proxy Provider.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.7 SEO and Performance Optimization.md",
+    "Thesis/1. Introduction/1.5 Existing Solutions.md",
+    "Thesis/1. Introduction/1.4 Coverage.md",
+    "Thesis/1. Introduction/1.2 Implemented Solution.md",
+    "Structure.md",
     "Untitled.canvas",
+    "Data Mining/data mining/Section C/Apriori",
+    "Data Mining/data mining/Section C/Untitled",
+    "Data Mining/data mining/Section C/1. Preprocessing",
+    "Data Mining/data mining/Section C",
+    "Data Mining/data mining/Untitled",
+    "Data Mining/data mining/Section B/4. DBSCAN/k-distance graph.png",
+    "Data Mining/data mining/Section B/4. DBSCAN",
+    "Data Mining/data mining/Section B/3. Agglomerative Clustering/og.png",
+    "Data Mining/data mining/Section B/3. Agglomerative Clustering/modded.png",
+    "Data Mining/data mining/Section B/3. Agglomerative Clustering",
+    "Data Mining/data mining/Section B/2. KMeans with Elbow method/Runs",
+    "Data Mining/data mining/Section B/2. KMeans with Elbow method",
+    "Data Mining/data mining/Section B/1. Preprocessing",
+    "Data Mining/data mining/Section B/2. Agglomerative Clustering/modded.png",
+    "Data Mining/data mining/Section B/2. Agglomerative Clustering/og.png",
+    "Data Mining/data mining/Section B/3. DBSCAN/k-distance graph.png",
+    "Data Mining/data mining/k-distance graph.png",
     "Untitled 1.canvas"
   ]
 }
