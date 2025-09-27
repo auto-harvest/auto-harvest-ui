@@ -9,7 +9,12 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "tunnel": "cloudflared access tcp --hostname ssh.autoharvest.solutions --url localhost:2222",
+    "kill-tunnel": "pkill cloudflared",
+    "kill-tunnel:win": "Stop-Process -Name cloudflared",
+    "deploy:copy": "scp -o ConnectionAttempts=5 -o ConnectTimeout=1 -P 2222 -r dist/* deploy@localhost:/config/site/Frontend",
+    "export": "expo export"
   },
   "jest": {
     "preset": "jest-expo"

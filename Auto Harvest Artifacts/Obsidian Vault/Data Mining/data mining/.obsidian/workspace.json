@@ -1,0 +1,214 @@
+{
+  "main": {
+    "id": "6639b281d99d4cc8",
+    "type": "split",
+    "children": [
+      {
+        "id": "6ce206bd0f4571f6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ff45ea31d6d2c9f4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Section B/2. KMeans with Elbow method/Runs/k=2.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "k=2"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "fa59ce2712e6f9cc",
+    "type": "split",
+    "children": [
+      {
+        "id": "b747ea7db1851dd6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f735cb482945c8a4",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "9891f8a924686513",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "e08f4f5e56cc7b15",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 409.5
+  },
+  "right": {
+    "id": "eda99d5679299279",
+    "type": "split",
+    "children": [
+      {
+        "id": "20c1e3c34cc12d04",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1c91eff3b66b7024",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Section B/1. KMeans with Elbow method/Runs/k=2.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for k=2"
+            }
+          },
+          {
+            "id": "a4b8acc8d7f7d9d1",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Section B/1. KMeans with Elbow method/Runs/k=2.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from k=2"
+            }
+          },
+          {
+            "id": "a8ea0a44c2eb4374",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "d9a4988da6f7f5c2",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Section B/1. KMeans with Elbow method/Runs/k=2.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of k=2"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "ff45ea31d6d2c9f4",
+  "lastOpenFiles": [
+    "Welcome.md",
+    "Pasted image 20250626195352.png",
+    "Section C/1. Preprocessing/Discretization.md",
+    "Section B/4. DBSCAN/k-distance graph.png",
+    "Section B/4. DBSCAN/DBSCAN Parameters.md",
+    "Section B/4. DBSCAN/Result.md",
+    "Section B/3. Agglomerative Clustering/og.png",
+    "Section B/3. Agglomerative Clustering/Result.md",
+    "Section B/3. Agglomerative Clustering/Summary.md",
+    "Section B/2. KMeans with Elbow method/Runs/k=6.md",
+    "Section B/2. KMeans with Elbow method/Runs/k=2.md",
+    "Section B/2. KMeans with Elbow method/Runs/k=3.md",
+    "Section B/2. KMeans with Elbow method/Runs/k=4.md",
+    "Section B/2. KMeans with Elbow method/Runs/k=5.md",
+    "Section B/3. Agglomerative Clustering/modded.png",
+    "Section B/3. Agglomerative Clustering/Analysis.md",
+    "Section B/2. KMeans with Elbow method/Clustering Analysis.md",
+    "Section B/2. KMeans with Elbow method/Elbow Method.md",
+    "Section B/1. Preprocessing/Filters Applied.md",
+    "Section A/4. Conclusion/Conclusion.md",
+    "Section A/4. Conclusion/Best Algorythm.md",
+    "Section A/3. Run Results/SMOTE/Random Forrest/Summary.md",
+    "Section A/3. Run Results/SMOTE/Random Forrest/Result.md",
+    "Section A/3. Run Results/SMOTE/Naive-Bayes/Summary.md",
+    "Section A/3. Run Results/SMOTE/Naive-Bayes/Result.md",
+    "Section A/3. Run Results/SMOTE/J48/Summary.md",
+    "Section A/3. Run Results/SMOTE/J48/Result.md",
+    "Section A/3. Run Results/SMOTE/IBk/Summary.md",
+    "Section A/3. Run Results/SMOTE/IBk/Result.md",
+    "Section A/2. SMOTE/Why SMOTE.md",
+    "Section C/Apriori",
+    "Section C/1. Preprocessing",
+    "Section C",
+    "Section B/1. Preprocessing",
+    "Section B/4. DBSCAN",
+    "Section B/3. Agglomerative Clustering",
+    "Section B/2. KMeans with Elbow method/Runs",
+    "Section B/2. KMeans with Elbow method",
+    "Section B",
+    "Section A"
+  ]
+}
