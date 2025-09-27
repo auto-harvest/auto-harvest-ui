@@ -1,3 +1,5 @@
+import { UnknownAction } from "redux";
+
 export const SOCKET_CONNECT = "SOCKET/CONNECT";
 export const SOCKET_DISCONNECT = "SOCKET/DISCONNECT";
 export const SOCKET_EMIT = "SOCKET/EMIT";
@@ -54,7 +56,7 @@ export const disconnectSocket = (): DisconnectSocketAction => ({
 export const emitSocketEvent = (
   event: string,
   payload: any
-): EmitSocketEventAction => ({
+): EmitSocketEventAction & UnknownAction => ({
   type: SOCKET_EMIT,
   event,
   payload,

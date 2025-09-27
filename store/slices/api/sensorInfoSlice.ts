@@ -1,16 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface SensorInfo {
+  initial?: boolean;
   id: string;
   value: number;
   timestamp: string;
 }
 
 export interface SensorInfoState {
+  initial: boolean;
+
   data: Record<string, SensorInfo>; // Using an object to mimic a map for Redux's JSON serialization
 }
 
 const initialState: SensorInfoState = {
+  initial: true,
+
   data: {
     ph: {
       id: "ph",
@@ -32,11 +37,21 @@ const initialState: SensorInfoState = {
       value: 0,
       timestamp: Date.now().toString(),
     },
-    'water-temperature': {
+    "water-temperature": {
       id: "water-temperature",
       value: 0,
       timestamp: Date.now().toString(),
-    }
+    },
+    pump: {
+      id: "pump",
+      value: 0,
+      timestamp: Date.now().toString(),
+    },
+    "air-pump": {
+      id: "air-pump",
+      value: 0,
+      timestamp: Date.now().toString(),
+    },
   }, // Initial state as an empty object
 };
 
@@ -46,6 +61,7 @@ const sensorInfoSlice = createSlice({
   reducers: {
     updateSensorInfo(state, action: PayloadAction<Record<string, any>>) {
       // Add or update the sensor data using its `id`
+      state.initial = false;
       state.data = {};
       for (const key in action.payload) {
         state.data[key] = {

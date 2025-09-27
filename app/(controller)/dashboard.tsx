@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -8,19 +8,37 @@ import {
   Switch,
   Text,
   Button,
+  ActivityIndicator,
 } from "react-native-paper";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
 import { useRouter } from "expo-router";
-import { useAppSelector } from "@/store/overrides";
+import { useAppDispatch, useAppSelector } from "@/store/overrides";
+import { emitSocketEvent } from "@/store/actions/socketActions";
 
 export default function HydroponicsDashboard() {
   const router = useRouter();
-  const [isPumpOn, setIsPumpOn] = useState(false);
-  const [isAirPumpOn, setIsAirPumpOn] = useState(false);
   const sensorData = useAppSelector((state) => state.sensorInfo.data);
+  const [isPumpOn, setIsPumpOn] = useState(!!sensorData["water-pump"]?.value);
+  const [isAirPumpOn, setIsAirPumpOn] = useState(
+    !!sensorData["air-pump"]?.value
+  );
   const { theme } = useThemeColor();
+  const dispatch = useAppDispatch();
+  const handlePumpToggle = (value: boolean) => {
+    setIsPumpOn(value);
+    dispatch(emitSocketEvent(`pump`, `pump-${value ? "on" : "off"}`));
+  };
+
+  const handleAirPumpToggle = (value: boolean) => {
+    setIsAirPumpOn(value);
+    dispatch(emitSocketEvent(`air-pump`, `air-pump-${value ? "on" : "off"}`));
+  };
+  useEffect(() => {
+    setIsPumpOn(!!sensorData["water-pump"]?.value);
+    setIsAirPumpOn(!!sensorData["air-pump"]?.value);
+  }, [sensorData]);
   console.log(sensorData);
 
   const styles = StyleSheet.create({
@@ -116,86 +134,113 @@ export default function HydroponicsDashboard() {
       </Card.Content>
     </Card>
   );
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <Header
-          showBackButton
-          onBackPress={() => router.push("/systemSelection")}
-          showUserIcon
-          onUserIconPress={() => {
-            router.push("/profile");
-          }}
+  if (sensorData.initial) {
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: theme.background,
+        }}
+      >
+        <ActivityIndicator
+          animating={true}
+          size="large"
+          color={theme.primary}
         />
+      </SafeAreaView>
+    );
+  } else
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <Header
+            showBackButton
+            onBackPress={() => router.push("/systemSelection")}
+            showUserIcon
+            onUserIconPress={() => {
+              router.push("/profile");
+            }}
+          />
 
-        {/* //? Metrics */}
-        <View style={styles.controlsContainer}>
-          {renderMetricCard({
-            title: "Temperature",
-            value: `${sensorData["temperature"]?.value}°C`,
-            desc: "Optimal range: 20-26°C",
-          })}
-          {renderMetricCard({
-            title: "Humidity",
-            value: `${sensorData["humidity"]?.value}%`,
-            desc: "Optimal range: 50-70%",
-          })}
-          {renderMetricCard({
-            title: "Water Temperature",
-            value: `${sensorData["water-temperature"]?.value}°C`,
-            desc: "Optimal range: 18-22°C",
-          })}
-          {renderMetricCard({
-            title: "pH Level",
-            value: `${sensorData["ph"]?.value}`,
-            desc: "Optimal range: 5.5-6.5",
-          })}
-          {renderMetricCard({
-            title: "TDS",
-            value: `${sensorData["tds"]?.value} ppm`,
-            desc: "Optimal range: 150-250 ppm",
-          })}
-          {renderMetricCard({
-            title: "Water Level",
-            value: `Full`,
-            desc: "Water Level could be Attention Needed, Low, Full",
-          })}
-        </View>
+          {/* //? Metrics */}
+          <View style={styles.controlsContainer}>
+            {renderMetricCard({
+              title: "Temperature",
+              value: `${(sensorData["temperature"]?.value || 0).toFixed(2)}°C`,
+              desc: "Optimal range: 18-28°C",
+            })}
+            {renderMetricCard({
+              title: "Humidity",
+              value: `${(sensorData["humidity"]?.value || 0).toFixed(2)}%`,
+              desc: "Optimal range: 45-75%",
+            })}
+            {renderMetricCard({
+              title: "Water Temperature",
+              value: `${(sensorData["water-temperature"]?.value || 0).toFixed(
+                2
+              )}°C`,
+              desc: "Optimal range: 18-25°C",
+            })}
+            {renderMetricCard({
+              title: "pH Level",
+              value: `${(sensorData["ph"]?.value || 0).toFixed(2)}`,
+              desc: "Optimal range: 5-6",
+            })}
+            {renderMetricCard({
+              title: "TDS",
+              value: `${(sensorData["tds"]?.value || 0).toFixed(2)} ppm`,
+              desc: "Optimal range: 8-20 ppm",
+            })}
+            {renderMetricCard({
+              title: "Water Level",
+              value: `${
+                sensorData["water-level"]?.value === 0
+                  ? "Ok"
+                  : sensorData["water-level"]?.value === -1
+                  ? "Low"
+                  : sensorData["water-level"]?.value === 2
+                  ? "Full"
+                  : "Unknown"
+              }`,
+              desc: "Water Level could be Attention Needed, Low, Full",
+            })}
+          </View>
 
-        {/* //? Controls */}
-        <View style={styles.controlsContainer}>
-          <Card style={styles.controlCard}>
-            <Card.Content>
-              <Title style={{ color: theme.text }}>Pump Control</Title>
-              <View style={styles.switchContainer}>
-                <Text style={styles.switchText}>Off</Text>
-                <Switch
-                  value={isPumpOn}
-                  onValueChange={() => setIsPumpOn(!isPumpOn)}
-                  color={theme.primary}
-                />
-                <Text style={styles.switchText}>On</Text>
-              </View>
-            </Card.Content>
-          </Card>
-          <Card style={styles.controlCard}>
-            <Card.Content>
-              <Title style={{ color: theme.text }}>Air Pump Control</Title>
-              <View style={styles.switchContainer}>
-                <Text style={styles.switchText}>Off</Text>
-                <Switch
-                  value={isAirPumpOn}
-                  onValueChange={() => setIsAirPumpOn(!isAirPumpOn)}
-                  color={theme.primary}
-                />
-                <Text style={styles.switchText}>On</Text>
-              </View>
-            </Card.Content>
-          </Card>
-        </View>
-      </ScrollView>
-      <Navbar activeNav="dashboard" />
-    </SafeAreaView>
-  );
+          {/* //? Controls */}
+          <View style={styles.controlsContainer}>
+            <Card style={styles.controlCard}>
+              <Card.Content>
+                <Title style={{ color: theme.text }}>Pump Control</Title>
+                <View style={styles.switchContainer}>
+                  <Text style={styles.switchText}>Off</Text>
+                  <Switch
+                    value={isPumpOn}
+                    onValueChange={() => handlePumpToggle(!isPumpOn)}
+                    color={theme.primary}
+                  />
+                  <Text style={styles.switchText}>On</Text>
+                </View>
+              </Card.Content>
+            </Card>
+            <Card style={styles.controlCard}>
+              <Card.Content>
+                <Title style={{ color: theme.text }}>Air Pump Control</Title>
+                <View style={styles.switchContainer}>
+                  <Text style={styles.switchText}>Off</Text>
+                  <Switch
+                    value={isAirPumpOn}
+                    onValueChange={() => handleAirPumpToggle(!isAirPumpOn)}
+                    color={theme.primary}
+                  />
+                  <Text style={styles.switchText}>On</Text>
+                </View>
+              </Card.Content>
+            </Card>
+          </View>
+        </ScrollView>
+        <Navbar activeNav="dashboard" />
+      </SafeAreaView>
+    );
 }

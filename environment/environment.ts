@@ -1,12 +1,5 @@
-// export const environment = {
-//   production: false,
-//   apiBaseUrl: "https://autoharvest.solutions.ngrok.app/report-server",
-//   wsBaseUrl: "https://autoharvest.solutions.ngrok.app/report-server",
-// };
-
 export const environment = {
-  production: false,
-  apiBaseUrl: "http://localhost/report-server",
-  wsBaseUrl: "http://localhost",
+  production: process.env.NODE_ENV === "production",
+  apiBaseUrl: process.env.EXPO_PUBLIC_API_URL!,
+  wsBaseUrl: process.env.EXPO_PUBLIC_WS_URL!,
 };
-  
