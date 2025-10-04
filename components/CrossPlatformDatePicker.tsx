@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import {
-  Platform,
-  View,
-  StyleSheet,
-} from "react-native";
-import { Text } from "react-native-paper";
-// import DateTimePicker, {
-//   DateTimePickerEvent,
-// } from "@react-native-community/datetimepicker";
+import { Platform, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, TextInput } from "react-native-paper";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import { useThemeColor } from "../hooks/useThemeColor";
 import { router } from "expo-router";
 
@@ -18,8 +14,12 @@ interface Props {
   onChange: (date: Date) => void;
 }
 
-export default function CrossPlatformDatePicker({ mode, value, onChange }: Props) {
-  // const [showAndroidPicker, setShowAndroidPicker] = useState<boolean>(false);
+export default function CrossPlatformDatePicker({
+  mode,
+  value,
+  onChange,
+}: Props) {
+  const [showAndroidPicker, setShowAndroidPicker] = useState<boolean>(false);
   const { theme } = useThemeColor();
 
   const styles = StyleSheet.create({
@@ -61,7 +61,9 @@ export default function CrossPlatformDatePicker({ mode, value, onChange }: Props
   if (Platform.OS === "web") {
     return (
       <View style={styles.container}>
-        <Text style={styles.label}>{`Select ${mode.charAt(0).toUpperCase() + mode.slice(1)}`}</Text>
+        <Text style={styles.label}>{`Select ${
+          mode.charAt(0).toUpperCase() + mode.slice(1)
+        }`}</Text>
 
         {mode === "year" ? (
           // For "year" specifically
@@ -96,68 +98,70 @@ export default function CrossPlatformDatePicker({ mode, value, onChange }: Props
 
   // Android Implementation
   if (Platform.OS === "android") {
-    // router.push("/availabilityErrorAndroid");	
+    // router.push("/availabilityErrorAndroid");
     // If mode = day => use DateTimePicker
-    // if (mode === "day") {
-    //   return (
-    //     <View style={styles.container}>
-    //       <Text style={styles.label}>{`Select Day`}</Text>
-    //       {showAndroidPicker && (
-    //         <DateTimePicker
-    //           mode="date"
-    //           display="calendar"
-    //           value={value}
-    //           onChange={(event: DateTimePickerEvent, date?: Date) => {
-    //             setShowAndroidPicker(false);
-    //             if (date) {
-    //               onChange(date);
-    //             }
-    //           }}
-    //         />
-    //       )}
+    if (mode === "day") {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.label}>{`Select Day`}</Text>
+          {showAndroidPicker && (
+            <DateTimePicker
+              mode="date"
+              display="inline"
+              value={value}
+              onChange={(event: DateTimePickerEvent, date?: Date) => {
+                setShowAndroidPicker(false);
+                if (date) {
+                  onChange(date);
+                }
+              }}
+            />
+          )}
 
-    //       <TouchableOpacity
-    //         onPress={() => setShowAndroidPicker(true)}
-    //         style={styles.androidPickerButton}
-    //       >
-    //         <Text style={styles.androidPickerButtonText}>
-    //           {formatDateDisplay(value)}
-    //         </Text>
-    //       </TouchableOpacity>
-    //     </View>
-    //   );
-    // } else {
-    //   // Fallback or minimal approach for week/month/year
-    //   return (
-    //     <View style={styles.container}>
-    //       <Text style={styles.label}>{`Select ${mode.charAt(0).toUpperCase() + mode.slice(1)}`}</Text>
-    //       <TouchableOpacity
-    //         onPress={() => {
-    //           // Here you can implement custom logic for week/month/year selection
-    //           // For now, we'll use a TextInput as a placeholder
-    //         }}
-    //         style={styles.androidPickerButton}
-    //       >
-    //         <TextInput
-    //           value={placeholderForMode(mode, value)}
-    //           onChangeText={(text) => {
-    //             // Implement custom logic for parsing the input and updating the date
-    //             // This is a simplified example and may need more robust parsing
-    //             const newDate = new Date(value);
-    //             if (mode === "year") {
-    //               newDate.setFullYear(parseInt(text, 10));
-    //             } else if (mode === "month") {
-    //               newDate.setMonth(parseInt(text, 10) - 1);
-    //             }
-    //             // For week, you might need more complex logic
-    //             onChange(newDate);
-    //           }}
-    //           style={styles.androidPickerButtonText}
-    //         />
-    //       </TouchableOpacity>
-    //     </View>
-    //   );
-    // }
+          <TouchableOpacity
+            onPress={() => setShowAndroidPicker(true)}
+            style={styles.androidPickerButton}
+          >
+            <Text style={styles.androidPickerButtonText}>
+              {formatDateDisplay(value)}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      // Fallback or minimal approach for week/month/year
+      return (
+        <View style={styles.container}>
+          <Text style={styles.label}>{`Select ${
+            mode.charAt(0).toUpperCase() + mode.slice(1)
+          }`}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              // Here you can implement custom logic for week/month/year selection
+              // For now, we'll use a TextInput as a placeholder
+            }}
+            style={styles.androidPickerButton}
+          >
+            <TextInput
+              value={placeholderForMode(mode, value)}
+              onChangeText={(text) => {
+                // Implement custom logic for parsing the input and updating the date
+                // This is a simplified example and may need more robust parsing
+                const newDate = new Date(value);
+                if (mode === "year") {
+                  newDate.setFullYear(parseInt(text, 10));
+                } else if (mode === "month") {
+                  newDate.setMonth(parseInt(text, 10) - 1);
+                }
+                // For week, you might need more complex logic
+                onChange(newDate);
+              }}
+              style={styles.androidPickerButtonText}
+            />
+          </TouchableOpacity>
+        </View>
+      );
+    }
   }
 
   // Fallback for other platforms (or if none of the above conditions are met)
@@ -229,11 +233,15 @@ function weekToDate(year: number, week: number): Date {
 }
 
 function getWeekNumber(date: Date): number {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const d = new Date(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+  );
   const dayNum = d.getUTCDay() || 7;
   d.setUTCDate(d.getUTCDate() + 4 - dayNum);
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  const weekNo = Math.ceil(
+    ((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7
+  );
   return weekNo;
 }
 

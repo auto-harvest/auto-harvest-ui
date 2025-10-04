@@ -2,6 +2,7 @@ import { Middleware, MiddlewareAPI, Dispatch } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 import { logout } from "../slices/persist/authSlice";
 import { RootState } from "../store"; // Import your RootState type
+import { router } from "expo-router";
 
 // Define the shape of the decoded JWT
 interface DecodedToken {
@@ -19,8 +20,9 @@ const jwtMiddleware: Middleware =
         const currentTime = Date.now() / 1000;
 
         if (decoded.exp < currentTime) {
-          console.warn("JWT expired. Logging out...");
+          console.warn("JWT expired. Logging outa...");
           storeAPI.dispatch(logout());
+          router.replace("/login");
         }
       } catch (error) {
         console.error("Invalid JWT token:", error);

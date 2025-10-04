@@ -1,99 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, FlatList } from "react-native";
-import {Card, Title, Paragraph, Searchbar, Button } from "react-native-paper";
+import { Card, Title, Paragraph, Searchbar, Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import { Link, router } from "expo-router";
-import { Controller } from "@/constants/types/Controller";
-import { WaterLevel } from "@/constants/enums/WaterLevel.enum";
-import { SystemStatus } from "@/constants/enums/SystemStatus.enum";
-import { CropType } from "@/constants/enums/CropType.enum";
+
 import Header from "@/components/Header";
-
-export interface SystemInterface {
-  id: number;
-  name: string;
-  plants: number;
-  lastUpdated: string;
-}
-
-export const systems: SystemInterface[] = [
-  {
-    id: 1,
-    name: "Basement Lettuce Farm",
-    plants: 48,
-    lastUpdated: "2 hours ago",
-  },
-  {
-    id: 2,
-    name: "Rooftop Tomato Garden",
-    plants: 24,
-    lastUpdated: "1 day ago",
-  },
-  {
-    id: 3,
-    name: "Indoor Herb Collection",
-    plants: 12,
-    lastUpdated: "3 hours ago",
-  },
-  {
-    id: 4,
-    name: "Experimental Strawberry Setup",
-    plants: 36,
-    lastUpdated: "Just now",
-  },
-];
-
-export const controllers: Controller[] = [
-  {
-    id: "1",
-    createdAt: "2021-08-01T12:00:00Z",
-    updatedAt: "2021-08-01T12:00:00Z",
-    code: "ABC123",
-    waterLevel: WaterLevel.HIGH,
-    systemStatus: SystemStatus.ON,
-    cropType: CropType.LETTUCE,
-    isDeleted: false,
-  },
-  {
-    id: "2",
-    createdAt: "2021-08-01T12:00:00Z",
-    updatedAt: "2021-08-01T12:00:00Z",
-    code: "DEF456",
-    waterLevel: WaterLevel.LOW,
-    systemStatus: SystemStatus.OFF,
-    cropType: CropType.BASIL,
-    isDeleted: false,
-  },
-  {
-    id: "3",
-    createdAt: "2021-08-01T12:00:00Z",
-    updatedAt: "2021-08-01T12:00:00Z",
-    code: "GHI789",
-    waterLevel: WaterLevel.ADEQUATE,
-    systemStatus: SystemStatus.ON,
-    cropType: CropType.CHILLY,
-    isDeleted: false,
-  },
-  {
-    id: "4",
-    createdAt: "2021-08-01T12:00:00Z",
-    updatedAt: "2021-08-01T12:00:00Z",
-    code: "JKL012",
-    waterLevel: WaterLevel.HIGH,
-    systemStatus: SystemStatus.OFF,
-    cropType: CropType.STRAWBERRY,
-    isDeleted: false,
-  },
-];
+import { useGetControllersQuery } from "@/store/slices/api/apiSlice";
 
 export default function SystemsScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const { theme } = useThemeColor();
+  const { data, isLoading, isError } = useGetControllersQuery({});
+  const [filteredSystems, setFilteredSystems] = useState<SystemInterface[]>([]);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.background,
+      backgroundColor: theme.background, 
     },
     header: {
       flexDirection: "row",
@@ -136,25 +59,37 @@ export default function SystemsScreen() {
       backgroundColor: theme.primary,
     },
   });
-
-  const filteredSystems = systems.filter((system) =>
-    system.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  useEffect(() => {
+    if (!data) return;
+    setFilteredSystems(
+      data.filter((system) =>
+        system.code.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [data, searchQuery]);
+  useEffect(() => {
+    if (!data) return;
+    setFilteredSystems(data);
+    console.log("Fetched Controllers:", data);
+  }, [data]);
   const handleSystemSelect = () => {
     return router.push(`../dashboard`);
   };
 
-  const renderSystemItem = ({ item }: { item: SystemInterface }) => (
+  const renderSystemItem = ({ item }) => (
     <Card style={styles.card} onPress={() => handleSystemSelect()}>
       <Link href={"/dashboard"}>
         <Card.Content>
-          <Title style={styles.cardTitle}>{item.name}</Title>
+          <Title style={styles.cardTitle}>{item.code}</Title>
           <Paragraph style={styles.cardParagraph}>
-            {item.plants} plants
+            Crop: {item.cropType}
           </Paragraph>
           <Paragraph style={styles.cardParagraph}>
-            Last updated: {item.lastUpdated}
+            Status: {item.systemStatus}
+          </Paragraph>
+          <Paragraph style={styles.cardParagraph}>
+            Last update:{" "}
+            {new Date(item.lastMaintenanceDate).toLocaleString()}
           </Paragraph>
         </Card.Content>
       </Link>
@@ -179,10 +114,15 @@ export default function SystemsScreen() {
         iconColor={theme.text}
         placeholderTextColor={theme.text}
       />
+      {filteredSystems.length === 0 && !isLoading && (
+        <Paragraph style={{ textAlign: "center", color: theme.text }}>
+          No systems found.
+        </Paragraph>
+      )}
       <FlatList
         data={filteredSystems}
         renderItem={renderSystemItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => "" + item.id}
         contentContainerStyle={styles.listContent}
       />
       <Button

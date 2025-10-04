@@ -52,6 +52,16 @@ const initialState: SensorInfoState = {
       value: 0,
       timestamp: Date.now().toString(),
     },
+    fan: {
+      id: "fan",
+      value: 0,
+      timestamp: Date.now().toString(),
+    },
+    vpd: {
+      id: "vpd",
+      value: 0,
+      timestamp: Date.now().toString(),
+    },
   }, // Initial state as an empty object
 };
 

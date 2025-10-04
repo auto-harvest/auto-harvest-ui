@@ -55,6 +55,12 @@
       "eas": {
         "projectId": "9ef25314-f6d4-4458-a5fa-684c091085a2"
       }
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.autoharvestui",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     }
   }
 }

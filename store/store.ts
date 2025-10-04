@@ -18,7 +18,7 @@ import socketSlice from "./slices/socketSlice";
 import sensorInfoSlice from "./slices/api/sensorInfoSlice";
 import jwtMiddleware from "./middleware/jwtMiddleware";
 import { authApi } from "./slices/api/authSlice";
-
+import { squashedSensorInfoSlice } from "./slices/api/squashedSensorInfoSlice";
 // Persist configuration
 const persistConfig = {
   key: "root",
@@ -33,6 +33,7 @@ const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   [socketSlice.reducerPath]: socketSlice.reducer, // Add the socket reducer
   [sensorInfoSlice.reducerPath]: sensorInfoSlice.reducer,
+  [squashedSensorInfoSlice.reducerPath]: squashedSensorInfoSlice.reducer,
 });
 
 // Persisted reducer
@@ -50,7 +51,8 @@ const store = configureStore({
       .concat(jwtMiddleware)
       .concat(socketMiddleware)
       .concat(authApi.middleware)
-      .concat(apiSlice.middleware), // Add API middleware
+      .concat(apiSlice.middleware)
+      .concat(squashedSensorInfoSlice.middleware), // Add API middleware
 });
 
 // Persistor

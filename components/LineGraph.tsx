@@ -6,10 +6,11 @@ import {
   ActivityIndicator,
   Text,
 } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+//import { LineChart } from "react-native-chart-kit";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ValueType } from "@/constants/enums/ValueType.enum";
 import { DateRange } from "@/constants/enums/DateRange.enum";
+import { LineChart } from "react-native-gifted-charts";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -74,15 +75,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
       case "day":
         return Array.from({ length: 12 }, (_, i) => `${i * 2}:00`);
       case "week":
-        return [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
-        ]
+        return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
       case "month":
         // 30 daily labels
         return Array.from({ length: 15 }, (_, i) => `${i * 2 + 1}`);
@@ -147,10 +140,15 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
   const fetchChartData = async () => {
     const expectedPointsCount = getExpectedPointsCount(rangeType);
     const labels = generateLabels(rangeType);
+    // dont throw this error just compensate for the missing data points
 
     if (dataPoints && dataPoints.length !== expectedPointsCount) {
-      throw new Error(
-        `Provided dataPoints length (${dataPoints.length}) does not match expected length (${expectedPointsCount}) for rangeType="${rangeType}".`
+      Array.from(
+        { length: expectedPointsCount - dataPoints.length },
+        () => 0
+      ).forEach(() => dataPoints!.push(0));
+      console.warn(
+        `Data points length (${dataPoints.length}) does not match expected count (${expectedPointsCount}). Compensating with zeros.`
       );
     }
 
@@ -196,8 +194,9 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
       <Text style={[styles.title, { color: lineHexColor }]}>
         ({rangeType.toUpperCase()}) - {date.toDateString()}
       </Text>
+      <LineChart data={dataPoints?.map((v) => ({ value: v }))} />
 
-      <LineChart
+      {/* <LineChart
         data={{
           labels: chartLabels,
           datasets: [
@@ -227,7 +226,7 @@ const MeasurementLineChart: React.FC<MeasurementLineChartProps> = ({
           },
         }}
         style={styles.chart}
-      />
+      /> */}
     </View>
   );
 };

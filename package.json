@@ -16,7 +16,8 @@
     "tunnel": "cloudflared access tcp --hostname ssh.autoharvest.solutions --url localhost:22",
     "kill-tunnel": "pkill cloudflared",
     "kill-tunnel:win": "Stop-Process -Name cloudflared",
-    "deploy:copy": "scp -i ~/.ssh/ci_key -o ConnectionAttempts=5 -o ConnectTimeout=1 -P 22 -r dist/* mememachine@localhost:/home/mememachine/Documents/Server/Containers/Frontend"
+    "deploy:copy": "scp -i ~/.ssh/ci_key -o ConnectionAttempts=5 -o ConnectTimeout=1 -P 22 -r dist/* mememachine@localhost:/home/mememachine/Documents/Server/Containers/Frontend",
+    "build-deploy": "npm run export:prod && npm run deploy:copy"
   },
   "jest": {
     "preset": "jest-expo"
@@ -37,6 +38,7 @@
     "expo-device": "^7.0.2",
     "expo-font": "~13.0.1",
     "expo-haptics": "~14.0.0",
+    "expo-linear-gradient": "~14.0.2",
     "expo-linking": "~7.0.3",
     "expo-location": "^18.0.4",
     "expo-network": "~7.0.3",
@@ -57,15 +59,17 @@
     "react-native-chart": "^1.0.8-beta",
     "react-native-chart-kit": "^6.12.0",
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-gifted-charts": "^1.4.64",
     "react-native-paper": "^5.12.5",
     "react-native-reanimated": "~3.16.1",
-    "react-native-safe-area-context": "4.12.0",
+    "react-native-safe-area-context": "^4.14.1",
     "react-native-screens": "~4.4.0",
     "react-native-svg": "15.8.0",
     "react-native-toast-message": "^2.2.1",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "react-native-wifi-reborn": "^4.13.0",
+    "react-navigation": "^5.0.0",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1",
     "redux-persist": "^5.10.0",

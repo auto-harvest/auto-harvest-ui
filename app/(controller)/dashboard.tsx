@@ -24,22 +24,41 @@ export default function HydroponicsDashboard() {
   const [isAirPumpOn, setIsAirPumpOn] = useState(
     !!sensorData["air-pump"]?.value
   );
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [isFanOn, setIsFanOn] = useState(!!sensorData["fan"]?.value);
   const { theme } = useThemeColor();
   const dispatch = useAppDispatch();
-  const handlePumpToggle = (value: boolean) => {
-    setIsPumpOn(value);
-    dispatch(emitSocketEvent(`pump`, `pump-${value ? "on" : "off"}`));
+  const [ignoreChanges, setIgnoreChanges] = useState(false);
+  const handle = (code: "pump" | "air-pump" | "fan") => (value: any) => {
+    {
+      const setterMap: {
+        [key in "pump" | "air-pump" | "fan"]: React.Dispatch<
+          React.SetStateAction<boolean>
+        >;
+      } = {
+        pump: setIsPumpOn,
+        "air-pump": setIsAirPumpOn,
+        fan: setIsFanOn,
+      };
+      setterMap[code](value);
+      clearTimeout(timeoutId as NodeJS.Timeout);
+      setIgnoreChanges(true);
+      setTimeoutId(setTimeout(() => setIgnoreChanges(false), 4000));
+      dispatch(emitSocketEvent(code, `${code}-${value ? "on" : "off"}`));
+    }
   };
 
-  const handleAirPumpToggle = (value: boolean) => {
-    setIsAirPumpOn(value);
-    dispatch(emitSocketEvent(`air-pump`, `air-pump-${value ? "on" : "off"}`));
-  };
   useEffect(() => {
+    if (ignoreChanges) {
+      console.log("Ignoring changes to avoid conflict");
+      return;
+    }
+    console.log("sensorData changed", sensorData);
+
     setIsPumpOn(!!sensorData["water-pump"]?.value);
     setIsAirPumpOn(!!sensorData["air-pump"]?.value);
-  }, [sensorData]);
-  console.log(sensorData);
+    setIsFanOn(!!sensorData["fan"]?.value);
+  }, [sensorData, ignoreChanges]);
 
   const styles = StyleSheet.create({
     container: {
@@ -106,29 +125,165 @@ export default function HydroponicsDashboard() {
     title: string;
     value: string;
     desc: string;
+    code: string;
   }
 
-  const handleMetricPress = (title: string): void => {
+  const handleMetricPress = (code: string): void => {
+    router.push(`/metric/${code.toLowerCase()}`);
     if (Platform.OS === "web") {
-      router.push(`/metric/${title.toLowerCase()}`);
     } else {
-      router.push("/availabilityErrorAndroid");
+     // router.push("/availabilityErrorAndroid");
     }
   };
+  // --- replace your VpdCard() with this (adds RH bands, single card) ---
+  function VpdCard() {
+    const vpd = sensorData["vpd"]?.value;
+    if (vpd == null || !isFinite(vpd)) {
+      return renderMetricCard({
+        title: "VPD",
+        value: "—",
+        desc: "Need air temperature and RH to compute VPD.",
+        code: "vpd",
+      });
+    }
 
-  const renderMetricCard = ({ title, value, desc }: MetricCardProps) => (
+    type Stage = "Seedling" | "Leafy" | "Fruiting";
+    type Level = "low" | "ok" | "high";
+    const TARGETS: Record<Stage, [number, number]> = {
+      Seedling: [0.4, 0.8],
+      Leafy: [0.6, 1.0],
+      Fruiting: [0.8, 1.2],
+    };
+
+    const icon = (lvl: Level) =>
+      lvl === "ok" ? "✅" : lvl === "low" ? "💧" : "🔥";
+
+    const rows = (Object.keys(TARGETS) as Stage[]).map((stage) => {
+      const [lo, hi] = TARGETS[stage];
+      const level: Level = vpd < lo ? "low" : vpd > hi ? "high" : "ok";
+      const label =
+        level === "ok" ? "Good" : level === "low" ? "Too humid" : "Too dry";
+      return `${icon(level)} ${stage}: ${label} (target ${lo}–${hi} kPa)`;
+    });
+
+    // RH bands for current temp (leaf ≈ air − 1°C if no leaf temp sensor)
+    const Tair = sensorData["temperature"]?.value;
+    const RH = sensorData["humidity"]?.value;
+    const leaf =
+      sensorData["leaf-temperature"]?.value ?? (Tair != null ? Tair - 1 : NaN);
+    const bands =
+      Tair != null && RH != null && isFinite(Tair)
+        ? (() => {
+            const [sL, sH] = rhBandForVpd(Tair, leaf, 0.4, 0.8);
+            const [lL, lH] = rhBandForVpd(Tair, leaf, 0.6, 1.0);
+            const [fL, fH] = rhBandForVpd(Tair, leaf, 0.8, 1.2);
+            return (
+              `\nRH bands @ ${Tair.toFixed(1)}°C: Seedling ${sL.toFixed(
+                1
+              )}–${sH.toFixed(1)}%, ` +
+              `Leafy ${lL.toFixed(1)}–${lH.toFixed(1)}%, Fruiting ${fL.toFixed(
+                1
+              )}–${fH.toFixed(1)}%`
+            );
+          })()
+        : "";
+
+    return renderMetricCard({
+      title: "VPD",
+      value: `${vpd.toFixed(2)} kPa`,
+      desc: rows.join("\n") + bands,
+      code: "vpd",
+    });
+  }
+  // --- new card: Dew Point + Infection Risk ---
+  function DewPointCard() {
+    const Tair = sensorData["temperature"]?.value;
+    const RH = sensorData["humidity"]?.value;
+
+    if (Tair == null || RH == null || !isFinite(Tair) || !isFinite(RH)) {
+      return renderMetricCard({
+        title: "Dew Point",
+        value: "—",
+        desc: "Need air temperature and RH.",
+        code: "dew point",
+      });
+    }
+
+    const { Td, spread, level, hint } = infectionRiskFromSpread(Tair, RH);
+
+    return renderMetricCard({
+      title: "Dew Point",
+      value: `${Td.toFixed(1)}°C`,
+      desc: `Δ ${spread.toFixed(
+        1
+      )}°C from air • Infection risk: ${level}\n${hint}`,
+      code: "dew point",
+    });
+  }
+
+  // --- new card: Absolute Humidity ---
+  function AbsoluteHumidityCard() {
+    const Tair = sensorData["temperature"]?.value;
+    const RH = sensorData["humidity"]?.value;
+    if (Tair == null || RH == null || !isFinite(Tair) || !isFinite(RH)) {
+      return renderMetricCard({
+        title: "Absolute Humidity",
+        value: "—",
+        desc: "Need air temperature and RH.",
+        code: "absolute humidity",
+      });
+    }
+    const AH = absoluteHumidity_gm3(Tair, RH);
+    return renderMetricCard({
+      title: "Absolute Humidity",
+      value: `${AH.toFixed(1)} g/m³`,
+      desc: `from ${Tair.toFixed(1)}°C & ${RH.toFixed(0)}% RH`,
+      code: "absolute humidity",
+    });
+  }
+  function FlowCard() {
+    // Try common keys; adjust to your actual sensor key if different
+    const flowLmin =
+      sensorData["liters-per-minute"]?.value ??
+      sensorData["flow"]?.value ??
+      sensorData["water-flow"]?.value;
+
+    if (flowLmin == null || !isFinite(flowLmin)) {
+      return renderMetricCard({
+        title: "Flow Rate",
+        value: "—",
+        desc: "No flow data available",
+        code: "flow rate",
+      });
+    }
+
+    const lph = flowLmin * 60;
+    return renderMetricCard({
+      title: "Flow Rate",
+      value: `${flowLmin.toFixed(2)} L/min`,
+      desc: `≈ ${lph.toFixed(0)} L/h`,
+      code: "flow rate",
+    });
+  }
+  const renderMetricCard = ({ title, value, desc, code }: MetricCardProps) => (
     <Card style={styles.card}>
       <Card.Content>
         <Title style={styles.cardTitle}>{title}</Title>
         <Paragraph style={styles.cardValue}>{value}</Paragraph>
         <Paragraph style={styles.cardDesc}>{desc}</Paragraph>
 
-        {title !== "Water Level" && (
+        {![
+          "water level",
+          "flow rate",
+          "vpd",
+          "absolute humidity",
+          "dew point",
+        ].includes(title.toLocaleLowerCase()) && (
           <Button
-            onPress={() => handleMetricPress(title)}
+            onPress={() => handleMetricPress(code)}
             textColor={theme.secondary}
           >
-            Show Detailed View
+            Show Graph
           </Button>
         )}
       </Card.Content>
@@ -170,29 +325,47 @@ export default function HydroponicsDashboard() {
               title: "Temperature",
               value: `${(sensorData["temperature"]?.value || 0).toFixed(2)}°C`,
               desc: "Optimal range: 18-28°C",
+              code: "temperature",
             })}
+            {DewPointCard()}
             {renderMetricCard({
-              title: "Humidity",
+              title: "Relative Humidity",
               value: `${(sensorData["humidity"]?.value || 0).toFixed(2)}%`,
               desc: "Optimal range: 45-75%",
+              code: "humidity",
             })}
-            {renderMetricCard({
-              title: "Water Temperature",
-              value: `${(sensorData["water-temperature"]?.value || 0).toFixed(
-                2
-              )}°C`,
-              desc: "Optimal range: 18-25°C",
-            })}
+            {AbsoluteHumidityCard()}
+            {VpdCard()}
+
+            {(() => {
+              const tw = sensorData["water-temperature"]?.value || 0;
+              return renderMetricCard({
+                title: "Water Temperature",
+                value: `${tw.toFixed(2)}°C`,
+                desc: `Optimal range: 18–25°C — ${waterTempStatus(tw)}`,
+                code: "water-temperature",
+              });
+            })()}
             {renderMetricCard({
               title: "pH Level",
               value: `${(sensorData["ph"]?.value || 0).toFixed(2)}`,
               desc: "Optimal range: 5-6",
+              code: "ph",
             })}
-            {renderMetricCard({
-              title: "TDS",
-              value: `${(sensorData["tds"]?.value || 0).toFixed(2)} ppm`,
-              desc: "Optimal range: 8-20 ppm",
-            })}
+            {(() => {
+              const tds500 = sensorData["tds"]?.value ?? 0; // ppm (500 scale) from your sensor
+              const ec = tds500 / 500; // mS/cm
+              const cf = ec * 10;
+              const tds700 = Math.round(ec * 700);
+              return renderMetricCard({
+                title: "EC",
+                value: `${ec.toFixed(2)} mS/cm`,
+                desc: `CF ${cf.toFixed(1)} | TDS ~${Math.round(
+                  tds500
+                )} ppm (500) / ~${tds700} ppm (700)`,
+                code: "tds",
+              });
+            })()}
             {renderMetricCard({
               title: "Water Level",
               value: `${
@@ -200,12 +373,14 @@ export default function HydroponicsDashboard() {
                   ? "Ok"
                   : sensorData["water-level"]?.value === -1
                   ? "Low"
-                  : sensorData["water-level"]?.value === 2
+                  : sensorData["water-level"]?.value === 1
                   ? "Full"
                   : "Unknown"
               }`,
               desc: "Water Level could be Attention Needed, Low, Full",
+              code: "water level",
             })}
+            {FlowCard()}
           </View>
 
           {/* //? Controls */}
@@ -217,7 +392,7 @@ export default function HydroponicsDashboard() {
                   <Text style={styles.switchText}>Off</Text>
                   <Switch
                     value={isPumpOn}
-                    onValueChange={() => handlePumpToggle(!isPumpOn)}
+                    onValueChange={() => handle("pump")(!isPumpOn)}
                     color={theme.primary}
                   />
                   <Text style={styles.switchText}>On</Text>
@@ -231,7 +406,21 @@ export default function HydroponicsDashboard() {
                   <Text style={styles.switchText}>Off</Text>
                   <Switch
                     value={isAirPumpOn}
-                    onValueChange={() => handleAirPumpToggle(!isAirPumpOn)}
+                    onValueChange={() => handle("air-pump")(!isAirPumpOn)}
+                    color={theme.primary}
+                  />
+                  <Text style={styles.switchText}>On</Text>
+                </View>
+              </Card.Content>
+            </Card>
+            <Card style={styles.controlCard}>
+              <Card.Content>
+                <Title style={{ color: theme.text }}>Fan Control</Title>
+                <View style={styles.switchContainer}>
+                  <Text style={styles.switchText}>Off</Text>
+                  <Switch
+                    value={isFanOn}
+                    onValueChange={() => handle("fan")(!isFanOn)}
                     color={theme.primary}
                   />
                   <Text style={styles.switchText}>On</Text>
@@ -244,3 +433,60 @@ export default function HydroponicsDashboard() {
       </SafeAreaView>
     );
 }
+// --- helpers (put near the top of the file, once) ---
+const es = (Tc: number) => 0.6108 * Math.exp((17.27 * Tc) / (Tc + 237.3)); // kPa
+
+// RH band needed to hit a VPD range at current temps
+const rhBandForVpd = (Tair: number, leaf: number, lo: number, hi: number) => {
+  const clamp = (x: number) => Math.min(100, Math.max(0, x));
+  const Ea = es(Tair),
+    El = es(leaf);
+  const RHlow = clamp((100 * (El - hi)) / Ea); // lower RH = higher VPD
+  const RHhigh = clamp((100 * (El - lo)) / Ea); // upper RH = lower VPD
+  return [RHlow, RHhigh] as const;
+};
+
+// Absolute humidity (g/m³)
+const absoluteHumidity_gm3 = (T: number, RH: number) =>
+  (2167 * (RH / 100) * es(T)) / (T + 273.15);
+
+// Root health risk text from water temperature
+const waterTempStatus = (Tw: number) =>
+  Tw < 18
+    ? "Too cold (uptake slows)"
+    : Tw <= 21
+    ? "Ideal"
+    : Tw <= 23
+    ? "Okay (watch roots)"
+    : Tw <= 25
+    ? "High risk (pythium)"
+    : "Very high risk";
+// --- add helpers (near your other helpers) ---
+const dewPointC = (T: number, RH: number) => {
+  const a = 17.27,
+    b = 237.7;
+  const alpha = (a * T) / (b + T) + Math.log(Math.max(1e-6, RH / 100));
+  return (b * alpha) / (a - alpha);
+};
+
+const infectionRiskFromSpread = (Tair: number, RH: number) => {
+  const Td = dewPointC(Tair, RH);
+  const spread = Tair - Td; // °C above dew point
+  let level: "Low" | "Moderate" | "High" | "Very High";
+  let hint: string;
+
+  if (RH >= 90 || spread <= 1.5) {
+    level = "Very High";
+    hint = "Condensation likely; mildew/botrytis risk";
+  } else if (RH >= 80 || spread <= 3) {
+    level = "High";
+    hint = "Leaves may stay wet; improve airflow/defog";
+  } else if (RH >= 70 || spread <= 5) {
+    level = "Moderate";
+    hint = "Watch nighttime humidity";
+  } else {
+    level = "Low";
+    hint = "Good separation from dew point";
+  }
+  return { Td, spread, level, hint };
+};

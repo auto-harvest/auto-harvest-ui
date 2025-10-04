@@ -24,6 +24,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setToken: (state, action: PayloadAction<string>) => {
+      console.log("wtf")
       state.token = action.payload;
     },
     setUser: (state, action: PayloadAction<User>) => {
@@ -34,6 +35,7 @@ const authSlice = createSlice({
       state.user = null;
     },
     logout: (state) => {
+      console.log("here")
       state.token = null;
       state.user = null;
     },

@@ -1,26 +1,24 @@
 import { Middleware } from "@reduxjs/toolkit";
 import { initializeSocket, socket } from "../../utils/socket";
-import { setToken, clearAuth, logout } from "../slices/persist/authSlice";
+import { setToken, logout } from "../slices/persist/authSlice";
 import { RootState } from "../overrides";
 
 const socketMiddleware: Middleware<{}, RootState> = (store) => {
   const state = store.getState();
   const token = state.auth.token;
-  if (token) {
-    initializeSocket(store, token); 
-  } 
+
   return (next) => (action: any) => {
     const state = store.getState();
     const token = state.auth.token; // Access the JWT token from authSlice
     switch (action.type) {
       case setToken.type:
-        initializeSocket(store, action.payload);
+        initializeSocket();
         break;
 
       case logout.type: {
         // Disconnect the socket when the user logs out
         console.log("Clearing auth token");
-        socket.disconnect();
+        socket?.disconnect();
         break;
       }
 

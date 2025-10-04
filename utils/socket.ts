@@ -2,61 +2,102 @@ import { environment } from "@/environment/environment";
 import { updateSensorInfo } from "@/store/slices/api/sensorInfoSlice";
 import { connected, disconnected } from "@/store/slices/socketSlice";
 import { store } from "@/store/store";
-import io from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
-export const socket = io(environment.wsBaseUrl, {
-  autoConnect: false,
-  transports: ["websocket"],
-  reconnection: true,
-});
+// Pick ONE path that matches your server/proxy:
+// - If Nginx exposes Socket.IO at /socket.io:
+const SOCKET_PATH = "/socket.io";
+// - If behind /report-server/ prefix: const SOCKET_PATH = "/report-server/socket.io";
 
-const handle = setInterval(() => {
+export let socket: Socket | null = null;
+let listenersAttached = false;
+
+export function initializeSocket() {
   const token = store.getState().auth.token;
-  if (token && !socket.connected) {
-    initializeSocket(store, token);
-    clearInterval(handle);
+  if (!token) return; // nothing to do yet
+
+  if (!socket) {
+    console.log({
+      autoConnect: false,
+      path: SOCKET_PATH,
+      transports: ["websocket", "polling"], // keep fallback
+      reconnection: true,
+      auth: { token }, // <-- pass token safely
+    });
+    socket = io(environment.wsBaseUrl, {
+      autoConnect: false,
+      path: SOCKET_PATH,
+      transports: ["websocket", "polling"], // keep fallback
+      reconnection: true,
+      auth: { token }, // <-- pass token safely
+    });
+  } else {
+    // Update auth on reconnects if token changed
+    (socket.io as any).opts.auth = { token };
   }
-}, 100);
-export const initializeSocket = (store: any, token: any) => {
-  // Establish a socket connection when the token is set
-  console.log("Initializing socket connection");
-  if (socket.connected) return;
-  if (token) {
-    socket.io.uri += "?token=" + token; // Pass token in the WebSocket auth payload
-    console.log("Initializing socket connection");
-    console.log("socketMiddleware -> toke%n", token);
 
-    socket.connect();
-    console.log(socket.id);
+  if (!listenersAttached) {
+    listenersAttached = true;
+
     socket.on("connect", () => {
-      console.log("Socket connected");
       store.dispatch(connected());
-      socket.emit("ping", Date.now());
-    });
-    socket.on("pong", (stamp: number) => {
-      console.log("Pong received with latency:", Date.now() - stamp);
-      socket.emit("ping", Date.now());
+      console.log("socket connected", socket?.id);
     });
 
-    socket.on("disconnect", () => {
-      console.log("Socket disconnected");
+    socket.on("disconnect", (reason) => {
       store.dispatch(disconnected());
+      console.log("socket disconnected:", reason);
     });
 
-    socket.on("sensor-info", (data: string) => {
-      const { type, ...payload } = JSON.parse(data);
-      store.dispatch(updateSensorInfo(payload));
+    // Optional: throttle your custom ping/pong
+    let pingTimer: any = null;
+    socket.on("connect", () => {
+      clearInterval(pingTimer);
+      pingTimer = setInterval(() => {
+        socket?.emit("ping", Date.now());
+      }, 5000);
+    });
+    socket.on("disconnect", () => clearInterval(pingTimer));
+    socket.on("pong", (stamp: number) => {
+      console.log("latency(ms):", Date.now() - stamp);
+    });
+
+    socket.on("sensor-info", (data: any) => {
+      try {
+        // If server already sends an object, use it directly
+        const payload = typeof data === "string" ? JSON.parse(data) : data;
+        const { type, ...rest } = payload ?? {};
+        store.dispatch(updateSensorInfo(rest));
+      } catch (e) {
+        console.error("bad sensor-info payload", e, data);
+      }
     });
 
     socket.on("hello-message", (data: string) => {
-      console.log("Received hello message from server:", data);
-    });
-    socket.on("error", (error: any) => {
-      console.error("Socket error:", error);
+      console.log("hello from server:", data);
     });
 
-    socket.on("connect_error", (error: any) => {
-      console.error("Socket connection error:", JSON.stringify(error));
+    socket.on("error", (err: any) => console.error("socket error:", err));
+    socket.io.on("reconnect_attempt", () => {
+      // ensure latest token on attempts
+      const t = store.getState().auth.token;
+      (socket!.io as any).opts.auth = { token: t };
+    });
+    socket.on("connect_error", (err) => {
+      console.error("connect_error:", err?.message || err);
     });
   }
-};
+
+  if (!socket.connected) socket.connect();
+}
+
+//Example: start when token appears
+const tokenInterval = setInterval(() => {
+  if (socket?.connected) return;
+  const t = store.getState().auth.token;
+  if (t) {
+    console.log("TOKENNNNNN", t);
+    initializeSocket();
+    //clearInterval(tokenInterval);
+  }
+}, 200);
