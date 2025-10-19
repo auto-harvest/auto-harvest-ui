@@ -37,7 +37,6 @@ function fmtLabel(d: Date, interval: RawDoc["interval"]) {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
-      timeZone: "UTC",
     });
   }
   return d.toLocaleDateString([], { day: "2-digit", month: "short" });
@@ -47,11 +46,19 @@ function fmtLabel(d: Date, interval: RawDoc["interval"]) {
 function mapDocs(docs: RawDoc[] = [], fallback: RawDoc["interval"] = "minute") {
   const sorted = [...docs].sort(
     (a, b) =>
-      new Date("" + a.timestamp).getTime() -
-      new Date("" + a.timestamp).getTime()
+      new Date(
+        typeof a.timestamp === "string"
+          ? a.timestamp
+          : a.timestamp?.$date ?? a.timestamp
+      ).getTime() -
+      new Date(
+        typeof b.timestamp === "string"
+          ? b.timestamp
+          : b.timestamp?.$date ?? b.timestamp
+      ).getTime()
   );
   const interval = sorted[0]?.interval ?? fallback;
-  let i = 0;
+
   const items = sorted.map((doc) => {
     const ts =
       typeof doc.timestamp === "string"
@@ -66,7 +73,6 @@ function mapDocs(docs: RawDoc[] = [], fallback: RawDoc["interval"] = "minute") {
     console.log("mapping doc", doc, "to", avg, minVal, maxVal);
 
     return {
-      perc: i++ / sorted.length,
       value: avg,
       barMarginBottom: Math.max(0, maxVal - minVal),
       label: fmtLabel(time, doc.interval ?? interval),
@@ -99,13 +105,13 @@ export default function TelemetryLineChart({
   height = 450,
 }: Props) {
   const { width: w1 } = useWindowDimensions();
-  const width = w1 * 0.8;
+  const width = w1 - 100;
   const data = useMemo(() => mapDocs(docs), [docs]);
   const offset = 0;
-  const pointSpacing = (width - offset) / data.length; // increase to make points more spread out
+  const pointSpacing = (width - offset) / data.length;
   const chartWidth = Math.max(width, data.length * pointSpacing);
   const spacing = Math.max(1, pointSpacing);
-  const initialSpacing = pointSpacing * 2;
+  const initialSpacing = 15;
   return (
     <View style={{ paddingHorizontal: 5 }}>
       {/* <ScrollView
@@ -132,7 +138,7 @@ export default function TelemetryLineChart({
         onScrollBeginDrag={() => {
           /* optional */
         }}
-        initialSpacing={offset / 2}
+        initialSpacing={offset / 2 + initialSpacing}
         endSpacing={offset / 2}
         data={data}
         color={color}
@@ -146,21 +152,19 @@ export default function TelemetryLineChart({
         startOpacity={areaFill.startOpacity ?? 0.1}
         endOpacity={areaFill.endOpacity ?? 0.0}
         yAxisLabelSuffix={` ${unit}`}
-        yAxisTextStyle={{ fontSize: 11, color: "#666" }}
+        yAxisTextStyle={{
+          fontSize: 10,
+          color: "#E0E0E0",
+          left: -5,
+          textOverflow: "unset",
+        }}
         xAxisLabelTextStyle={{
-          fontSize: fontSizeNormalization(width),
-          color: "#666",
-
-          position: "absolute",
-          zIndex: 999,
-          textOverflow: "clip",
-          includeFontPadding: false,
+          fontSize: Math.min(10, fontSizeNormalization(width)),
+          color: "#E0E0E0",
           textAlign: "center",
-          transform: [
-            { translateY: 5 },
-            { translateX: -10 },
-            { rotate: "35deg" },
-          ],
+          transform: [{ rotate: "35deg" }],
+          left: initialSpacing / 2,
+          top: 10,
         }}
         xAxisLabelsHeight={20}
         showFractionalValues
@@ -189,7 +193,6 @@ export default function TelemetryLineChart({
           pointerComponent: () => (
             <View
               style={{
-                left: -(pointSpacing / data.length) / 2 - offset / 2,
                 width: 12,
                 height: 12,
                 borderWidth: 2,
@@ -198,6 +201,7 @@ export default function TelemetryLineChart({
                 borderRadius: 6,
                 shadowColor: color,
                 shadowOffset: { width: 0, height: 0 },
+                left: -initialSpacing,
                 shadowOpacity: 0.9,
                 shadowRadius: 4,
                 elevation: 5,
@@ -230,9 +234,10 @@ export default function TelemetryLineChart({
             ),
           },
           radius: 6,
-          pointerLabelWidth: 140,
-          pointerLabelHeight: 100,
+          pointerLabelWidth: 160,
+          pointerLabelHeight: 120,
           activatePointersOnLongPress: false,
+          autoAdjustPointerLabelPosition: true,
 
           pointerLabelComponent: (items: any) => {
             const item = items[0];
@@ -258,17 +263,16 @@ export default function TelemetryLineChart({
             return (
               <View
                 style={{
-                  position: "absolute",
-                  zIndex: 9999,
-                  top: height / 2 + 48,
-                  left:
-                    -item.perc * (width - offset) * 1 + (width - offset) * 0.02,
                   backgroundColor: "rgba(0,0,0,0.9)",
                   paddingHorizontal: 12,
                   paddingVertical: 10,
                   borderRadius: 6,
-                  minWidth: 300,
-                  minHeight: 250,
+                  minWidth: 140,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 5,
                 }}
               >
                 <Text style={{ color: "#999", fontSize: 12 }}>{when}</Text>
@@ -310,7 +314,7 @@ export default function TelemetryLineChart({
             );
           },
         }}
-        xAxisLabelTexts={data.map((d) => d.label + "aa")}
+        xAxisLabelTexts={data.map((d) => d.label)}
         focusedDataPointColor={"white"}
         rulesType="solid"
         rulesColor="#E0E0E0"
