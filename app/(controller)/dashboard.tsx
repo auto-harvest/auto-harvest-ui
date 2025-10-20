@@ -360,7 +360,7 @@ export default function HydroponicsDashboard() {
               return renderMetricCard({
                 title: "EC",
                 value: `${ec.toFixed(2)} mS/cm`,
-                desc: `CF ${cf.toFixed(1)} | TDS ~${Math.round(
+                desc: `CF ${cf.toFixed(2)} | TDS ~${Math.round(
                   tds500
                 )} ppm (500) / ~${tds700} ppm (700)`,
                 code: "tds",

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /home/meme-machine/Documents/GitHub/auto-harvest-ui -path node_modules -prune -o -type f ( -name \"*Card*\" -o -name \"*Chart*\" -o -name \"*Graph*\" -o -name \"*Metric*\" ) -print)",
+      "Bash(find /home/meme-machine/Documents/GitHub/auto-harvest-ui/components -maxdepth 2 -type f ( -name \"*.tsx\" -o -name \"*.ts\" ) ! -path \"*/node_modules/*\")",
+      "Bash(find /home/meme-machine/Documents/GitHub/auto-harvest-ui -path node_modules -prune -o -type f -name \"*.tsx\" -exec grep -l \"Chart\\|Graph\\|BarChart\\|LineChart\" {} ;)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -169,8 +169,8 @@ export default function TelemetryLineChart({
             item?.value ??
             0
           ).toFixed(2);
-          const minV = raw?.min?.value ?? "--";
-          const maxV = raw?.max?.value ?? "--";
+          const minV = raw?.min?.value?.toFixed(2) ?? "--";
+          const maxV = raw?.max?.value?.toFixed(2) ?? "--";
           const datapoints = raw?.datapoints as number;
           return (
             <View
