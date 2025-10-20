@@ -102,7 +102,7 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = () => {
         style={{ marginBottom: 16 }}
       />
       <TextInput
-        label="Capacity (Number of Plants)"
+        label="Capacity (Number of Plants) "
         value={capacity}
         onChangeText={setCapacity}
         mode="outlined"
