@@ -13,12 +13,12 @@ interface StepProps {
 
 const Step: React.FC<StepProps> = ({ title, description, children }) => {
   const { theme } = useThemeColor();
-  const colors = theme;
+  const colors = theme; 
 
   const styles = StyleSheet.create({
     container: {
       marginBottom: 16,
-      height: "88%",
+      height: "88%", 
       color: colors.background,
     },
     title: {
