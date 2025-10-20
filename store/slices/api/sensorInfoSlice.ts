@@ -7,7 +7,7 @@ export interface SensorInfo {
   timestamp: string;
 }
 
-export interface SensorInfoState {
+export interface SensorInfoState { 
   initial: boolean;
 
   data: Record<string, SensorInfo>; // Using an object to mimic a map for Redux's JSON serialization
