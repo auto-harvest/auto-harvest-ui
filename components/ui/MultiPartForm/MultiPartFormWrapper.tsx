@@ -18,6 +18,7 @@ const MultiPartFormWrapper: React.FC<MultiPartFormWrapperProps> = () => {
   const [systemName, setSystemName] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [capacity, setCapacity] = React.useState("");
+  //
   const [currentStep, setCurrentStep] = useState(0);
   const [clientId, setClientId] = useState("");
   const [canContinue, setCanContinue] = useState(true);
