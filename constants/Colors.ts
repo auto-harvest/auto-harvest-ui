@@ -10,12 +10,23 @@ const secondary = "#FFA726";
 const card = "#FFFFFF";
 const border = "#32f1";
 
+// Suggested new colors
+const tertiary = "#2196F3";   // A strong blue
+const quaternary = "#9C27B0"; // A deep purple
+const quinary = "#009688";    // A bright yellow
+const red="#D32F2F";
+
 const darkBackground = "#121212";
 const darkText = "#FFFFFF";
 const darkPrimary = "#81C784";
 const darkSecondary = "#FFB74D";
 const darkCard = "#1E1E1E";
 const darkBorder = "#333333";
+
+// Suggested new colors
+const darkTertiary = "#64B5F6";    // Lighter blue for dark background
+const darkQuaternary = "#BA68C8";  // Lighter purple for dark background
+const darkQuinary = "#4DB6AC";     // Lighter yellow/orange for dark background
 
 export const Colors = {
   light: {
@@ -25,6 +36,10 @@ export const Colors = {
     card: card,
     border: border,
     secondary: secondary,
+    tertiary: tertiary,
+    quaternary: quaternary,
+    quinary: quinary,
+    red:red
   },
   dark: {
     text: darkText,
@@ -33,5 +48,9 @@ export const Colors = {
     card: darkCard,
     border: darkBorder,
     secondary: darkSecondary,
+    tertiary: darkTertiary,
+    quaternary: darkQuaternary,
+    quinary: darkQuinary,
+    red:red
   },
 };

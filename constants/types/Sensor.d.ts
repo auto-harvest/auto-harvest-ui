@@ -1,13 +1,13 @@
 import { SensorType } from "../enums/SensorType.enum";
 
-export interface Sensor extends BaseEntity {
+export interface ISensor extends BaseEntity {
   name: string;
   type: SensorType;
   description: string;
   code: string;
 }
 
-export class Sensor implements Sensor {
+export class Sensor implements ISensor {
   constructor() {
     this.id = "";
     this.name = "";

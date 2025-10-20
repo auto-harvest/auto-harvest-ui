@@ -1,11 +1,12 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Platform } from "react-native";
+import { SafeAreaView, StyleSheet, Platform, ScrollView } from "react-native";
 import MultiPartFormWrapper from "../../components/ui/MultiPartForm/MultiPartFormWrapper";
 import { router } from "expo-router";
 
 const IoTDevicePairingScreen: React.FC = () => {
   const handleSubmit = () => {
-    console.log("Form submitted:", { location });
+    
+    
   };
 
   if (Platform.OS === "web") {
@@ -14,7 +15,9 @@ const IoTDevicePairingScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <MultiPartFormWrapper onSubmit={handleSubmit} />
+      <ScrollView>
+        <MultiPartFormWrapper onSubmit={handleSubmit} />
+      </ScrollView>
     </SafeAreaView>
   );
 };

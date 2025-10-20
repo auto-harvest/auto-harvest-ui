@@ -1,60 +1,64 @@
-import React, { useState } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, ScrollView, StyleSheet, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Card,
   Title,
   Paragraph,
-  DataTable,
   Switch,
   Text,
+  Button,
+  ActivityIndicator,
 } from "react-native-paper";
-import { LineChart, BarChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
-import { router } from "expo-router";
-
-const screenWidth = Dimensions.get("window").width;
+import { useRouter } from "expo-router";
+import { useAppDispatch, useAppSelector } from "@/store/overrides";
+import { emitSocketEvent } from "@/store/actions/socketActions";
 
 export default function HydroponicsDashboard() {
-  const [isPumpOn, setIsPumpOn] = useState(false);
-  const [isSystemOn, setIsSystemOn] = useState(true);
-  const [isAirPumpOn, setIsAirPumpOn] = useState(false);
+  const router = useRouter();
+  const sensorData = useAppSelector((state) => state.sensorInfo.data);
+  const [isPumpOn, setIsPumpOn] = useState(!!sensorData["water-pump"]?.value);
+  const [isAirPumpOn, setIsAirPumpOn] = useState(
+    !!sensorData["air-pump"]?.value
+  );
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [isFanOn, setIsFanOn] = useState(!!sensorData["fan"]?.value);
   const { theme } = useThemeColor();
-
-  const temperatureHumidityData = {
-    labels: ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00"],
-    datasets: [
-      {
-        data: [22, 21, 23, 26, 25, 24],
-        color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,
-        strokeWidth: 2,
-      },
-      {
-        data: [60, 62, 58, 55, 57, 59],
-        color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
-        strokeWidth: 2,
-      },
-    ],
-    legend: ["Temperature", "Humidity"],
+  const dispatch = useAppDispatch();
+  const [ignoreChanges, setIgnoreChanges] = useState(false);
+  const handle = (code: "pump" | "air-pump" | "fan") => (value: any) => {
+    {
+      const setterMap: {
+        [key in "pump" | "air-pump" | "fan"]: React.Dispatch<
+          React.SetStateAction<boolean>
+        >;
+      } = {
+        pump: setIsPumpOn,
+        "air-pump": setIsAirPumpOn,
+        fan: setIsFanOn,
+      };
+      setterMap[code](value);
+      clearTimeout(timeoutId as NodeJS.Timeout);
+      setIgnoreChanges(true);
+      setTimeoutId(setTimeout(() => setIgnoreChanges(false), 4000));
+      dispatch(emitSocketEvent(code, `${code}-${value ? "on" : "off"}`));
+    }
   };
 
-  const nutrientLevelsData = {
-    labels: ["Nitrogen", "Phosphorus", "Potassium", "Calcium", "Magnesium"],
-    datasets: [
-      {
-        data: [200, 50, 150, 100, 40],
-      },
-    ],
-  };
+  useEffect(() => {
+    if (ignoreChanges) {
+      console.log("Ignoring changes to avoid conflict");
+      return;
+    }
+    console.log("sensorData changed", sensorData);
 
-  const alertsData = [
-    { id: 1, type: "Low Water Level", timestamp: "2023-04-15 09:23" },
-    { id: 2, type: "High EC", timestamp: "2023-04-14 14:56" },
-    { id: 3, type: "Pump Malfunction", timestamp: "2023-04-13 22:10" },
-  ];
+    setIsPumpOn(!!sensorData["water-pump"]?.value);
+    setIsAirPumpOn(!!sensorData["air-pump"]?.value);
+    setIsFanOn(!!sensorData["fan"]?.value);
+  }, [sensorData, ignoreChanges]);
 
   const styles = StyleSheet.create({
     container: {
@@ -78,6 +82,8 @@ export default function HydroponicsDashboard() {
     },
     cardValue: {
       fontSize: 24,
+      height: 32,
+      verticalAlign: "middle",
       fontWeight: "bold",
       color: theme.text,
     },
@@ -115,164 +121,372 @@ export default function HydroponicsDashboard() {
     },
   });
 
-  const renderMetricCard = (title, value, desc) => (
+  interface MetricCardProps {
+    title: string;
+    value: string;
+    desc: string;
+    code: string;
+  }
+
+  const handleMetricPress = (code: string): void => {
+    router.push(`/metric/${code.toLowerCase()}`);
+    if (Platform.OS === "web") {
+    } else {
+     // router.push("/availabilityErrorAndroid");
+    }
+  };
+  // --- replace your VpdCard() with this (adds RH bands, single card) ---
+  function VpdCard() {
+    const vpd = sensorData["vpd"]?.value;
+    if (vpd == null || !isFinite(vpd)) {
+      return renderMetricCard({
+        title: "VPD",
+        value: "—",
+        desc: "Need air temperature and RH to compute VPD.",
+        code: "vpd",
+      });
+    }
+
+    type Stage = "Seedling" | "Leafy" | "Fruiting";
+    type Level = "low" | "ok" | "high";
+    const TARGETS: Record<Stage, [number, number]> = {
+      Seedling: [0.4, 0.8],
+      Leafy: [0.6, 1.0],
+      Fruiting: [0.8, 1.2],
+    };
+
+    const icon = (lvl: Level) =>
+      lvl === "ok" ? "✅" : lvl === "low" ? "💧" : "🔥";
+
+    const rows = (Object.keys(TARGETS) as Stage[]).map((stage) => {
+      const [lo, hi] = TARGETS[stage];
+      const level: Level = vpd < lo ? "low" : vpd > hi ? "high" : "ok";
+      const label =
+        level === "ok" ? "Good" : level === "low" ? "Too humid" : "Too dry";
+      return `${icon(level)} ${stage}: ${label} (target ${lo}–${hi} kPa)`;
+    });
+
+    // RH bands for current temp (leaf ≈ air − 1°C if no leaf temp sensor)
+    const Tair = sensorData["temperature"]?.value;
+    const RH = sensorData["humidity"]?.value;
+    const leaf =
+      sensorData["leaf-temperature"]?.value ?? (Tair != null ? Tair - 1 : NaN);
+    const bands =
+      Tair != null && RH != null && isFinite(Tair)
+        ? (() => {
+            const [sL, sH] = rhBandForVpd(Tair, leaf, 0.4, 0.8);
+            const [lL, lH] = rhBandForVpd(Tair, leaf, 0.6, 1.0);
+            const [fL, fH] = rhBandForVpd(Tair, leaf, 0.8, 1.2);
+            return (
+              `\nRH bands @ ${Tair.toFixed(1)}°C: Seedling ${sL.toFixed(
+                1
+              )}–${sH.toFixed(1)}%, ` +
+              `Leafy ${lL.toFixed(1)}–${lH.toFixed(1)}%, Fruiting ${fL.toFixed(
+                1
+              )}–${fH.toFixed(1)}%`
+            );
+          })()
+        : "";
+
+    return renderMetricCard({
+      title: "VPD",
+      value: `${vpd.toFixed(2)} kPa`,
+      desc: rows.join("\n") + bands,
+      code: "vpd",
+    });
+  }
+  // --- new card: Dew Point + Infection Risk ---
+  function DewPointCard() {
+    const Tair = sensorData["temperature"]?.value;
+    const RH = sensorData["humidity"]?.value;
+
+    if (Tair == null || RH == null || !isFinite(Tair) || !isFinite(RH)) {
+      return renderMetricCard({
+        title: "Dew Point",
+        value: "—",
+        desc: "Need air temperature and RH.",
+        code: "dew point",
+      });
+    }
+
+    const { Td, spread, level, hint } = infectionRiskFromSpread(Tair, RH);
+
+    return renderMetricCard({
+      title: "Dew Point",
+      value: `${Td.toFixed(1)}°C`,
+      desc: `Δ ${spread.toFixed(
+        1
+      )}°C from air • Infection risk: ${level}\n${hint}`,
+      code: "dew point",
+    });
+  }
+
+  // --- new card: Absolute Humidity ---
+  function AbsoluteHumidityCard() {
+    const Tair = sensorData["temperature"]?.value;
+    const RH = sensorData["humidity"]?.value;
+    if (Tair == null || RH == null || !isFinite(Tair) || !isFinite(RH)) {
+      return renderMetricCard({
+        title: "Absolute Humidity",
+        value: "—",
+        desc: "Need air temperature and RH.",
+        code: "absolute humidity",
+      });
+    }
+    const AH = absoluteHumidity_gm3(Tair, RH);
+    return renderMetricCard({
+      title: "Absolute Humidity",
+      value: `${AH.toFixed(1)} g/m³`,
+      desc: `from ${Tair.toFixed(1)}°C & ${RH.toFixed(0)}% RH`,
+      code: "absolute humidity",
+    });
+  }
+  function FlowCard() {
+    // Try common keys; adjust to your actual sensor key if different
+    const flowLmin =
+      sensorData["liters-per-minute"]?.value ??
+      sensorData["flow"]?.value ??
+      sensorData["water-flow"]?.value;
+
+    if (flowLmin == null || !isFinite(flowLmin)) {
+      return renderMetricCard({
+        title: "Flow Rate",
+        value: "—",
+        desc: "No flow data available",
+        code: "flow rate",
+      });
+    }
+
+    const lph = flowLmin * 60;
+    return renderMetricCard({
+      title: "Flow Rate",
+      value: `${flowLmin.toFixed(2)} L/min`,
+      desc: `≈ ${lph.toFixed(0)} L/h`,
+      code: "flow rate",
+    });
+  }
+  const renderMetricCard = ({ title, value, desc, code }: MetricCardProps) => (
     <Card style={styles.card}>
       <Card.Content>
         <Title style={styles.cardTitle}>{title}</Title>
         <Paragraph style={styles.cardValue}>{value}</Paragraph>
         <Paragraph style={styles.cardDesc}>{desc}</Paragraph>
+
+        {![
+          "water level",
+          "flow rate",
+          "vpd",
+          "absolute humidity",
+          "dew point",
+        ].includes(title.toLocaleLowerCase()) && (
+          <Button
+            onPress={() => handleMetricPress(code)}
+            textColor={theme.secondary}
+          >
+            Show Graph
+          </Button>
+        )}
       </Card.Content>
     </Card>
   );
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <Header
-          showBackButton
-          onBackPress={() => {
-            router.back();
-          }}
-          showUserIcon
-          onUserIconPress={() => {
-            router.push("/profile");
-          }}
+  if (sensorData.initial) {
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: theme.background,
+        }}
+      >
+        <ActivityIndicator
+          animating={true}
+          size="large"
+          color={theme.primary}
         />
+      </SafeAreaView>
+    );
+  } else
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <Header
+            showBackButton
+            onBackPress={() => router.push("/systemSelection")}
+            showUserIcon
+            onUserIconPress={() => {
+              router.push("/profile");
+            }}
+          />
 
-        <View style={styles.metricsContainer}>
-          {renderMetricCard("Temperature", "24°C", "Optimal range: 20-26°C")}
-          {renderMetricCard("Humidity", "60%", "Optimal range: 50-70%")}
-          {renderMetricCard("pH Level", "6.2", "Optimal range: 5.5-6.5")}
-          {renderMetricCard("EC", "1.8 mS/cm", "Optimal range: 1.5-2.5 mS/cm")}
-        </View>
+          {/* //? Metrics */}
+          <View style={styles.controlsContainer}>
+            {renderMetricCard({
+              title: "Temperature",
+              value: `${(sensorData["temperature"]?.value || 0).toFixed(2)}°C`,
+              desc: "Optimal range: 18-28°C",
+              code: "temperature",
+            })}
+            {DewPointCard()}
+            {renderMetricCard({
+              title: "Relative Humidity",
+              value: `${(sensorData["humidity"]?.value || 0).toFixed(2)}%`,
+              desc: "Optimal range: 45-75%",
+              code: "humidity",
+            })}
+            {AbsoluteHumidityCard()}
+            {VpdCard()}
 
-        <Card style={styles.chartCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Temperature & Humidity</Title>
-            <LineChart
-              data={temperatureHumidityData}
-              width={screenWidth - 40}
-              height={220}
-              chartConfig={{
-                backgroundColor: theme.card,
-                backgroundGradientFrom: theme.card,
-                backgroundGradientTo: theme.card,
-                decimalPlaces: 1,
-                color: (opacity = 1) => theme.text,
-                labelColor: (opacity = 1) => theme.text,
-                style: {
-                  borderRadius: 16,
-                },
-              }}
-              bezier
-              style={{
-                marginVertical: 8,
-                borderRadius: 16,
-              }}
-            />
-          </Card.Content>
-        </Card>
+            {(() => {
+              const tw = sensorData["water-temperature"]?.value || 0;
+              return renderMetricCard({
+                title: "Water Temperature",
+                value: `${tw.toFixed(2)}°C`,
+                desc: `Optimal range: 18–25°C — ${waterTempStatus(tw)}`,
+                code: "water-temperature",
+              });
+            })()}
+            {renderMetricCard({
+              title: "pH Level",
+              value: `${(sensorData["ph"]?.value || 0).toFixed(2)}`,
+              desc: "Optimal range: 5-6",
+              code: "ph",
+            })}
+            {(() => {
+              const tds500 = sensorData["tds"]?.value ?? 0; // ppm (500 scale) from your sensor
+              const ec = tds500 / 500; // mS/cm
+              const cf = ec * 10;
+              const tds700 = Math.round(ec * 700);
+              return renderMetricCard({
+                title: "EC",
+                value: `${ec.toFixed(2)} mS/cm`,
+                desc: `CF ${cf.toFixed(2)} | TDS ~${Math.round(
+                  tds500
+                )} ppm (500) / ~${tds700} ppm (700)`,
+                code: "tds",
+              });
+            })()}
+            {renderMetricCard({
+              title: "Water Level",
+              value: `${
+                sensorData["water-level"]?.value === 0
+                  ? "Ok"
+                  : sensorData["water-level"]?.value === -1
+                  ? "Low"
+                  : sensorData["water-level"]?.value === 1
+                  ? "Full"
+                  : "Unknown"
+              }`,
+              desc: "Water Level could be Attention Needed, Low, Full",
+              code: "water level",
+            })}
+            {FlowCard()}
+          </View>
 
-        <Card style={styles.chartCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Nutrient Levels</Title>
-            <BarChart
-              data={nutrientLevelsData}
-              width={screenWidth - 40}
-              height={220}
-              yAxisLabel=""
-              chartConfig={{
-                backgroundColor: theme.card,
-                backgroundGradientFrom: theme.card,
-                backgroundGradientTo: theme.card,
-                decimalPlaces: 0,
-                color: (opacity = 1) => theme.primary,
-                labelColor: (opacity = 1) => theme.text,
-                style: {
-                  borderRadius: 16,
-                },
-              }}
-              style={{
-                marginVertical: 8,
-                borderRadius: 16,
-              }}
-            />
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.alertsCard}>
-          <Card.Content>
-            <Title style={{ color: theme.text }}>Recent Alerts</Title>
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title textStyle={{ color: theme.text }}>
-                  Alert Type
-                </DataTable.Title>
-                <DataTable.Title textStyle={{ color: theme.text }}>
-                  Timestamp
-                </DataTable.Title>
-              </DataTable.Header>
-              {alertsData.map((alert) => (
-                <DataTable.Row key={alert.id}>
-                  <DataTable.Cell textStyle={{ color: theme.text }}>
-                    {alert.type}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={{ color: theme.text }}>
-                    {alert.timestamp}
-                  </DataTable.Cell>
-                </DataTable.Row>
-              ))}
-            </DataTable>
-          </Card.Content>
-        </Card>
-
-        <View style={styles.controlsContainer}>
-          <Card style={styles.controlCard}>
-            <Card.Content>
-              <Title style={{ color: theme.text }}>Pump Control</Title>
-              <View style={styles.switchContainer}>
-                <Text style={styles.switchText}>Off</Text>
-                <Switch
-                  value={isPumpOn}
-                  onValueChange={() => setIsPumpOn(!isPumpOn)}
-                  color={theme.primary}
-                />
-                <Text style={styles.switchText}>On</Text>
-              </View>
-            </Card.Content>
-          </Card>
-          <Card style={styles.controlCard}>
-            <Card.Content>
-              <Title style={{ color: theme.text }}>System Control</Title>
-              <View style={styles.switchContainer}>
-                <Text style={styles.switchText}>Off</Text>
-                <Switch
-                  value={isSystemOn}
-                  onValueChange={() => setIsSystemOn(!isSystemOn)}
-                  color={theme.primary}
-                />
-                <Text style={styles.switchText}>On</Text>
-              </View>
-            </Card.Content>
-          </Card>
-          <Card style={styles.controlCard}>
-            <Card.Content>
-              <Title style={{ color: theme.text }}>Air Pump Control</Title>
-              <View style={styles.switchContainer}>
-                <Text style={styles.switchText}>Off</Text>
-                <Switch
-                  value={isAirPumpOn}
-                  onValueChange={() => setIsAirPumpOn(!isAirPumpOn)}
-                  color={theme.primary}
-                />
-                <Text style={styles.switchText}>On</Text>
-              </View>
-            </Card.Content>
-          </Card>
-        </View>
-      </ScrollView>
-
-      <Navbar activeNav="dashboard" />
-    </SafeAreaView>
-  );
+          {/* //? Controls */}
+          <View style={styles.controlsContainer}>
+            <Card style={styles.controlCard}>
+              <Card.Content>
+                <Title style={{ color: theme.text }}>Pump Control</Title>
+                <View style={styles.switchContainer}>
+                  <Text style={styles.switchText}>Off</Text>
+                  <Switch
+                    value={isPumpOn}
+                    onValueChange={() => handle("pump")(!isPumpOn)}
+                    color={theme.primary}
+                  />
+                  <Text style={styles.switchText}>On</Text>
+                </View>
+              </Card.Content>
+            </Card>
+            <Card style={styles.controlCard}>
+              <Card.Content>
+                <Title style={{ color: theme.text }}>Air Pump Control</Title>
+                <View style={styles.switchContainer}>
+                  <Text style={styles.switchText}>Off</Text>
+                  <Switch
+                    value={isAirPumpOn}
+                    onValueChange={() => handle("air-pump")(!isAirPumpOn)}
+                    color={theme.primary}
+                  />
+                  <Text style={styles.switchText}>On</Text>
+                </View>
+              </Card.Content>
+            </Card>
+            <Card style={styles.controlCard}>
+              <Card.Content>
+                <Title style={{ color: theme.text }}>Fan Control</Title>
+                <View style={styles.switchContainer}>
+                  <Text style={styles.switchText}>Off</Text>
+                  <Switch
+                    value={isFanOn}
+                    onValueChange={() => handle("fan")(!isFanOn)}
+                    color={theme.primary}
+                  />
+                  <Text style={styles.switchText}>On</Text>
+                </View>
+              </Card.Content>
+            </Card>
+          </View>
+        </ScrollView>
+        <Navbar activeNav="dashboard" />
+      </SafeAreaView>
+    );
 }
+// --- helpers (put near the top of the file, once) ---
+const es = (Tc: number) => 0.6108 * Math.exp((17.27 * Tc) / (Tc + 237.3)); // kPa
+
+// RH band needed to hit a VPD range at current temps
+const rhBandForVpd = (Tair: number, leaf: number, lo: number, hi: number) => {
+  const clamp = (x: number) => Math.min(100, Math.max(0, x));
+  const Ea = es(Tair),
+    El = es(leaf);
+  const RHlow = clamp((100 * (El - hi)) / Ea); // lower RH = higher VPD
+  const RHhigh = clamp((100 * (El - lo)) / Ea); // upper RH = lower VPD
+  return [RHlow, RHhigh] as const;
+};
+
+// Absolute humidity (g/m³)
+const absoluteHumidity_gm3 = (T: number, RH: number) =>
+  (2167 * (RH / 100) * es(T)) / (T + 273.15);
+
+// Root health risk text from water temperature
+const waterTempStatus = (Tw: number) =>
+  Tw < 18
+    ? "Too cold (uptake slows)"
+    : Tw <= 21
+    ? "Ideal"
+    : Tw <= 23
+    ? "Okay (watch roots)"
+    : Tw <= 25
+    ? "High risk (pythium)"
+    : "Very high risk";
+// --- add helpers (near your other helpers) ---
+const dewPointC = (T: number, RH: number) => {
+  const a = 17.27,
+    b = 237.7;
+  const alpha = (a * T) / (b + T) + Math.log(Math.max(1e-6, RH / 100));
+  return (b * alpha) / (a - alpha);
+};
+
+const infectionRiskFromSpread = (Tair: number, RH: number) => {
+  const Td = dewPointC(Tair, RH);
+  const spread = Tair - Td; // °C above dew point
+  let level: "Low" | "Moderate" | "High" | "Very High";
+  let hint: string;
+
+  if (RH >= 90 || spread <= 1.5) {
+    level = "Very High";
+    hint = "Condensation likely; mildew/botrytis risk";
+  } else if (RH >= 80 || spread <= 3) {
+    level = "High";
+    hint = "Leaves may stay wet; improve airflow/defog";
+  } else if (RH >= 70 || spread <= 5) {
+    level = "Moderate";
+    hint = "Watch nighttime humidity";
+  } else {
+    level = "Low";
+    hint = "Good separation from dew point";
+  }
+  return { Td, spread, level, hint };
+};

@@ -1,4 +1,6 @@
 import React from "react";
+import Notification from "@/components/Notification";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { persistor, store } from "@/store/store";
 import { Stack } from "expo-router";
 import { Provider } from "react-redux";
@@ -14,7 +16,14 @@ export default function RootLayout() {
             headerShown: false, // Hides the header for all screens in this layout
           }}
         />
+        <JwtGuard />
+        <Notification />
       </PersistGate>
     </Provider>
   );
 }
+
+const JwtGuard = () => {
+  useAuthGuard();
+  return null;
+};

@@ -1,27 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  Avatar,
-  Button,
-  Card,
-  Switch,
-  Text,
-  TextInput,
-} from "react-native-paper";
+import { Avatar, Button, Card, Switch, Text } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { useThemeColor } from "../../hooks/useThemeColor";
+import { useThemeColor, useDarkTheme } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
+import { logout, setAllowPush, setTheme } from "@/store/slices/persist/authSlice";
+import { useAppDispatch, useAppSelector } from "@/store/overrides";
 
 export default function ProfileScreen() {
-  const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const User = useAppSelector((state) => state.auth.user);
+  const allowPush = useAppSelector((state) => state.auth.allowPush);
+
+  const username = User?.username ?? "JohnDoe";
+  const email = User?.email ?? "john.doe@mail.com";
+
   const { theme } = useThemeColor();
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [darkModeEnabled, setDarkModeEnabled] = useState(false);
+  const isDarkTheme = useDarkTheme();
+
+  const handleThemeChange = (value: boolean) => {
+    if (value) {
+      dispatch(setTheme("dark"));
+    } else {
+      dispatch(setTheme("light"));
+    }
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -74,16 +80,21 @@ export default function ProfileScreen() {
     },
     logoutButton: {
       marginTop: 20,
-      backgroundColor: "#D32F2F",
+      backgroundColor: theme.red,
+    },
+    redirectButton: {
+      backgroundColor: theme.primary,
+      marginTop: 20,
     },
   });
 
   return (
+    // (!User && router.push("/errorPage")) || (
     <SafeAreaView style={styles.container}>
       <Header
         title="Profile"
         showBackButton
-        onBackPress={() => navigation.goBack()}
+        onBackPress={() => router.back()}
       />
       <ScrollView>
         <View style={styles.header}>
@@ -93,45 +104,9 @@ export default function ProfileScreen() {
               uri: "https://avatar.iran.liara.run/public",
             }}
           />
-          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.name}>{username}</Text>
           <Text style={styles.email}>{email}</Text>
         </View>
-        <Card style={styles.card}>
-          <Card.Content>
-            <Text style={styles.sectionTitle}>Personal Information</Text>
-            <TextInput
-              label="Name"
-              value={name}
-              onChangeText={setName}
-              mode="outlined"
-              textColor={theme.text}
-              style={styles.input}
-              theme={{
-                colors: {
-                  text: theme.text,
-                  primary: theme.primary,
-                  background: theme.card,
-                },
-              }}
-            />
-            <TextInput
-              label="Email"
-              value={email}
-              onChangeText={setEmail}
-              mode="outlined"
-              keyboardType="email-address"
-              textColor={theme.text}
-              style={styles.input}
-              theme={{
-                colors: {
-                  text: theme.text,
-                  primary: theme.primary,
-                  background: theme.card,
-                },
-              }}
-            />
-          </Card.Content>
-        </Card>
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.sectionTitle}>App Settings</Text>
@@ -141,18 +116,19 @@ export default function ProfileScreen() {
             <View style={styles.settingItem}>
               <Text style={styles.settingText}>Enable Notifications</Text>
               <Switch
-                value={notificationsEnabled}
-                onValueChange={setNotificationsEnabled}
+                value={allowPush}
+                onValueChange={(value) => {
+                  dispatch(setAllowPush(!!value));
+                }}
                 color={theme.primary}
               />
             </View>
             <View style={styles.settingItem}>
               <Text style={styles.settingText}>Dark Mode</Text>
               <Switch
-                value={darkModeEnabled}
+                value={isDarkTheme}
                 onValueChange={(value) => {
-                  setDarkModeEnabled(value);
-                  toggleTheme();
+                  handleThemeChange(!!value);
                 }}
                 color={theme.primary}
               />
@@ -163,34 +139,22 @@ export default function ProfileScreen() {
           <Card.Content>
             <Text style={styles.sectionTitle}>Account</Text>
             <Button
-              mode="outlined"
-              onPress={() => {}}
-              style={styles.button}
-              textColor={theme.text}
+              mode="contained"
+              onPress={() => {
+                router.push("/systemSelection");
+              }}
+              style={[styles.button, styles.redirectButton]}
               icon={() => (
-                <Ionicons name="key-outline" size={20} color={theme.primary} />
+                <Ionicons name="home-outline" size={20} color="white" />
               )}
             >
-              Change Password
-            </Button>
-            <Button
-              mode="outlined"
-              onPress={() => {}}
-              style={styles.button}
-              textColor={theme.text}
-              icon={() => (
-                <Ionicons
-                  name="cloud-download-outline"
-                  size={20}
-                  color={theme.primary}
-                />
-              )}
-            >
-              Export Data
+              Back to Controller Selection
             </Button>
             <Button
               mode="contained"
               onPress={() => {
+                // Handle logout logic here
+                dispatch(logout());
                 router.push("/login");
               }}
               style={[styles.button, styles.logoutButton]}
@@ -204,5 +168,6 @@ export default function ProfileScreen() {
         </Card>
       </ScrollView>
     </SafeAreaView>
+    // )
   );
 }

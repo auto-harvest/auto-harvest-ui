@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import {
-  TextInput,
-  Button,
-  Text,
-  Card,
-  Title,
-  Paragraph,
-} from "react-native-paper";
+import { TextInput, Button, Text, Card, Title, Paragraph,} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import { useRouter } from "expo-router";
+import { setToken, setUser } from "@/store/slices/persist/authSlice";
+import { useAppDispatch } from "@/store/overrides";
+import { useLoginMutation } from "@/store/slices/api/authSlice";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { theme } = useThemeColor();
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [login, { isLoading }] = useLoginMutation();
 
   const styles = StyleSheet.create({
     container: {
@@ -48,6 +46,7 @@ export default function LoginScreen() {
     },
     input: {
       marginBottom: 16,
+      backgroundColor: theme.card,
     },
     button: {
       marginTop: 8,
@@ -63,6 +62,18 @@ export default function LoginScreen() {
     },
   });
 
+  const handleLogin = async () => {
+    try {
+      const response = await login({ email, password }).unwrap();
+      const { token, user } = response;
+      dispatch(setToken(token));
+      dispatch(setUser(user));
+      router.push("/systemSelection");
+    } catch (error) {
+      console.error("Failed to login:", error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Card style={styles.card}>
@@ -72,48 +83,33 @@ export default function LoginScreen() {
           </View>
           <Title style={styles.title}>Login to Auto-Harvest</Title>
           <Paragraph style={styles.description}>
-            Enter your email and password to access your systems
+            EEnter your email and password to access your systems
           </Paragraph>
-
           <TextInput
             label="Email"
             value={email}
             onChangeText={setEmail}
             mode="outlined"
-            textColor={theme.text}
             keyboardType="email-address"
             style={styles.input}
-            theme={{
-              colors: {
-                text: theme.text,
-                primary: theme.primary,
-                background: theme.card,
-              },
-            }}
+            textColor={theme.text}
+            theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
           <TextInput
             label="Password"
             value={password}
             onChangeText={setPassword}
             mode="outlined"
-            textColor={theme.text}
             secureTextEntry
             style={styles.input}
-            theme={{
-              colors: {
-                text: theme.text,
-                primary: theme.primary,
-                background: theme.card,
-              },
-            }}
+            textColor={theme.text}
+            theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
           <Button
             mode="contained"
             style={styles.button}
-            theme={{ colors: { backdrop: theme.primary } }}
-            onPress={() => {
-              router.push("/systemSelection");
-            }}
+            onPress={handleLogin}
+            loading={isLoading}
           >
             Sign In
           </Button>
@@ -124,7 +120,7 @@ export default function LoginScreen() {
             }}
           >
             <Text style={styles.signupText}>
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Text style={styles.signupLink}>Sign up</Text>
             </Text>
           </TouchableOpacity>

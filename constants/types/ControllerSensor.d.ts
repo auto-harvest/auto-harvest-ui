@@ -1,13 +1,13 @@
 import { Controller } from "./Controller";
 import { Sensor } from "./Sensor";
 
-export interface ControllerSensor {
+export interface IControllerSensor {
   controller: Controller;
   sensor: Sensor;
   code: string;
 }
 
-export class ControllerSensor implements ControllerSensor {
+export class ControllerSensor implements IControllerSensor {
   constructor() {
     this.controller = new Controller();
     this.sensor = new Sensor();

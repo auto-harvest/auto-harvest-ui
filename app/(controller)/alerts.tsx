@@ -48,6 +48,7 @@ const alertsData = [
 ];
 
 export default function AlertsScreen() {
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All");
   const { theme } = useThemeColor();
@@ -95,17 +96,17 @@ export default function AlertsScreen() {
       color: theme.text,
     },
     criticalAlert: {
-      color: "#FF0000",
+      color: theme.red,
     },
     warningAlert: {
-      color: "#FFA500",
+      color: theme.secondary,
     },
     infoAlert: {
-      color: "#0000FF",
+      color: theme.tertiary,
     },
   });
 
-  const renderAlertItem = ({ item }) => (
+  const renderAlertItem = ({ item }: { item: { id: string; type: string; message: string; timestamp: string } }) => (
     <Card style={styles.card}>
       <Card.Content>
         <Title
@@ -121,7 +122,14 @@ export default function AlertsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header showBackButton onBackPress={() => router.back()} />
+      <Header
+        showBackButton
+        onBackPress={() => router.push("/systemSelection")}
+        showUserIcon
+        onUserIconPress={() => {
+          router.push("/profile");
+        }}
+      />
       <Searchbar
         placeholder="Search alerts..."
         onChangeText={setSearchQuery}

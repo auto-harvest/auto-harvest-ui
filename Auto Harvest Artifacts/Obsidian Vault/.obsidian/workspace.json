@@ -1,0 +1,286 @@
+{
+  "main": {
+    "id": "c48c3a8f808fed97",
+    "type": "split",
+    "children": [
+      {
+        "id": "221306e443ff3359",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fe1f85ef09b87a15",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Pasted image 20250410032816.png"
+              },
+              "icon": "lucide-image",
+              "title": "Pasted image 20250410032816"
+            }
+          },
+          {
+            "id": "f09d7d4cd2eb62d3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Thesis/2. Software/2.1 Backend/2.1.4 Utilized Libraries.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "2.1.4 Utilized Libraries"
+            }
+          },
+          {
+            "id": "d6ce6d016bcbf895",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Thesis/2. Software/2.2 Firmware/2.2.5 Utilized Libraries.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "2.2.5 Utilized Libraries"
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "aab8f9eb897da538",
+    "type": "split",
+    "children": [
+      {
+        "id": "bba444a3643da613",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "98f686e1e4158978",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "d027355df4711494",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "df2acf9a3e3457ab",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "ac867f85e4b5f905",
+    "type": "split",
+    "children": [
+      {
+        "id": "4d96c3415d0778b4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "445af07082cae94f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Thesis/Intro/Introduction.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Introduction"
+            }
+          },
+          {
+            "id": "79ab68531e86b800",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Thesis/Intro/Introduction.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Introduction"
+            }
+          },
+          {
+            "id": "bc6084499889ed45",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "e514f851c72b1e3c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Thesis/2. Software/2.1 Backend/2.1.4 Utilized Libraries.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of 2.1.4 Utilized Libraries"
+            }
+          },
+          {
+            "id": "149a00f124a0d0ab",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "bases:Create new base": false,
+      "markdown-importer:Open format converter": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "workspaces:Manage workspace layouts": false
+    }
+  },
+  "active": "d6ce6d016bcbf895",
+  "lastOpenFiles": [
+    "Thesis/2. Software/2.2 Firmware/2.2.6 Testing and Debugging.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.5 Utilized Libraries.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.4 Control Logic and Custom Behaviors.md",
+    "Data Mining/data mining/Pasted image 20250626195352.png",
+    "Thesis/1. Introduction/1.1 Problem.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.3 Code Structure and Patterns.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.2 PlatformIO for Arduino.md",
+    "Thesis/2. Software/2.2 Firmware/2.2.1 Firmware Specifications.md",
+    "Pasted image 20250410032707.png",
+    "Pasted image 20250410032816.png",
+    "Thesis/2. Software/2.1 Backend/2.1.5 Debugging and Profiling.md",
+    "Thesis/2. Software/2.3 Services/2.3.4 Service Orchestration.md",
+    "Thesis/2. Software/2.3 Services/2.3.1 3rd Part Dependencies.md",
+    "Thesis/2. Software/2.3 Services/2.3.2 MongoDB Service.md",
+    "Thesis/2. Software/2.1 Backend/2.1.4 Utilized Libraries.md",
+    "Thesis/2. Software/2.1 Backend/2.1.3 Code Structure and Patterns.md",
+    "Thesis/2. Software/2.1 Backend/2.1.2 Express Server.md",
+    "Thesis/2. Software/2.1 Backend/2.1.1 Backend Specifications.md",
+    "Data Mining/data mining/Section A/1. Preprocessing/Attribute Selection.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.1 Cloudflare Services.md",
+    "Thesis/5. Infrastracture/5.1 Cloud Provider/5.1.5 Static Files and Google Buckets.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.3 WAF Rules.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.4 Reverse Proxy Provider.md",
+    "Thesis/5. Infrastracture/5.2 Cloudflare/5.2.7 SEO and Performance Optimization.md",
+    "Thesis/1. Introduction/1.5 Existing Solutions.md",
+    "Thesis/1. Introduction/1.4 Coverage.md",
+    "Thesis/1. Introduction/1.2 Implemented Solution.md",
+    "Structure.md",
+    "Untitled.canvas",
+    "Data Mining/data mining/Section C/Apriori",
+    "Data Mining/data mining/Section C/Untitled",
+    "Data Mining/data mining/Section C/1. Preprocessing",
+    "Data Mining/data mining/Section C",
+    "Data Mining/data mining/Untitled",
+    "Data Mining/data mining/Section B/4. DBSCAN/k-distance graph.png",
+    "Data Mining/data mining/Section B/4. DBSCAN",
+    "Data Mining/data mining/Section B/3. Agglomerative Clustering/og.png",
+    "Data Mining/data mining/Section B/3. Agglomerative Clustering/modded.png",
+    "Data Mining/data mining/Section B/3. Agglomerative Clustering",
+    "Data Mining/data mining/Section B/2. KMeans with Elbow method/Runs",
+    "Data Mining/data mining/Section B/2. KMeans with Elbow method",
+    "Data Mining/data mining/Section B/1. Preprocessing",
+    "Data Mining/data mining/Section B/2. Agglomerative Clustering/modded.png",
+    "Data Mining/data mining/Section B/2. Agglomerative Clustering/og.png",
+    "Data Mining/data mining/Section B/3. DBSCAN/k-distance graph.png",
+    "Data Mining/data mining/k-distance graph.png",
+    "Untitled 1.canvas"
+  ]
+}

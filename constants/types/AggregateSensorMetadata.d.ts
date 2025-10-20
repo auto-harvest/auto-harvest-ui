@@ -1,12 +1,12 @@
 import { Granularity } from "../enums/Granularity.enum";
 import { Statistics } from "./Statistics";
 
-export interface AggregateSensorMetadata {
+interface IAggregateSensorMetadata {
   granularity: Granularity;
   statics?: Statistics | undefined | null;
 }
 
-export class AggregateSensorMetadata implements AggregateSensorMetadata {
+export class AggregateSensorMetadata implements IAggregateSensorMetadata {
   constructor() {
     this.granularity = Granularity.MINUTE;
     this.statics = null;

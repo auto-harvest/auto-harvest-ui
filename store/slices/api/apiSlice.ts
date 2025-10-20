@@ -1,30 +1,29 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseAuthQuery } from "./baseQuery";
 
 // Define the API slice
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3333" }),
+  baseQuery: baseAuthQuery("api/controller"),
   endpoints: (builder) => ({
-    getTest: builder.query({
-      query: (token) => ({
-        url: "/test",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    getControllers: builder.query({
+      query: () => ({
+        url: "",
+        method: "GET",
       }),
     }),
-    postTest: builder.mutation({
-      query: ({ data, token }) => ({
-        url: "/test",
+    setController: builder.mutation<
+      { message: string; error: number },
+      { name: string; code: string; location: string; capacity: number }
+    >({
+      query: (data) => ({
+        url: "",
         method: "POST",
         body: data,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       }),
     }),
   }),
 });
 
 // Export hooks for usage in functional components
-export const { useGetTestQuery, usePostTestMutation } = apiSlice;
+export const { useGetControllersQuery, useSetControllerMutation } = apiSlice;

@@ -12,25 +12,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import { useRouter } from "expo-router";
+import { setToken, setUser } from "@/store/slices/persist/authSlice";
+import { useAppDispatch } from "@/store/overrides";
+import { useSignupMutation } from "@/store/slices/api/authSlice";
 
-export default function SignUpScreen() {
+export default function SignupScreen() {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const { theme } = useThemeColor();
   const router = useRouter();
-
-  const handleSignUp = () => {
-    if (!email.includes("@")) {
-      alert("Please enter a valid email.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-    router.push("/systemSelection");
-  };
+  const dispatch = useAppDispatch();
+  const [signup, { isLoading }] = useSignupMutation();
 
   const styles = StyleSheet.create({
     container: {
@@ -61,6 +54,7 @@ export default function SignUpScreen() {
     },
     input: {
       marginBottom: 16,
+      backgroundColor: theme.card,
     },
     button: {
       marginTop: 8,
@@ -76,6 +70,18 @@ export default function SignUpScreen() {
     },
   });
 
+  const handleSignup = async () => {
+    try {
+      const response = await signup({ username, email, password }).unwrap();
+      const { token, user } = response;
+      dispatch(setToken(token));
+      dispatch(setUser(user));
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Failed to signup:", error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Card style={styles.card}>
@@ -85,24 +91,26 @@ export default function SignUpScreen() {
           </View>
           <Title style={styles.title}>Sign Up for Auto-Harvest</Title>
           <Paragraph style={styles.description}>
-            Create an account to manage your hydroponic systems
+            Enter your details to create a new account
           </Paragraph>
-
+          <TextInput
+            label="Username"
+            value={username}
+            onChangeText={setUsername}
+            mode="outlined"
+            textColor={theme.text}
+            style={styles.input}
+            theme={{ colors: { text: theme.text, primary: theme.primary } }}
+          />
           <TextInput
             label="Email"
             value={email}
             onChangeText={setEmail}
             mode="outlined"
             keyboardType="email-address"
-            style={styles.input}
             textColor={theme.text}
-            theme={{
-              colors: {
-                background: theme.card,
-                placeholder: theme.text,
-                primary: theme.primary,
-              },
-            }}
+            style={styles.input}
+            theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
           <TextInput
             label="Password"
@@ -110,41 +118,15 @@ export default function SignUpScreen() {
             onChangeText={setPassword}
             mode="outlined"
             secureTextEntry
-            style={styles.input}
             textColor={theme.text}
-            theme={{
-              colors: {
-                text: theme.text,
-                background: theme.card,
-                placeholder: theme.text,
-                primary: theme.primary,
-              },
-            }}
-          />
-          <TextInput
-            label="Confirm Password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            mode="outlined"
-            secureTextEntry
             style={styles.input}
-            theme={{
-              colors: {
-                text: theme.text,
-                background: theme.card,
-                placeholder: theme.text,
-                primary: theme.primary,
-              },
-            }}
+            theme={{ colors: { text: theme.text, primary: theme.primary } }}
           />
-
           <Button
             mode="contained"
             style={styles.button}
-            theme={{ colors: { backdrop: theme.primary } }}
-            onPress={() => {
-              handleSignUp();
-            }}
+            onPress={handleSignup}
+            loading={isLoading}
           >
             Sign Up
           </Button>
