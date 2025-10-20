@@ -324,7 +324,7 @@ export default function TelemetryLineChart({
         delayBeforeUnFocus={500}
         animationDuration={400}
       />
-      {/* </ScrollView> */}
+      {/* </ScrollView>  */}
     </View>
   );
 }
