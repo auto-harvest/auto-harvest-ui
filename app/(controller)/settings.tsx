@@ -6,6 +6,7 @@ import { useThemeColor } from "../../hooks/useThemeColor";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
 import { useRouter } from "expo-router";
+import { useIsGuest } from "@/hooks/useIsGuest";
 
 export default function SettingsScreen() {
   const [notifications, setNotifications] = useState(true);
@@ -13,6 +14,7 @@ export default function SettingsScreen() {
   const [nutrientDosage, setNutrientDosage] = useState("5");
   const { theme } = useThemeColor();
   const router = useRouter();
+  const isGuest = useIsGuest();
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -64,6 +66,7 @@ export default function SettingsScreen() {
                 value={notifications}
                 onValueChange={setNotifications}
                 color={theme.primary}
+                disabled={isGuest}
               />
             </View>
           </Card.Content>
@@ -81,6 +84,7 @@ export default function SettingsScreen() {
                 keyboardType="numeric"
                 style={styles.input}
                 theme={{ colors: { text: theme.text, primary: theme.primary } }}
+                disabled={isGuest}
               />
             </View>
             <View style={styles.settingItem}>
@@ -93,6 +97,7 @@ export default function SettingsScreen() {
                 keyboardType="numeric"
                 style={styles.input}
                 theme={{ colors: { text: theme.text, primary: theme.primary } }}
+                disabled={isGuest}
               />
             </View>
           </Card.Content>
@@ -103,6 +108,7 @@ export default function SettingsScreen() {
             /* Handle saving settings */
           }}
           style={styles.saveButton}
+          disabled={isGuest}
         >
           Save Settings
         </Button>

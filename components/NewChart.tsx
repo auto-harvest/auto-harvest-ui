@@ -112,6 +112,18 @@ export default function TelemetryLineChart({
   const chartWidth = Math.max(width, data.length * pointSpacing);
   const spacing = Math.max(1, pointSpacing);
   const initialSpacing = 15;
+
+  // Compute how many decimals the Y-axis labels need
+  const yDecimals = useMemo(() => {
+    const vals = data.map((d) => d.value).filter(isFinite);
+    if (vals.length === 0) return 0;
+    const range = Math.max(...vals) - Math.min(...vals) || 1;
+    // If the full range is < 1, show 1 decimal; if < 0.1, show 2; otherwise 0
+    if (range < 0.1) return 2;
+    if (range < 1) return 1;
+    return 0;
+  }, [data]);
+
   return (
     <View style={{ paddingHorizontal: 5 }}>
       {/* <ScrollView
@@ -129,15 +141,9 @@ export default function TelemetryLineChart({
       <LineChart
         key={`${data.length}+${width}`}
         height={height}
-        directionalLockEnabled={true}
+        disableScroll
         width={width}
         spacing={spacing}
-        onScrollEndDrag={() => {
-          /* optional */
-        }}
-        onScrollBeginDrag={() => {
-          /* optional */
-        }}
         initialSpacing={offset / 2 + initialSpacing}
         endSpacing={offset / 2}
         data={data}
@@ -151,6 +157,8 @@ export default function TelemetryLineChart({
         endFillColor={areaFill.end}
         startOpacity={areaFill.startOpacity ?? 0.1}
         endOpacity={areaFill.endOpacity ?? 0.0}
+        noOfSections={5}
+        formatYLabel={(val: string) => Number(val).toFixed(yDecimals)}
         yAxisLabelSuffix={` ${unit}`}
         yAxisTextStyle={{
           fontSize: 10,
@@ -234,8 +242,8 @@ export default function TelemetryLineChart({
             ),
           },
           radius: 6,
-          pointerLabelWidth: 160,
-          pointerLabelHeight: 120,
+          pointerLabelWidth: 180,
+          pointerLabelHeight: 200,
           activatePointersOnLongPress: false,
           autoAdjustPointerLabelPosition: true,
 
@@ -259,56 +267,101 @@ export default function TelemetryLineChart({
             ).toFixed(2);
             const minV = raw?.min?.value?.toFixed(2) ?? "--";
             const maxV = raw?.max?.value?.toFixed(2) ?? "--";
+            const median = raw?.median != null ? Number(raw.median).toFixed(2) : null;
+            const variance = raw?.variance != null ? Number(raw.variance).toFixed(4) : null;
+            const datapoints = raw?.datapoints != null ? String(raw.datapoints) : null;
+
+            const hiddenKeys = new Set([
+              "type", "updatedAt", "averageValue", "average",
+              "min", "max", "__v", "median", "variance", "datapoints",
+              "timestamp",
+            ]);
+            const extraFields = Object.entries(raw ?? {})
+              .filter(([k]) => !hiddenKeys.has(k))
+              .map(([k, v]) => {
+                const label = k.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
+                let display = typeof v === "number" ? v.toFixed(2) : String(v ?? "--");
+                if (display.length > 14) display = display.slice(0, 14) + "\u2026";
+                return { label, display };
+              });
+
+            const statRow = (label: string, value: string) => (
+              <View
+                key={label}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginTop: 2,
+                }}
+              >
+                <Text style={{ color: "#999", fontSize: 10, userSelect: "none" } as any}>
+                  {label}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    color: "#ccc",
+                    fontSize: 10,
+                    fontWeight: "500",
+                    marginLeft: 8,
+                    flexShrink: 1,
+                    userSelect: "none",
+                  } as any}
+                >
+                  {value}
+                </Text>
+              </View>
+            );
 
             return (
               <View
+                pointerEvents="none"
                 style={{
-                  backgroundColor: "rgba(0,0,0,0.9)",
-                  paddingHorizontal: 12,
-                  paddingVertical: 10,
-                  borderRadius: 6,
-                  minWidth: 140,
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                }}
+                  backgroundColor: "rgba(20,20,20,0.95)",
+                  paddingHorizontal: 10,
+                  paddingVertical: 8,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: "rgba(255,255,255,0.1)",
+                  width: 180,
+                  userSelect: "none",
+                } as any}
               >
-                <Text style={{ color: "#999", fontSize: 12 }}>{when}</Text>
+                <Text style={{ color: "#888", fontSize: 10, userSelect: "none" } as any}>
+                  {when}
+                </Text>
                 <Text
                   style={{
                     color: "white",
                     fontSize: 16,
-                    fontWeight: "600",
-                    marginTop: 4,
-                  }}
+                    fontWeight: "700",
+                    marginTop: 2,
+                    userSelect: "none",
+                  } as any}
                 >
                   {avg} {unit}
                 </Text>
                 {raw?.min?.value !== undefined && (
-                  <Text style={{ color: "#999", fontSize: 12, marginTop: 6 }}>
-                    Range: {minV} - {maxV} {unit}
+                  <Text style={{ color: "#aaa", fontSize: 10, marginTop: 3, userSelect: "none" } as any}>
+                    {minV} ~ {maxV} {unit}
                   </Text>
                 )}
-                {Object.keys(raw ?? {}).length > 3 && (
-                  <Text style={{ color: "#999", fontSize: 12, marginTop: 6 }}>
-                    {/* Show other fields in the raw doc except type, timestamp, interval */}
-                    {Object.entries(raw ?? {})
-                      .filter(
-                        ([k, _]) =>
-                          ![
-                            "type",
-                            "updatedAt",
-                            "averageValue",
-                            "min",
-                            "max",
-                            "__v",
-                          ].includes(k)
-                      )
-                      .map(([k, v]) => `${k}: ${v}`)
-                      .join(",\n ")}
-                  </Text>
+                {(median || variance || datapoints || extraFields.length > 0) && (
+                  <View
+                    style={{
+                      borderTopWidth: 1,
+                      borderTopColor: "rgba(255,255,255,0.1)",
+                      marginTop: 4,
+                      paddingTop: 4,
+                    }}
+                  >
+                    {median && statRow("Median", `${median}`)}
+                    {variance && statRow("Variance", variance)}
+                    {datapoints && statRow("Samples", datapoints)}
+                    {extraFields.map(({ label, display }) =>
+                      statRow(label, display)
+                    )}
+                  </View>
                 )}
               </View>
             );

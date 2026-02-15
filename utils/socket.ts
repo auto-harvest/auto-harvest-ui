@@ -98,6 +98,6 @@ const tokenInterval = setInterval(() => {
   if (t) {
     console.log("TOKENNNNNN", t);
     initializeSocket();
-    //clearInterval(tokenInterval);
+    clearInterval(tokenInterval);
   }
 }, 200);

@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "dev": "dotenv -e .env.development -- expo start",
+    "dev": "dotenv -e .env.development -- expo start --port 80",
     "dev:prod": "dotenv -e .env.production -- expo start",
     "export:prod": "dotenv -e .env.production -- expo export --platform web",
     "export": "expo export",

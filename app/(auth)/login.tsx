@@ -10,8 +10,8 @@ import { useAppDispatch } from "@/store/overrides";
 import { useLoginMutation } from "@/store/slices/api/authSlice";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("guest@autoharvest.local");
+  const [password, setPassword] = useState("guest");
   const { theme } = useThemeColor();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -83,7 +83,7 @@ export default function LoginScreen() {
           </View>
           <Title style={styles.title}>Login to Auto-Harvest</Title>
           <Paragraph style={styles.description}>
-            EEnter your email and password to access your systems
+            Enter your email and password to access your systems
           </Paragraph>
           <TextInput
             label="Email"

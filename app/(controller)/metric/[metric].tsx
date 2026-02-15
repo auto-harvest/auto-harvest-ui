@@ -32,10 +32,17 @@ export default function MetricDetails() {
 
   const [rangeType, setRangeType] = useState<DateRange>(DateRange.DAY);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  // Build ISO string from local date parts so timezone offset doesn't shift the day
+  const startIso = (() => {
+    const y = selectedDate.getFullYear();
+    const m = String(selectedDate.getMonth() + 1).padStart(2, "0");
+    const d = String(selectedDate.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}T00:00:00.000Z`;
+  })();
   const { isLoading, data } = useGetHistoricSensorInfoQuery({
     type: metric?.toString() ?? "ph",
     range: rangeType.toString().toLowerCase(),
-    start: new Date(selectedDate).toISOString(),
+    start: startIso,
   });
   useEffect(() => {
     console.log(selectedDate);

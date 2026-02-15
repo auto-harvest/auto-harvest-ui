@@ -16,49 +16,35 @@ import Navbar from "../../components/Navbar";
 import { useRouter } from "expo-router";
 import { useAppDispatch, useAppSelector } from "@/store/overrides";
 import { emitSocketEvent } from "@/store/actions/socketActions";
+import { useIsGuest } from "@/hooks/useIsGuest";
 
 export default function HydroponicsDashboard() {
   const router = useRouter();
   const sensorData = useAppSelector((state) => state.sensorInfo.data);
-  const [isPumpOn, setIsPumpOn] = useState(!!sensorData["water-pump"]?.value);
-  const [isAirPumpOn, setIsAirPumpOn] = useState(
-    !!sensorData["air-pump"]?.value
-  );
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-  const [isFanOn, setIsFanOn] = useState(!!sensorData["fan"]?.value);
+  const pumpValue = useAppSelector((state) => !!state.sensorInfo.data["water-pump"]?.value);
+  const airPumpValue = useAppSelector((state) => !!state.sensorInfo.data["air-pump"]?.value);
+  const fanValue = useAppSelector((state) => !!state.sensorInfo.data["fan"]?.value);
+
+  // Local overrides during the optimistic window after a user toggle
+  const [overrides, setOverrides] = useState<Record<string, boolean>>({});
+  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const isPumpOn = "pump" in overrides ? overrides["pump"] : pumpValue;
+  const isAirPumpOn = "air-pump" in overrides ? overrides["air-pump"] : airPumpValue;
+  const isFanOn = "fan" in overrides ? overrides["fan"] : fanValue;
+
   const { theme } = useThemeColor();
   const dispatch = useAppDispatch();
-  const [ignoreChanges, setIgnoreChanges] = useState(false);
+  const isGuest = useIsGuest();
   const handle = (code: "pump" | "air-pump" | "fan") => (value: any) => {
     {
-      const setterMap: {
-        [key in "pump" | "air-pump" | "fan"]: React.Dispatch<
-          React.SetStateAction<boolean>
-        >;
-      } = {
-        pump: setIsPumpOn,
-        "air-pump": setIsAirPumpOn,
-        fan: setIsFanOn,
-      };
-      setterMap[code](value);
-      clearTimeout(timeoutId as NodeJS.Timeout);
-      setIgnoreChanges(true);
-      setTimeoutId(setTimeout(() => setIgnoreChanges(false), 4000));
+      if (isGuest) return;
+      setOverrides((prev) => ({ ...prev, [code]: value }));
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => setOverrides({}), 4000);
       dispatch(emitSocketEvent(code, `${code}-${value ? "on" : "off"}`));
     }
   };
-
-  useEffect(() => {
-    if (ignoreChanges) {
-      console.log("Ignoring changes to avoid conflict");
-      return;
-    }
-    console.log("sensorData changed", sensorData);
-
-    setIsPumpOn(!!sensorData["water-pump"]?.value);
-    setIsAirPumpOn(!!sensorData["air-pump"]?.value);
-    setIsFanOn(!!sensorData["fan"]?.value);
-  }, [sensorData, ignoreChanges]);
 
   const styles = StyleSheet.create({
     container: {
@@ -370,20 +356,27 @@ export default function HydroponicsDashboard() {
               title: "Water Level",
               value: `${
                 sensorData["water-level"]?.value === 0
-                  ? "Ok"
+                  ? "Adequate"
                   : sensorData["water-level"]?.value === -1
                   ? "Low"
                   : sensorData["water-level"]?.value === 1
                   ? "Full"
                   : "Unknown"
               }`,
-              desc: "Water Level could be Attention Needed, Low, Full",
+              desc: "Water Level could be Adequate, Low, Full",
               code: "water level",
             })}
             {FlowCard()}
           </View>
 
           {/* //? Controls */}
+          {isGuest && (
+            <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
+              <Text style={{ color: theme.secondary, fontStyle: "italic" }}>
+                Demo mode — controls are view-only
+              </Text>
+            </View>
+          )}
           <View style={styles.controlsContainer}>
             <Card style={styles.controlCard}>
               <Card.Content>
@@ -394,6 +387,7 @@ export default function HydroponicsDashboard() {
                     value={isPumpOn}
                     onValueChange={() => handle("pump")(!isPumpOn)}
                     color={theme.primary}
+                    disabled={isGuest}
                   />
                   <Text style={styles.switchText}>On</Text>
                 </View>
@@ -408,12 +402,13 @@ export default function HydroponicsDashboard() {
                     value={isAirPumpOn}
                     onValueChange={() => handle("air-pump")(!isAirPumpOn)}
                     color={theme.primary}
+                    disabled={isGuest}
                   />
                   <Text style={styles.switchText}>On</Text>
                 </View>
               </Card.Content>
             </Card>
-            <Card style={styles.controlCard}>
+            {/* <Card style={styles.controlCard}>
               <Card.Content>
                 <Title style={{ color: theme.text }}>Fan Control</Title>
                 <View style={styles.switchContainer}>
@@ -426,7 +421,7 @@ export default function HydroponicsDashboard() {
                   <Text style={styles.switchText}>On</Text>
                 </View>
               </Card.Content>
-            </Card>
+            </Card> */}
           </View>
         </ScrollView>
         <Navbar activeNav="dashboard" />
